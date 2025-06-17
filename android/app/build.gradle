@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.chaquo.python'
+
+android {
+    namespace 'com.example.imguihelloworld'
+    compileSdkVersion 33
+    chaquopy {
+        defaultConfig {
+            version "3.13"
+        }
+    }
+    defaultConfig {
+        applicationId "com.example.imguihelloworld"
+        minSdkVersion 24	
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++17"
+                arguments "-DANDROID=ON -DCMAKE_VERBOSE_MAKEFILE=ON"
+            }
+        }
+    	ndk {
+            abiFilters 'arm64-v8a'
+    	}
+	python {
+	    pip {
+	        install "numpy"
+	        install "pandas"
+	    }
+	}
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "../../CMakeLists.txt"
+	    version "3.25.1"
+        }
+    }
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets']
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    ndkVersion '26.1.10909125'
+}
+
+chaquopy {
+    defaultConfig {
+        extractPackages("stock_monitoring_app")
+    }
+}
+
+task copyPythonCode(type: Copy) {
+    // Specify the source directory where your external Python code is located
+    def externalPythonDir = '../../stock_monitoring_app' // Update this path
+    // Specify the destination directory within your Android project
+    def destinationDir = "$projectDir/src/main/python/stock_monitoring_app"
+
+    from externalPythonDir
+    into destinationDir
+    include '**/*.py' // Include all Python files
+}
+
+preBuild.dependsOn(copyPythonCode)
+
+tasks.whenTaskAdded { task ->
+    if (task.name == "mergeDebugPythonSources") {
+        task.dependsOn(copyPythonCode)
+    }
+}
+
