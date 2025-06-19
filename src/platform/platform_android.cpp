@@ -11,6 +11,8 @@
 // Include keyboard helper
 #include "android/keyboard_helper.h"
 
+#include "android/python_object_initializer.hpp"
+
 // Define log macros if not defined
 #ifndef ANDROID_LOG_INFO
 #define ANDROID_LOG_INFO 4
@@ -58,8 +60,10 @@ static struct android_app* ImGui_ImplAndroid_GetApp() {
     return (struct android_app*)Application::getInstance();  // Modified to avoid getPlatform()
 }
 
+
 PlatformAndroid::PlatformAndroid(const std::string& title) 
     : PlatformBase(title), m_androidApp(nullptr), m_keyboardVisible(false) {
+	 
 }
 
 PlatformAndroid::~PlatformAndroid() {

@@ -10,9 +10,6 @@ import android.os.Looper;
 import android.util.Log;
 import java.util.List;
 import java.util.ArrayList;
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
 
 /**
  * Main activity for the ImGui Hello World application.
@@ -22,7 +19,6 @@ public class MainActivity extends ImGuiKeyboardHelper {
     
     private static final String TAG = "MainActivity";
 
-    private Python py;
     
     // Static instance for access from native code via JNI
     public static MainActivity instance;
@@ -44,10 +40,6 @@ public class MainActivity extends ImGuiKeyboardHelper {
         
         startKeyboardVisibilityCheck();
 
-	if (!Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
-	py=Python.getInstance();
     }
     
     @Override

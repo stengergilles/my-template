@@ -2,10 +2,6 @@
 #include "imgui.h"
 #include <iostream>
 
-#ifdef __ANDROID__
-#include "platform/android/keyboard_helper.h"
-#endif
-
 // Initialize static instance
 Application* Application::s_instance = nullptr;
 
