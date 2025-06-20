@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(imgui_hello_world)
+# In your top-level CMakeLists.txt
+set(PROJECT_ROOT ${CMAKE_SOURCE_DIR})
+set(CMAKE_FIND_PACKAGE_DEBUG_MODE TRUE)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,6 +24,7 @@ set(SOURCES
     src/application.cpp
     src/platform/platform_base.cpp
     src/main.cpp
+    src/coingecko_fetcher.cpp
 )
 
 # ImGui source files
@@ -31,6 +35,47 @@ set(IMGUI_SOURCES
     external/imgui/imgui_tables.cpp
     external/imgui/imgui_widgets.cpp
 )
+
+set(OPENSSL_ROOT_DIR "${PROJECT_ROOT}/external/openssl" CACHE PATH "OpenSSL root" FORCE)
+set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include" CACHE PATH "OpenSSL include" FORCE)
+set(OPENSSL_CRYPTO_LIBRARY "${OPENSSL_ROOT_DIR}/libcrypto.a" CACHE FILEPATH "OpenSSL crypto lib" FORCE)
+set(OPENSSL_SSL_LIBRARY "${OPENSSL_ROOT_DIR}/libssl.a" CACHE FILEPATH "OpenSSL ssl lib" FORCE)
+set(CMAKE_PREFIX_PATH "${OPENSSL_ROOT_DIR}")
+set(OPENSSL_USE_STATIC_LIBS TRUE)
+
+# Only create alias targets if they don't exist already
+if(NOT TARGET OpenSSL::SSL)
+    add_library(OpenSSL::SSL STATIC IMPORTED GLOBAL)
+    set_target_properties(OpenSSL::SSL PROPERTIES
+        IMPORTED_LOCATION "${OPENSSL_SSL_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INCLUDE_DIR}"
+    )
+endif()
+if(NOT TARGET OpenSSL::Crypto)
+    add_library(OpenSSL::Crypto STATIC IMPORTED GLOBAL)
+    set_target_properties(OpenSSL::Crypto PROPERTIES
+        IMPORTED_LOCATION "${OPENSSL_CRYPTO_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INCLUDE_DIR}"
+    )
+endif()
+# nlohmann/json (header-only) 
+add_subdirectory(external/json)  
+# libcurl  
+option(BUILD_CURL_EXE OFF) 
+option(BUILD_SHARED_LIBS OFF)  
+set(CURL_USE_OPENSSL ON CACHE BOOL "Use Openssl")
+set(CURL_DISABLE_LIBIDN2 ON CACHE BOOL "Disable idn2")
+set(CURL_DISABLE_IDN ON CACHE BOOL "Disable idn")
+set(CURL_USE_LIBIDN2 OFF CACHE BOOL "Disable idn2")
+set(CURL_DISABLE_LIBPSL ON CACHE BOOL "Disable PSL support" FORCE)
+set(CURL_USE_LIBPSL OFF CACHE BOOL "Use PSL support" FORCE)
+set(BUILD_CURL_EXE OFF CACHE BOOL "" FORCE)       # Don't build curl command-line tool
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)        # Don't build tests
+set(BUILD_TESTING_DEFAULT OFF CACHE BOOL "" FORCE) # Some curl versions use this
+set(CURL_DISABLE_TESTS ON CACHE BOOL "" FORCE)    # For some curl CMake configs
+add_subdirectory(external/curl) 
+get_target_property(CURL_INCLUDE_DIRS libcurl INTERFACE_INCLUDE_DIRECTORIES)
+
 
 # Platform-specific source files and libraries
 if(ANDROID)
@@ -53,6 +98,7 @@ if(ANDROID)
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/android
         ${ANDROID_NDK}/sources/android/native_app_glue
+	${CURL_INCLUDE_DIRS}
     )
     
     # Android-specific libraries
@@ -61,6 +107,8 @@ if(ANDROID)
         EGL
         GLESv3
         log
+        nlohmann_json::nlohmann_json
+	CURL::libcurl
     )
     
     # Set to build a shared library for Android
