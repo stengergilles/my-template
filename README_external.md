@@ -8,7 +8,6 @@ It assumes you are using [CMake](https://cmake.org/), [Android NDK](https://deve
 ## Dependencies
 
 - **nlohmann/json** (header-only)
-- **cpr** (HTTP client, depends on libcurl)
 - **libcurl** (network transport)
 - **OpenSSL** (for HTTPS support in libcurl)
 - **zlib** (required by libcurl)
@@ -49,16 +48,11 @@ option(BUILD_CURL_EXE OFF)
 option(BUILD_SHARED_LIBS OFF)
 add_subdirectory(external/curl)
 
-# cpr (depends on curl)
-set(CPR_FORCE_USE_SYSTEM_CURL OFF)
-set(CPR_ENABLE_SSL ON)
-add_subdirectory(external/cpr)
-
 # Your source files
 add_library(coingeckofetcher STATIC
     stock_monitoring_app/fetchers/base_fetcher.cpp
     stock_monitoring_app/fetchers/coingecko_fetcher.cpp
-    stock_monitoring_app/fetchers/http_client_cpr.cpp
+    stock_monitoring_app/fetchers/http_client_curl.cpp
 )
 
 target_include_directories(coingeckofetcher
@@ -68,8 +62,8 @@ target_include_directories(coingeckofetcher
 
 target_link_libraries(coingeckofetcher
     PUBLIC
-        cpr::cpr
         nlohmann_json::nlohmann_json
+        libcurl
 )
 ```
 
@@ -121,7 +115,6 @@ cmake --build build_android --target coingeckofetcher -- -j$(nproc)
 ## References
 
 - [CMake Android Toolchain](https://developer.android.com/ndk/guides/cmake)
-- [cpr Android Build Docs](https://github.com/libcpr/cpr#android)
 - [nlohmann/json](https://github.com/nlohmann/json)
 - [libcurl Android Build](https://curl.se/docs/install.html#Android)
 

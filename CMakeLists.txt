@@ -76,6 +76,23 @@ set(CURL_DISABLE_TESTS ON CACHE BOOL "" FORCE)    # For some curl CMake configs
 add_subdirectory(external/curl) 
 get_target_property(CURL_INCLUDE_DIRS libcurl INTERFACE_INCLUDE_DIRECTORIES)
 
+# Add this near your other add_executable or add_test calls
+
+add_executable(integration_coingecko_fetcher
+	${PROJECT_ROOT}/tests/fetchers/integration_coingecko_fetcher.cpp
+    	${PROJECT_ROOT}/src/coingecko_fetcher.cpp
+    # Add any other required source files here
+)
+
+target_include_directories(integration_coingecko_fetcher PRIVATE 
+	src
+	${PROJECT_ROOT}/external/json/include
+)
+# If you depend on curl, openssl, etc:
+target_link_libraries(integration_coingecko_fetcher PRIVATE CURL::libcurl)
+
+# Optionally, add as a test (CMake's ctest)
+add_test(NAME integration_coingecko_fetcher COMMAND integration_coingecko_fetcher)
 
 # Platform-specific source files and libraries
 if(ANDROID)
