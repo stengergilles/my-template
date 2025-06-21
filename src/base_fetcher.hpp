@@ -13,6 +13,19 @@ struct DataFrame {
     std::vector<double> close;
     std::vector<double> volume;
     std::vector<std::string> datetime_index;
+
+    // --- Add these methods ---
+
+    // Returns the number of rows (elements) in the DataFrame.
+    size_t size() const {
+        // All columns should have the same size, so we return the size of one of them
+        return close.size();
+    }
+
+    // Returns the list of column names present in the DataFrame.
+    std::vector<std::string> columns() const {
+        return {"Open", "High", "Low", "Close", "Volume", "Timestamp"};
+    }
 };
 
 class Fetcher {
