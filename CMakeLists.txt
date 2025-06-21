@@ -12,6 +12,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+# Gtest
+
+# Adjust these paths if your installation is elsewhere
+set(GTEST_ROOT "$ENV{HOME}/.local")
+set(GTEST_INCLUDE_DIR "${GTEST_ROOT}/include")
+set(GTEST_LIBRARY "${GTEST_ROOT}/lib/libgtest.a")
+set(GTEST_MAIN_LIBRARY "${GTEST_ROOT}/lib/libgtest_main.a")
+
 # Include directories
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -19,6 +27,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
     ${PROJECT_ROOT}/external/json/include
     ${PROJECT_ROOT}/external/curl/include
+    ${GTEST_INCLUDE_DIR}
 )
 
 # Source files
@@ -37,14 +46,6 @@ set(IMGUI_SOURCES
     external/imgui/imgui_tables.cpp
     external/imgui/imgui_widgets.cpp
 )
-
-# Gtest
-
-# Adjust these paths if your installation is elsewhere
-set(GTEST_ROOT "$ENV{HOME}/.local")
-set(GTEST_INCLUDE_DIR "${GTEST_ROOT}/include")
-set(GTEST_LIBRARY "${GTEST_ROOT}/lib/libgtest.a")
-set(GTEST_MAIN_LIBRARY "${GTEST_ROOT}/lib/libgtest_main.a")
 
 # OpenSSL
 
