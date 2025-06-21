@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-PlatformGLFW::PlatformGLFW(int width, int height, const std::string& appName)
+PlatformGLFW::PlatformGLFW(const std::string& appName,int width, int height)
     : PlatformBase(appName)
     , m_window(nullptr)
     , m_width(width)

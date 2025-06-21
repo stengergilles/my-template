@@ -8,7 +8,7 @@ struct GLFWwindow;
 // GLFW implementation (works on Windows, Linux, macOS)
 class PlatformGLFW : public PlatformBase {
 public:
-    PlatformGLFW(int width = 1280, int height = 720, const std::string& appName = "ImGui Hello World");
+    PlatformGLFW(const std::string& appName,int width = 1280, int height = 720);
     virtual ~PlatformGLFW();
 
 protected:

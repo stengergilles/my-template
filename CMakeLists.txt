@@ -17,6 +17,8 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
+    ${PROJECT_ROOT}/external/json/include
+    ${PROJECT_ROOT}/external/curl/include
 )
 
 # Source files
@@ -96,10 +98,14 @@ add_executable(integration_coingecko_fetcher
 
 target_include_directories(integration_coingecko_fetcher PRIVATE 
 	src
-	${PROJECT_ROOT}/external/json/include
 )
 # If you depend on curl, openssl, etc:
-target_link_libraries(integration_coingecko_fetcher PRIVATE CURL::libcurl)
+target_link_libraries(integration_coingecko_fetcher PRIVATE 
+	CURL::libcurl
+	"${GTEST_ROOT}/lib/libgtest.a"
+        "${GTEST_ROOT}/lib/libgtest_main.a"
+         pthread
+)
 
 # Optionally, add as a test (CMake's ctest)
 add_test(NAME integration_coingecko_fetcher COMMAND integration_coingecko_fetcher)
@@ -126,6 +132,7 @@ if(ANDROID)
         ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/android
         ${ANDROID_NDK}/sources/android/native_app_glue
 	${CURL_INCLUDE_DIRS}
+	${PROJECT_ROOT}/external/json/include
     )
     
     # Android-specific libraries
