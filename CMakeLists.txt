@@ -36,6 +36,16 @@ set(IMGUI_SOURCES
     external/imgui/imgui_widgets.cpp
 )
 
+# Gtest
+
+# Adjust these paths if your installation is elsewhere
+set(GTEST_ROOT "$ENV{HOME}/.local")
+set(GTEST_INCLUDE_DIR "${GTEST_ROOT}/include")
+set(GTEST_LIBRARY "${GTEST_ROOT}/lib/libgtest.a")
+set(GTEST_MAIN_LIBRARY "${GTEST_ROOT}/lib/libgtest_main.a")
+
+# OpenSSL
+
 set(OPENSSL_ROOT_DIR "${PROJECT_ROOT}/external/openssl" CACHE PATH "OpenSSL root" FORCE)
 set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include" CACHE PATH "OpenSSL include" FORCE)
 set(OPENSSL_CRYPTO_LIBRARY "${OPENSSL_ROOT_DIR}/libcrypto.a" CACHE FILEPATH "OpenSSL crypto lib" FORCE)
@@ -157,6 +167,9 @@ else()
     )
     
     # Find required packages
+    if(POLICY CMP0072)
+       cmake_policy(SET CMP0072 NEW)
+    endif()
     find_package(OpenGL REQUIRED)
     
     # Platform-specific libraries

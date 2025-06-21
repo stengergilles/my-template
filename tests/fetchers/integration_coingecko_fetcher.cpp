@@ -1,24 +1,41 @@
+#include <gtest/gtest.h>
+#include "coingecko_fetcher.hpp"
 #include <iostream>
-#include "../../src/coingecko_fetcher.hpp" // Adjust include as needed
 
-int main() {
+// Helper to check DataFrame columns (adapt to your DataFrame interface)
+bool has_column(const DataFrame& df, const std::string& col_name) {
+    auto cols = df.columns();
+    return std::find(cols.begin(), cols.end(), col_name) != cols.end();
+}
+
+// Integration test for CoinGeckoFetcher using real API
+TEST(CoinGeckoFetcherIntegrationTest, FetchBitcoin1d) {
+    CoinGeckoFetcher fetcher; // No API key needed for free endpoints
+
     try {
-        CoinGeckoFetcher fetcher;
-        // Example: fetch the price of bitcoin (adjust to your actual API)
-        // You may need to adapt method names/parameters.
-        // double price = fetcher.fetch_price("bitcoin"); // Replace with real method
-//        std::cout << "Bitcoin price: " << price << std::endl;
+        DataFrame df = fetcher.fetch_data("bitcoin", "1d", "daily");
 
-        // Optionally, add a basic check
-//        if (price > 0) {
-//            std::cout << "Test passed." << std::endl;
-//            return 0;
-//        } else {
-//            std::cerr << "Test failed: price not positive." << std::endl;
-//            return 1;
-//        }
-    } catch (const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-        return 2;
+        // Print for debug
+        std::cout << "Fetched DataFrame rows: " << df.size() << std::endl;
+
+        // Basic checks
+        ASSERT_GT(df.size(), 0) << "DataFrame should have at least 1 row.";
+        ASSERT_TRUE(has_column(df, "Timestamp")) << "DataFrame must have 'Timestamp' column.";
+        ASSERT_TRUE(has_column(df, "Close")) << "DataFrame must have 'Close' column.";
+        // Optionally check for other expected columns
+        ASSERT_TRUE(has_column(df, "Open"));
+        ASSERT_TRUE(has_column(df, "High"));
+        ASSERT_TRUE(has_column(df, "Low"));
+        ASSERT_TRUE(has_column(df, "Volume"));
+
+        // Optionally, print the first row for manual inspection
+        // auto first_row = df.row(0);
+        // for (const auto& col : df.columns()) {
+        //     std::cout << col << ": " << first_row[col] << " ";
+        // }
+        // std::cout << std::endl;
+
+    } catch (const std::exception& ex) {
+        FAIL() << "Exception thrown during fetch_data: " << ex.what();
     }
 }
