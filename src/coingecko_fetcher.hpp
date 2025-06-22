@@ -16,7 +16,7 @@ public:
 
     DataFrame fetch_data(const std::string& identifier,
                         const std::string& period,
-                        const std::string& interval) override ;
+                        const std::string& interval) override;
 
     std::string get_service_name() const override;
 
@@ -27,15 +27,9 @@ private:
     static bool is_number(const std::string& s);
     static double random_uniform();
     static std::string timestamp_to_iso8601(int64_t ms_since_epoch);
-    // Define this function using your HTTP client (pseudo-code here)
-    struct HttpResponse {
-        int status_code;
-        std::string text;
-    };
-    HttpResponse http_get(const std::string& url,
-                          const std::map<std::string, std::string>& params,
-                          const std::map<std::string, std::string>& headers) const {
-        // Replace this with actual HTTP library code, e.g., using cpr or libcurl
-        throw std::runtime_error("HTTP GET not implemented! Integrate your HTTP client here.");
-    }
+
+    // Returns the raw JSON string from CoinGecko (separates fetch from parse)
+    std::string fetch_raw_response(const std::string& identifier,
+                                   const std::string& period,
+                                   const std::string& interval);
 };

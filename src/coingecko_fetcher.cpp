@@ -1,5 +1,5 @@
 #include "coingecko_fetcher.hpp"
-#include "http_client.hpp"      // The platform-abstracted HTTP client
+#include "platform_http_client.hpp"      // The platform-abstracted HTTP client
 #include <nlohmann/json.hpp>
 #include <algorithm>
 #include <cmath>
@@ -11,9 +11,10 @@ CoinGeckoFetcher::CoinGeckoFetcher(const std::string& api_key)
     : api_key_(api_key)
 {}
 
-DataFrame CoinGeckoFetcher::fetch_data(const std::string& identifier,
-                                       const std::string& period,
-                                       const std::string& interval)
+std::string CoinGeckoFetcher::fetch_raw_response(
+    const std::string& identifier,
+    const std::string& period,
+    const std::string& interval)
 {
     static const std::unordered_map<std::string, std::string> period_map_cg = {
         {"1d", "1"}, {"5d", "7"}, {"1w", "7"}, {"1mo", "30"}, {"3mo", "90"},
@@ -48,7 +49,6 @@ DataFrame CoinGeckoFetcher::fetch_data(const std::string& identifier,
     constexpr int BACKOFF_FACTOR = 2;
     int retries = 0;
     std::string last_error;
-    nlohmann::json data;
 
     PlatformHttpClient http_client;
 
@@ -68,16 +68,35 @@ DataFrame CoinGeckoFetcher::fetch_data(const std::string& identifier,
                     throw std::runtime_error("HTTP error " + std::to_string(response.status_code));
                 }
             }
-            data = nlohmann::json::parse(response.text);
-            break;
+            if (response.text.empty()) {
+                throw std::runtime_error("Empty response body from CoinGecko API.");
+            }
+            return response.text;
         } catch (const std::exception& e) {
             last_error = e.what();
             if (++retries >= MAX_RETRIES)
                 throw std::runtime_error("Failed to fetch data: " + last_error);
         }
     }
+    throw std::runtime_error("Failed to fetch data: " + last_error); // Should not reach here
+}
 
-    // Parse JSON response
+DataFrame CoinGeckoFetcher::fetch_data(const std::string& identifier,
+                                       const std::string& period,
+                                       const std::string& interval)
+{
+    // Step 1: Fetch raw JSON string from CoinGecko
+    std::string raw_json = fetch_raw_response(identifier, period, interval);
+
+    // Step 2: Parse JSON
+    nlohmann::json data;
+    try {
+        data = nlohmann::json::parse(raw_json);
+    } catch (const std::exception& e) {
+        throw std::runtime_error("Failed to parse JSON from CoinGecko: " + std::string(e.what()));
+    }
+
+    // Step 3: Process as before
     if (!data.contains("prices") || !data.contains("total_volumes"))
         throw std::runtime_error("CoinGecko API response is malformed or missing data.");
 

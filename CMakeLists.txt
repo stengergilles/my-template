@@ -36,6 +36,7 @@ set(SOURCES
     src/platform/platform_base.cpp
     src/main.cpp
     src/coingecko_fetcher.cpp
+    src/http_client_curl.cpp
 )
 
 # ImGui source files
@@ -94,7 +95,9 @@ get_target_property(CURL_INCLUDE_DIRS libcurl INTERFACE_INCLUDE_DIRECTORIES)
 add_executable(integration_coingecko_fetcher
 	${PROJECT_ROOT}/tests/fetchers/integration_coingecko_fetcher.cpp
     	${PROJECT_ROOT}/src/coingecko_fetcher.cpp
-    # Add any other required source files here
+	${PROJECT_ROOT}/src/http_client_curl.cpp
+	${PROJECT_ROOT}/src/tempfile.cpp
+	${PROJECT_ROOT}/src/write_cacert.cpp
 )
 
 target_include_directories(integration_coingecko_fetcher PRIVATE 
@@ -110,6 +113,35 @@ target_link_libraries(integration_coingecko_fetcher PRIVATE
 
 # Optionally, add as a test (CMake's ctest)
 add_test(NAME integration_coingecko_fetcher COMMAND integration_coingecko_fetcher)
+
+set(CACERT_PEM_URL "https://curl.se/ca/cacert.pem")
+set(CACERT_PEM "${CMAKE_BINARY_DIR}/cacert.pem")
+set(CACERT_HEADER "${CMAKE_SOURCE_DIR}/src/cacert_pem_data.hpp")
+
+# Download cacert.pem
+add_custom_command(
+    OUTPUT ${CACERT_PEM}
+    COMMAND ${CMAKE_COMMAND} -E echo "Downloading cacert.pem..."
+    COMMAND ${CMAKE_COMMAND} -E remove -f ${CACERT_PEM}
+    COMMAND curl -L -o ${CACERT_PEM} ${CACERT_PEM_URL}
+    COMMENT "Downloading latest cacert.pem"
+)
+
+# Convert to header and fix variable names
+add_custom_command(
+    OUTPUT ${CACERT_HEADER}
+    DEPENDS ${CACERT_PEM}
+    COMMAND xxd -i ${CACERT_PEM} > ${CACERT_HEADER}
+    COMMAND sed -i -e 's/unsigned char .*/unsigned char cacert_pem[] = {/' ${CACERT_HEADER}
+    COMMAND sed -i -e '"s/unsigned int .*/unsigned int cacert_pem_len = sizeof(cacert_pem);/"' ${CACERT_HEADER}
+    COMMENT "Generating and fixing cacert_pem_data.hpp"
+)
+
+# Add as a custom target so it runs before build
+add_custom_target(gen_cacert_header ALL DEPENDS ${CACERT_HEADER})
+
+# Make sure your sources include the generated header
+add_dependencies(integration_coingecko_fetcher gen_cacert_header)
 
 # Platform-specific source files and libraries
 if(ANDROID)
