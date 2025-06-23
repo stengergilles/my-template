@@ -36,6 +36,7 @@ set(SOURCES
     src/platform/platform_base.cpp
     src/main.cpp
     src/coingecko_fetcher.cpp
+    src/polygon_fetcher.cpp
     src/http_client_curl.cpp
 )
 
@@ -100,7 +101,18 @@ add_executable(integration_coingecko_fetcher
 	${PROJECT_ROOT}/src/write_cacert.cpp
 )
 
+add_executable(integration_polygon_fetcher
+	${PROJECT_ROOT}/tests/fetchers/integration_polygon_fetcher.cpp
+    	${PROJECT_ROOT}/src/polygon_fetcher.cpp
+	${PROJECT_ROOT}/src/http_client_curl.cpp
+	${PROJECT_ROOT}/src/tempfile.cpp
+	${PROJECT_ROOT}/src/write_cacert.cpp
+)
+
 target_include_directories(integration_coingecko_fetcher PRIVATE 
+	src
+)
+target_include_directories(integration_polygon_fetcher PRIVATE 
 	src
 )
 # If you depend on curl, openssl, etc:
@@ -111,8 +123,15 @@ target_link_libraries(integration_coingecko_fetcher PRIVATE
          pthread
 )
 
+target_link_libraries(integration_polygon_fetcher PRIVATE 
+	CURL::libcurl
+	"${GTEST_ROOT}/lib/libgtest.a"
+        "${GTEST_ROOT}/lib/libgtest_main.a"
+         pthread
+)
 # Optionally, add as a test (CMake's ctest)
 add_test(NAME integration_coingecko_fetcher COMMAND integration_coingecko_fetcher)
+add_test(NAME integration_polygon_fetcher COMMAND integration_polygon_fetcher)
 
 set(CACERT_PEM_URL "https://curl.se/ca/cacert.pem")
 set(CACERT_PEM "${CMAKE_BINARY_DIR}/cacert.pem")
@@ -142,6 +161,7 @@ add_custom_target(gen_cacert_header ALL DEPENDS ${CACERT_HEADER})
 
 # Make sure your sources include the generated header
 add_dependencies(integration_coingecko_fetcher gen_cacert_header)
+add_dependencies(integration_polygon_fetcher gen_cacert_header)
 
 # Platform-specific source files and libraries
 if(ANDROID)
