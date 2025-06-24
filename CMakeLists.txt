@@ -109,10 +109,18 @@ add_executable(integration_polygon_fetcher
 	${PROJECT_ROOT}/src/write_cacert.cpp
 )
 
+add_executable(test_atr
+	${PROJECT_ROOT}/tests/indicators/test_atr.cpp
+    	${PROJECT_ROOT}/src/atr_indicator.cpp
+)
+
 target_include_directories(integration_coingecko_fetcher PRIVATE 
 	src
 )
 target_include_directories(integration_polygon_fetcher PRIVATE 
+	src
+)
+target_include_directories(test_atr PRIVATE 
 	src
 )
 # If you depend on curl, openssl, etc:
@@ -125,6 +133,12 @@ target_link_libraries(integration_coingecko_fetcher PRIVATE
 
 target_link_libraries(integration_polygon_fetcher PRIVATE 
 	CURL::libcurl
+	"${GTEST_ROOT}/lib/libgtest.a"
+        "${GTEST_ROOT}/lib/libgtest_main.a"
+         pthread
+)
+
+target_link_libraries(test_atr PRIVATE 
 	"${GTEST_ROOT}/lib/libgtest.a"
         "${GTEST_ROOT}/lib/libgtest_main.a"
          pthread

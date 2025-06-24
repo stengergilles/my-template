@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <map>
 #include <stdexcept>
 
 // A simple DataFrame-like structure for demonstration.
@@ -13,6 +14,8 @@ struct DataFrame {
     std::vector<double> close;
     std::vector<double> volume;
     std::vector<std::string> datetime_index;
+    std::map<std::string, std::vector<double>> extra_columns;
+    std::map<std::string, std::vector<bool>> extra_bool_columns;
 
     // --- Add these methods ---
 
