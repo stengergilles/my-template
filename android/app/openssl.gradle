@@ -1,0 +1,38 @@
+def opensslBuildDir = "${rootProject.projectDir}/../external/openssl/android/arm64-v8a"
+def opensslSourceDir = "${rootProject.projectDir}/../external/openssl-src"
+
+task buildOpensslArm64 {
+    def requiredFiles = [
+        "${opensslBuildDir}/include/openssl/opensslconf.h",
+        "${opensslBuildDir}/lib/libssl.a",
+        "${opensslBuildDir}/lib/libcrypto.a",
+    ]
+
+    outputs.files requiredFiles
+
+    outputs.upToDateWhen {
+        requiredFiles.every { file(it).exists() }
+    }
+
+    doFirst {
+        file(opensslBuildDir).mkdirs()
+	requiredFiles.each { println "${it}: ${file(it).absolutePath} exists? ${file(it).exists()}" }
+    }
+    doLast {
+      exec {
+      commandLine "bash", "-c", """
+        set -e && \
+	rm -rf ${opensslSourceDir} && \
+	git clone https://github.com/openssl/openssl.git ${opensslSourceDir} && \
+        cd ${opensslSourceDir} && \
+        ./Configure android-arm64 no-tests --prefix=${opensslBuildDir} && \
+	ls include/openssl/opensslconf.h && \
+        make -j\$(nproc) && \
+        make install_sw
+      """
+      }
+    }
+    outputs.dir opensslBuildDir
+}
+
+preBuild.dependsOn buildOpensslArm64

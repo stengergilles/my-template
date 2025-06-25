@@ -42,3 +42,5 @@ android {
     }
     ndkVersion '26.1.10909125'
 }
+
+apply from: 'openssl.gradle'
