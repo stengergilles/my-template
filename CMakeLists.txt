@@ -245,7 +245,7 @@ add_dependencies(integration_coingecko_fetcher gen_cacert_header)
 add_dependencies(integration_polygon_fetcher gen_cacert_header)
 endif()
 
-if(ANDROID)
+if(ANDROID AND NOT BUILD_TESTS)
     set(PLATFORM_SOURCES
         src/platform/platform_android.cpp
         src/platform/android/android_native_app_glue.c
@@ -272,7 +272,7 @@ if(ANDROID)
         OpenSSL::Crypto
     )
     add_library(${PROJECT_NAME} SHARED ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
-elseif(EMSCRIPTEN)
+elseif(EMSCRIPTEN AND NOT BUILD_TESTS)
     set(PLATFORM_SOURCES
         src/platform/platform_wasm.cpp
         external/imgui/backends/imgui_impl_sdl2.cpp
@@ -284,36 +284,41 @@ elseif(EMSCRIPTEN)
     set(PLATFORM_LIBS)
     add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
 else()
-    set(PLATFORM_SOURCES
-        src/platform/platform_glfw.cpp
-        external/imgui/backends/imgui_impl_glfw.cpp
-        external/imgui/backends/imgui_impl_opengl3.cpp
-    )
-    if(POLICY CMP0072)
-       cmake_policy(SET CMP0072 NEW)
-    endif()
-    find_package(OpenGL REQUIRED)
-    set(PLATFORM_LIBS
+    if(NOT BUILD_TESTS)
+      set(PLATFORM_SOURCES
+          src/platform/platform_glfw.cpp
+          external/imgui/backends/imgui_impl_glfw.cpp
+          external/imgui/backends/imgui_impl_opengl3.cpp
+      )
+      if(POLICY CMP0072)
+        cmake_policy(SET CMP0072 NEW)
+      endif()
+      find_package(OpenGL REQUIRED)
+      set(PLATFORM_LIBS
         OpenGL::GL
         glfw
         CURL::libcurl
         OpenSSL::SSL
         OpenSSL::Crypto
-    )
-    if(APPLE)
+      )
+      if(APPLE AND NOT BUILD_TESTS)
         find_library(COCOA_LIBRARY Cocoa)
         find_library(IOKIT_LIBRARY IOKit)
         find_library(CORE_FOUNDATION_LIBRARY CoreFoundation)
         find_library(CORE_VIDEO_LIBRARY CoreVideo)
         list(APPEND PLATFORM_LIBS ${COCOA_LIBRARY} ${IOKIT_LIBRARY} ${CORE_FOUNDATION_LIBRARY} ${CORE_VIDEO_LIBRARY})
-    endif()
-    if(WIN32)
+      endif()
+      if(WIN32 AND NOT BUILD_TESTS)
         # Add Windows-specific libraries if needed
-    endif()
-    add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
+      endif()
+      add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
+   endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} ${PLATFORM_LIBS})
+if (NOT BUILD_TESTS)
+   target_link_libraries(${PROJECT_NAME} ${PLATFORM_LIBS})
+   add_dependencies(${PROJECT_NAME} gen_cacert_header)
+endif()
 
 if(NOT ANDROID)
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)
