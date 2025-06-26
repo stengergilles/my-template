@@ -24,6 +24,29 @@ else()
   set(GTEST_INCLUDE_DIR "")
 endif()
 
+# Prebuild openssl for everything except Android
+
+message(STATUS "CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}")
+message(STATUS "BUILD_TESTS ${BUILD_TESTS}")
+
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND BUILD_TESTS OR EXISTS "/data/data/com.termux/files/usr")
+  if(NOT EXISTS "${PROJECT_ROOT}/external/openssl/native/include/openssl/opensslconf.h")
+    execute_process(
+        COMMAND bash -c "
+	    cd ${PROJECT_ROOT}/external/openssl-src
+	    ./Configure no-tests --prefix=${PROJECT_ROOT}/external/openssl/native
+	    make -j\$(nproc)
+	    make install
+        "
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        RESULT_VARIABLE OPENSSL_BUILD_RESULT
+    )
+    if(NOT OPENSSL_BUILD_RESULT EQUAL 0)
+        message(FATAL_ERROR "Failed to build OpenSSL!")
+    endif()
+  endif()
+endif()
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
@@ -196,7 +219,7 @@ if(BUILD_TESTS)
 endif()
 set(CACERT_PEM_URL "https://curl.se/ca/cacert.pem")
 set(CACERT_PEM "${CMAKE_BINARY_DIR}/cacert.pem")
-set(CACERT_HEADER "${CMAKE_SOURCE_DIR}/src/cacert_pem_data.hpp")
+set(CACERT_HEADER "${CMAKE_SOURCE_DIR}/include/cacert_pem_data.hpp")
 
 add_custom_command(
     OUTPUT ${CACERT_PEM}
@@ -205,20 +228,13 @@ add_custom_command(
     COMMAND curl -L -o ${CACERT_PEM} ${CACERT_PEM_URL}
     COMMENT "Downloading latest cacert.pem"
 )
-#
-#add_custom_command(
-#    OUTPUT ${CACERT_HEADER}
-#    DEPENDS ${CACERT_PEM}
-#    COMMAND xxd -i ${CACERT_PEM} > ${CACERT_HEADER}
-#    COMMAND sed -i -e 's/unsigned char .*/unsigned char cacert_pem[] = {/' ${CACERT_HEADER}
-#    COMMAND sed -i -e "s/unsigned int .*/unsigned int cacert_pem_len = sizeof(cacert_pem);/" ${CACERT_HEADER}
-#    COMMENT "Generating and fixing cacert_pem_data.hpp"
-#)
 
 add_custom_command(
     OUTPUT ${CACERT_HEADER}
     DEPENDS ${CACERT_PEM}
-    COMMAND bash -c "xxd -i ${CACERT_PEM} > ${CACERT_HEADER} && sed -i -e 's/unsigned char .*/unsigned char cacert_pem[] = {/' ${CACERT_HEADER} && sed -i -e 's/unsigned int .*/unsigned int cacert_pem_len = sizeof(cacert_pem);/' ${CACERT_HEADER}"
+    COMMAND xxd -i ${CACERT_PEM} > ${CACERT_HEADER}.tmp && mv ${CACERT_HEADER}.tmp ${CACERT_HEADER}
+    COMMAND sed -i -e 's|unsigned char .*|unsigned char cacert_pem[] = {|g' "${CACERT_HEADER}"
+    COMMAND sed -i -e 's|unsigned int[[:space:]]*.*|unsigned int cacert_pem_len = sizeof\(cacert_pem\)\;|' "${CACERT_HEADER}"
     COMMENT "Generating and fixing cacert_pem_data.hpp"
 )
 
