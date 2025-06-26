@@ -20,6 +20,7 @@ if (BUILD_TESTS)
   set(GTEST_INCLUDE_DIR "${GTEST_ROOT}/include")
   set(GTEST_LIBRARY "${GTEST_ROOT}/lib/libgtest.a")
   set(GTEST_MAIN_LIBRARY "${GTEST_ROOT}/lib/libgtest_main.a")
+  enable_testing()
 else()
   set(GTEST_INCLUDE_DIR "")
 endif()
@@ -175,7 +176,7 @@ if(BUILD_TESTS)
       ${PROJECT_ROOT}/tests/indicators/test_atr.cpp
       ${PROJECT_ROOT}/src/atr_indicator.cpp
   )
-  add_executable(test_bollinger_bands_indicator
+  add_executable(test_bollinger_indicator
       ${PROJECT_ROOT}/tests/indicators/test_bollinger.cpp
       ${PROJECT_ROOT}/src/bollinger_indicator.cpp
   )
@@ -183,7 +184,7 @@ if(BUILD_TESTS)
   target_include_directories(integration_coingecko_fetcher PRIVATE src)
   target_include_directories(integration_polygon_fetcher PRIVATE src)
   target_include_directories(test_atr PRIVATE src)
-  target_include_directories(test_bollinger_bands_indicator PRIVATE src)
+  target_include_directories(test_bollinger_indicator PRIVATE src)
   
   target_link_libraries(integration_coingecko_fetcher PRIVATE
       CURL::libcurl
@@ -206,7 +207,7 @@ if(BUILD_TESTS)
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
   )
-  target_link_libraries(test_bollinger_bands_indicator PRIVATE
+  target_link_libraries(test_bollinger_indicator PRIVATE
       "${GTEST_ROOT}/lib/libgtest.a"
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
@@ -215,7 +216,7 @@ if(BUILD_TESTS)
   add_test(NAME integration_coingecko_fetcher COMMAND integration_coingecko_fetcher)
   add_test(NAME integration_polygon_fetcher COMMAND integration_polygon_fetcher)
   add_test(NAME test_atr COMMAND test_atr)
-  add_test(NAME test_bollinger_bands_indicator COMMAND test_bollinger_bands_indicator)
+  add_test(NAME test_bollinger_indicator COMMAND test_bollinger_indicator)
 endif()
 set(CACERT_PEM_URL "https://curl.se/ca/cacert.pem")
 set(CACERT_PEM "${CMAKE_BINARY_DIR}/cacert.pem")
