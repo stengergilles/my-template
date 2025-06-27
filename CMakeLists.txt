@@ -176,15 +176,30 @@ if(BUILD_TESTS)
       ${PROJECT_ROOT}/tests/indicators/test_atr.cpp
       ${PROJECT_ROOT}/src/atr_indicator.cpp
   )
-  add_executable(test_bollinger_indicator
+  add_executable(test_bollinger
       ${PROJECT_ROOT}/tests/indicators/test_bollinger.cpp
       ${PROJECT_ROOT}/src/bollinger_indicator.cpp
   )
-  
-  target_include_directories(integration_coingecko_fetcher PRIVATE src)
-  target_include_directories(integration_polygon_fetcher PRIVATE src)
-  target_include_directories(test_atr PRIVATE src)
-  target_include_directories(test_bollinger_indicator PRIVATE src)
+  add_executable(test_breakout
+      ${PROJECT_ROOT}/tests/indicators/test_breakout.cpp
+      ${PROJECT_ROOT}/src/breakout_indicator.cpp
+  )
+  add_executable(test_ma
+      ${PROJECT_ROOT}/tests/indicators/test_ma.cpp
+      ${PROJECT_ROOT}/src/ma_indicator.cpp
+  )
+  add_executable(test_macd
+      ${PROJECT_ROOT}/tests/indicators/test_macd.cpp
+      ${PROJECT_ROOT}/src/macd_indicator.cpp
+  )
+  add_executable(test_rsi
+      ${PROJECT_ROOT}/tests/indicators/test_rsi.cpp
+      ${PROJECT_ROOT}/src/rsi_indicator.cpp
+  )
+  add_executable(test_volume_spike
+      ${PROJECT_ROOT}/tests/indicators/test_volume_spike.cpp
+      ${PROJECT_ROOT}/src/volume_spike_indicator.cpp
+  )
   
   target_link_libraries(integration_coingecko_fetcher PRIVATE
       CURL::libcurl
@@ -207,16 +222,47 @@ if(BUILD_TESTS)
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
   )
-  target_link_libraries(test_bollinger_indicator PRIVATE
+  target_link_libraries(test_bollinger PRIVATE
       "${GTEST_ROOT}/lib/libgtest.a"
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
   )
   
+  target_link_libraries(test_breakout PRIVATE
+      "${GTEST_ROOT}/lib/libgtest.a"
+      "${GTEST_ROOT}/lib/libgtest_main.a"
+      pthread
+  )
+  target_link_libraries(test_ma PRIVATE
+      "${GTEST_ROOT}/lib/libgtest.a"
+      "${GTEST_ROOT}/lib/libgtest_main.a"
+      pthread
+  )
+  target_link_libraries(test_macd PRIVATE
+      "${GTEST_ROOT}/lib/libgtest.a"
+      "${GTEST_ROOT}/lib/libgtest_main.a"
+      pthread
+  )
+  target_link_libraries(test_rsi PRIVATE
+      "${GTEST_ROOT}/lib/libgtest.a"
+      "${GTEST_ROOT}/lib/libgtest_main.a"
+      pthread
+  )
+  target_link_libraries(test_volume_spike PRIVATE
+      "${GTEST_ROOT}/lib/libgtest.a"
+      "${GTEST_ROOT}/lib/libgtest_main.a"
+      pthread
+  )
+
   add_test(NAME integration_coingecko_fetcher COMMAND integration_coingecko_fetcher)
   add_test(NAME integration_polygon_fetcher COMMAND integration_polygon_fetcher)
   add_test(NAME test_atr COMMAND test_atr)
-  add_test(NAME test_bollinger_indicator COMMAND test_bollinger_indicator)
+  add_test(NAME test_bollinger COMMAND test_bollinger)
+  add_test(NAME test_breakout COMMAND test_breakout)
+  add_test(NAME test_ma COMMAND test_ma)
+  add_test(NAME test_macd COMMAND test_macd)
+  add_test(NAME test_rsi COMMAND test_rsi)
+  add_test(NAME test_volume_spike COMMAND test_volume_spike)
 endif()
 set(CACERT_PEM_URL "https://curl.se/ca/cacert.pem")
 set(CACERT_PEM "${CMAKE_BINARY_DIR}/cacert.pem")
