@@ -76,6 +76,11 @@ set(IMGUI_SOURCES
     external/imgui/imgui_widgets.cpp
 )
 
+# Auto-collect all *_indicator.cpp files from src/
+file(GLOB INDICATOR_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*_indicator.cpp")
+add_library(indicators STATIC ${INDICATOR_SOURCES})
+target_include_directories(indicators PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 add_subdirectory(external/json)
 
 # --- OpenSSL & curl reproducible build block ---
@@ -218,37 +223,44 @@ if(BUILD_TESTS)
       pthread
   )
   target_link_libraries(test_atr PRIVATE
+      indicators
       "${GTEST_ROOT}/lib/libgtest.a"
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
   )
   target_link_libraries(test_bollinger PRIVATE
+      indicators
       "${GTEST_ROOT}/lib/libgtest.a"
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
   )
   
   target_link_libraries(test_breakout PRIVATE
+      indicators
       "${GTEST_ROOT}/lib/libgtest.a"
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
   )
   target_link_libraries(test_ma PRIVATE
+      indicators
       "${GTEST_ROOT}/lib/libgtest.a"
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
   )
   target_link_libraries(test_macd PRIVATE
+      indicators
       "${GTEST_ROOT}/lib/libgtest.a"
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
   )
   target_link_libraries(test_rsi PRIVATE
+      indicators
       "${GTEST_ROOT}/lib/libgtest.a"
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
   )
   target_link_libraries(test_volume_spike PRIVATE
+      indicators
       "${GTEST_ROOT}/lib/libgtest.a"
       "${GTEST_ROOT}/lib/libgtest_main.a"
       pthread
@@ -317,6 +329,7 @@ if(ANDROID AND NOT BUILD_TESTS)
         CURL::libcurl
         OpenSSL::SSL
         OpenSSL::Crypto
+        indicators
     )
     add_library(${PROJECT_NAME} SHARED ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
 elseif(EMSCRIPTEN AND NOT BUILD_TESTS)
@@ -328,7 +341,9 @@ elseif(EMSCRIPTEN AND NOT BUILD_TESTS)
     set(CMAKE_EXECUTABLE_SUFFIX ".html")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL=2 -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s USE_WEBGL2=1")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shell-file ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/wasm/shell.html")
-    set(PLATFORM_LIBS)
+    set(PLATFORM_LIBS
+        indicators
+    )
     add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
 else()
     if(NOT BUILD_TESTS)
@@ -347,6 +362,7 @@ else()
         CURL::libcurl
         OpenSSL::SSL
         OpenSSL::Crypto
+        indicators
       )
       if(APPLE AND NOT BUILD_TESTS)
         find_library(COCOA_LIBRARY Cocoa)
