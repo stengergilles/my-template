@@ -1,4 +1,5 @@
 #include "volume_spike_indicator.hpp"
+#include "indicator_factory.hpp"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -72,3 +73,5 @@ DataFrame VolumeSpikeIndicator::calculate() {
     out.extra_bool_columns[sell_signal_col_] = sell_signal;
     return out;
 }
+
+REGISTER_INDICATOR("VOLUMESPIKE",VolumeSpikeIndicator)

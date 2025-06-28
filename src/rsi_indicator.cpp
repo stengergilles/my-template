@@ -1,4 +1,5 @@
 #include "rsi_indicator.hpp"
+#include "indicator_factory.hpp"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -92,3 +93,5 @@ DataFrame RSIIndicator::calculate() {
     out.extra_bool_columns[sell_signal_col_] = sell_signal;
     return out;
 }
+
+REGISTER_INDICATOR("RSI",RSIIndicator)

@@ -1,4 +1,5 @@
 #include "bollinger_bands_indicator.hpp"
+#include "indicator_factory.hpp"
 #include <cmath>
 #include <numeric>
 #include <algorithm>
@@ -86,3 +87,5 @@ DataFrame BollingerBandsIndicator::calculate() {
 
     return df_;
 }
+
+REGISTER_INDICATOR("BOLLINGER", BollingerBandsIndicator)

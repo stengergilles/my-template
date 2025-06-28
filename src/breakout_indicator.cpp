@@ -1,4 +1,5 @@
 #include "breakout_indicator.hpp"
+#include "indicator_factory.hpp"
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
@@ -60,3 +61,5 @@ DataFrame BreakoutIndicator::calculate() {
     out.extra_bool_columns[bearish_signal_col_] = bearish_signal;
     return out;
 }
+
+REGISTER_INDICATOR("BREAKOUT",BreakoutIndicator) 

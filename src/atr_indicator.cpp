@@ -1,4 +1,5 @@
 #include "atr_indicator.hpp"
+#include "indicator_factory.hpp"
 #include <algorithm>
 #include <cmath>
 #include <numeric>
@@ -98,3 +99,5 @@ DataFrame ATRIndicator::calculate() {
 
     return df_;
 }
+
+REGISTER_INDICATOR("ATR", ATRIndicator)
