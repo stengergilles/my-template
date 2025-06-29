@@ -3,9 +3,9 @@
 #include <android/log.h>
 #include "imgui.h"  // Added ImGui header
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "KeyboardHelper", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "KeyboardHelper", __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "KeyboardHelper", __VA_ARGS__))
+#define LOG_TAG "keyboard_helper"
+#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
 // Forward declaration of the JavaVM reference from jni_bridge.cpp
 extern JavaVM* g_JavaVM;
@@ -71,7 +71,7 @@ extern "C" bool showKeyboardSafely() {
     jmethodID showKeyboardMethod = g_ShowKeyboardMethod;
     if (showKeyboardMethod == nullptr) {
         LOGI("Finding showKeyboard method");
-        showKeyboardMethod = env->GetStaticMethodID(mainActivityClass, "showKeyboard", "()V");
+        showKeyboardMethod = env->GetStaticMethodID(g_MainActivityClass, "showKeyboard", "()V");
         if (showKeyboardMethod == nullptr) {
             LOGE("Failed to find showKeyboard method");
             env->ExceptionClear(); // Clear any pending exception
@@ -180,3 +180,5 @@ extern "C" bool hideKeyboardSafely() {
     LOGI("hideKeyboardSafely completed successfully");
     return true;
 }
+
+

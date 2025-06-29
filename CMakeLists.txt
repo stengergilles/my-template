@@ -50,6 +50,7 @@ endif()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/app
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
     ${PROJECT_ROOT}/external/json/include
@@ -61,8 +62,8 @@ set(SOURCES
     src/application.cpp
     src/platform/platform_base.cpp
     src/main.cpp
-    src/coingecko_fetcher.cpp
-    src/polygon_fetcher.cpp
+    src/app/coingecko_fetcher.cpp
+    src/app/polygon_fetcher.cpp
     src/http_client_curl.cpp
     src/write_cacert.cpp
     src/tempfile.cpp
@@ -77,9 +78,9 @@ set(IMGUI_SOURCES
 )
 
 # Auto-collect all *_indicator.cpp files from src/
-file(GLOB INDICATOR_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*_indicator.cpp")
-add_library(indicators STATIC ${INDICATOR_SOURCES})
-target_include_directories(indicators PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+file(GLOB APP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/app/*_indicator.cpp")
+add_library(indicators STATIC ${APP_SOURCES})
+target_include_directories(indicators PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/app)
 
 add_subdirectory(external/json)
 
@@ -165,45 +166,45 @@ get_target_property(CURL_INCLUDE_DIRS libcurl INTERFACE_INCLUDE_DIRECTORIES)
 if(BUILD_TESTS)
   add_executable(integration_coingecko_fetcher
       ${PROJECT_ROOT}/tests/fetchers/integration_coingecko_fetcher.cpp
-      ${PROJECT_ROOT}/src/coingecko_fetcher.cpp
+      ${PROJECT_ROOT}/src/app/coingecko_fetcher.cpp
       ${PROJECT_ROOT}/src/http_client_curl.cpp
       ${PROJECT_ROOT}/src/tempfile.cpp
       ${PROJECT_ROOT}/src/write_cacert.cpp
   )
   add_executable(integration_polygon_fetcher
       ${PROJECT_ROOT}/tests/fetchers/integration_polygon_fetcher.cpp
-      ${PROJECT_ROOT}/src/polygon_fetcher.cpp
+      ${PROJECT_ROOT}/src/app/polygon_fetcher.cpp
       ${PROJECT_ROOT}/src/http_client_curl.cpp
       ${PROJECT_ROOT}/src/tempfile.cpp
       ${PROJECT_ROOT}/src/write_cacert.cpp
   )
   add_executable(test_atr
       ${PROJECT_ROOT}/tests/indicators/test_atr.cpp
-      ${PROJECT_ROOT}/src/atr_indicator.cpp
+      ${PROJECT_ROOT}/src/app/atr_indicator.cpp
   )
   add_executable(test_bollinger
       ${PROJECT_ROOT}/tests/indicators/test_bollinger.cpp
-      ${PROJECT_ROOT}/src/bollinger_indicator.cpp
+      ${PROJECT_ROOT}/src/app/bollinger_indicator.cpp
   )
   add_executable(test_breakout
       ${PROJECT_ROOT}/tests/indicators/test_breakout.cpp
-      ${PROJECT_ROOT}/src/breakout_indicator.cpp
+      ${PROJECT_ROOT}/src/app/breakout_indicator.cpp
   )
   add_executable(test_ma
       ${PROJECT_ROOT}/tests/indicators/test_ma.cpp
-      ${PROJECT_ROOT}/src/ma_indicator.cpp
+      ${PROJECT_ROOT}/src/app/ma_indicator.cpp
   )
   add_executable(test_macd
       ${PROJECT_ROOT}/tests/indicators/test_macd.cpp
-      ${PROJECT_ROOT}/src/macd_indicator.cpp
+      ${PROJECT_ROOT}/src/app/macd_indicator.cpp
   )
   add_executable(test_rsi
       ${PROJECT_ROOT}/tests/indicators/test_rsi.cpp
-      ${PROJECT_ROOT}/src/rsi_indicator.cpp
+      ${PROJECT_ROOT}/src/app/rsi_indicator.cpp
   )
   add_executable(test_volume_spike
       ${PROJECT_ROOT}/tests/indicators/test_volume_spike.cpp
-      ${PROJECT_ROOT}/src/volume_spike_indicator.cpp
+      ${PROJECT_ROOT}/src/app/volume_spike_indicator.cpp
   )
   
   target_link_libraries(integration_coingecko_fetcher PRIVATE
@@ -313,12 +314,22 @@ if(ANDROID AND NOT BUILD_TESTS)
         src/platform/android/imgui_impl_android.cpp
         src/platform/android/keyboard_helper.cpp
         external/imgui/backends/imgui_impl_opengl3.cpp
+        src/app/atr_indicator.cpp
+        src/app/bollinger_indicator.cpp
+        src/app/breakout_indicator.cpp
+        src/app/coingecko_fetcher.cpp
+        src/app/ma_indicator.cpp
+        src/app/macd_indicator.cpp
+        src/app/polygon_fetcher.cpp
+        src/app/rsi_indicator.cpp
+        src/app/volume_spike_indicator.cpp
     )
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/android
         ${ANDROID_NDK}/sources/android/native_app_glue
         ${CURL_INCLUDE_DIRS}
         ${PROJECT_ROOT}/external/json/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/app
     )
     set(PLATFORM_LIBS
         android
@@ -329,7 +340,6 @@ if(ANDROID AND NOT BUILD_TESTS)
         CURL::libcurl
         OpenSSL::SSL
         OpenSSL::Crypto
-        indicators
     )
     add_library(${PROJECT_NAME} SHARED ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
 elseif(EMSCRIPTEN AND NOT BUILD_TESTS)

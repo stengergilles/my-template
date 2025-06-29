@@ -1,4 +1,4 @@
-#include "../../include/platform/platform_glfw.h"
+#include "../include/platform/platform_glfw.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"

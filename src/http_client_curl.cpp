@@ -36,7 +36,6 @@ HttpResponse HttpClientLibcurl::get(const std::string& url,
             first = false;
             char* key_escaped = curl_easy_escape(curl, kv.first.c_str(), 0);
             char* val_escaped = curl_easy_escape(curl, kv.second.c_str(), 0);
-            oss << key_escaped << "=" << val_escaped;
             curl_free(key_escaped);
             curl_free(val_escaped);
         }
@@ -56,7 +55,7 @@ HttpResponse HttpClientLibcurl::get(const std::string& url,
         chunk = curl_slist_append(chunk, header_line.c_str());
     }
     if (chunk) {
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+        curl_slist_free_all(chunk);
     }
 
     // Write the embedded cacert.pem to a temp file and set CAINFO

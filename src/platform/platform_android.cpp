@@ -11,8 +11,6 @@
 // Include keyboard helper
 #include "android/keyboard_helper.h"
 
-#include "android/python_object_initializer.hpp"
-
 // Define log macros if not defined
 #ifndef ANDROID_LOG_INFO
 #define ANDROID_LOG_INFO 4
