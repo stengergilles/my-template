@@ -1,4 +1,4 @@
-package com.example.imguihelloworld;
+package com.my.app;
 
 import android.util.Log;
 

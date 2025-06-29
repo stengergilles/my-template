@@ -1,11 +1,91 @@
 apply plugin: 'com.android.application'
 
+task refactorPackage {
+    description = 'Refactors the package name in source files and moves them to the correct directory.'
+    group = 'custom'
+
+    doLast {
+        def javaDir = file("src/main/java")
+        def mainActivityFile = fileTree(javaDir).include('**/MainActivity.java').singleFile
+        def currentPackageName = ""
+
+        if (mainActivityFile.exists()) {
+            def content = mainActivityFile.getText('UTF-8')
+            def matcher = content =~ /^package\s+([a-zA-Z0-9_.]+);/
+            if (matcher.find()) {
+                currentPackageName = matcher.group(1)
+            } else {
+                throw new GradleException("Could not find package declaration in MainActivity.java")
+            }
+        } else {
+            throw new GradleException("MainActivity.java not found in $javaDir")
+        }
+
+        def newPackageName = android.defaultConfig.applicationId
+
+        if (currentPackageName == newPackageName) {
+            println "Package name is already set to $newPackageName. No refactoring needed."
+            return
+        }
+
+        println "Refactoring package name from $currentPackageName to $newPackageName"
+
+        // 1. Update Java files
+        def oldPackagePath = currentPackageName.replace('.', '/')
+        def newPackagePath = newPackageName.replace('.', '/')
+        def oldJavaPath = file("$javaDir/$oldPackagePath")
+        def newJavaPath = file("$javaDir/$newPackagePath")
+
+        if (oldJavaPath.exists()) {
+            println "Moving Java files from $oldJavaPath to $newJavaPath"
+            newJavaPath.mkdirs()
+            ant.move(file: "$oldJavaPath", tofile: "$newJavaPath")
+
+            // Update package declarations in Java files
+            fileTree(newJavaPath).include('**/*.java').each { file ->
+                println "Updating package in $file"
+                def content = file.getText('UTF-8')
+                content = content.replace("package $currentPackageName", "package $newPackageName")
+                file.write(content, 'UTF-8')
+            }
+        }
+
+        // 2. Update C++ JNI files
+        def jniBridgeFile = file("../../src/platform/android/jni_bridge.cpp")
+        if (jniBridgeFile.exists()) {
+            println "Updating package name in $jniBridgeFile"
+            def content = jniBridgeFile.getText('UTF-8')
+            content = content.replaceAll(currentPackageName.replace('.', '_'), newPackageName.replace('.', '_'))
+            content = content.replaceAll(currentPackageName.replace('.', '/'), newPackageName.replace('.', '/'))
+            jniBridgeFile.write(content, 'UTF-8')
+        }
+
+        def keyboardHelperFile = file("../../src/platform/android/keyboard_helper.cpp")
+        if (keyboardHelperFile.exists()) {
+            println "Updating package name in $keyboardHelperFile"
+            def content = keyboardHelperFile.getText('UTF-8')
+            content = content.replaceAll(currentPackageName.replace('.', '/'), newPackageName.replace('.', '/'))
+            keyboardHelperFile.write(content, 'UTF-8')
+        }
+
+        println "Package refactoring complete."
+    }
+}
+
+project.afterEvaluate {
+    preBuild.dependsOn refactorPackage
+}
+
 android {
-    namespace 'com.example.imguihelloworld'
+    def packageName = project.hasProperty('overridePackageName') ? project.properties['overridePackageName'] : (project.hasProperty('packageName') ? project.properties['packageName'] : 'com.example.imguihelloworld')
+    println "Resolved packageName: $packageName"
+    namespace packageName
+
+    
     compileSdkVersion 33
     defaultConfig {
-        applicationId "com.example.imguihelloworld"
-        minSdkVersion 24	
+        applicationId packageName
+        minSdkVersion 24
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
@@ -15,9 +95,9 @@ android {
                 arguments "-DANDROID=ON -DCMAKE_VERBOSE_MAKEFILE=ON"
             }
         }
-    	ndk {
+        ndk {
             abiFilters 'arm64-v8a'
-    	}
+        }
     }
     buildTypes {
         release {
@@ -28,7 +108,7 @@ android {
     externalNativeBuild {
         cmake {
             path "../../CMakeLists.txt"
-	    version "3.25.1"
+            version "3.25.1"
         }
     }
     sourceSets {
@@ -43,4 +123,32 @@ android {
     ndkVersion '26.1.10909125'
 }
 
+
+task updateAppTitle {
+    description = 'Updates the app title in strings.xml.'
+    group = 'custom'
+
+    doLast {
+        if (project.hasProperty('overrideAppTitle')) {
+            def appTitle = project.properties['overrideAppTitle']
+            def stringsXml = file("src/main/res/values/strings.xml")
+            if (stringsXml.exists()) {
+                def content = stringsXml.getText('UTF-8')
+                def newContent = content.substring(0, content.indexOf("<string name=\"app_name\">") + "<string name=\"app_name\">".length()) + appTitle + content.substring(content.indexOf("</string>", content.indexOf("<string name=\"app_name\">")));
+                stringsXml.write(newContent, 'UTF-8')
+                println "Updated app_name in strings.xml to: $appTitle"
+            } else {
+                println "strings.xml not found, skipping app title update."
+            }
+        } else {
+            println "No overrideAppTitle property found, skipping app title update."
+        }
+    }
+}
+
+project.afterEvaluate {
+    preBuild.dependsOn updateAppTitle
+}
+
 apply from: 'openssl.gradle'
+

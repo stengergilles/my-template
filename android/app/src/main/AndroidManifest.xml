@@ -10,7 +10,7 @@
         android:theme="@style/AppTheme">
 
         <!-- Our custom activity that extends NativeActivity -->
-        <activity android:name=".MainActivity"
+        <activity android:name="${applicationId}.MainActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="sensor"

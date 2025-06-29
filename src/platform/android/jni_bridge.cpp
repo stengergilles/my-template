@@ -23,7 +23,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     }
     
     // Find and cache the MainActivity class and keyboard methods
-    jclass mainActivityClass = env->FindClass("com/example/imguihelloworld/MainActivity");
+    jclass mainActivityClass = env->FindClass("com/my/app/MainActivity");
     if (mainActivityClass == nullptr) {
         LOGE("Failed to find MainActivity class");
         env->ExceptionClear(); // Clear any pending exception
@@ -57,7 +57,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 extern "C" {
 
 JNIEXPORT void JNICALL
-Java_com_example_imguihelloworld_ImGuiKeyboardHelper_nativeOnKeyDown(JNIEnv *env, jobject thiz, jint key_code, jint meta_state) {
+Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyDown(JNIEnv *env, jobject thiz, jint key_code, jint meta_state) {
     LOGI("Key down: %d, meta: %d", key_code, meta_state);
     
     // Map Android key codes to ImGui key codes
@@ -66,7 +66,8 @@ Java_com_example_imguihelloworld_ImGuiKeyboardHelper_nativeOnKeyDown(JNIEnv *env
         imguiKey = ImGuiKey_A + (key_code - AKEYCODE_A);
     } else if (key_code >= AKEYCODE_0 && key_code <= AKEYCODE_9) {
         imguiKey = ImGuiKey_0 + (key_code - AKEYCODE_0);
-    } else {
+    }
+    else {
         // Map other keys
         switch (key_code) {
             case AKEYCODE_SPACE: imguiKey = ImGuiKey_Space; break;
@@ -98,7 +99,7 @@ Java_com_example_imguihelloworld_ImGuiKeyboardHelper_nativeOnKeyDown(JNIEnv *env
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_imguihelloworld_ImGuiKeyboardHelper_nativeOnKeyUp(JNIEnv *env, jobject thiz, jint key_code, jint meta_state) {
+Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyUp(JNIEnv *env, jobject thiz, jint key_code, jint meta_state) {
     LOGI("Key up: %d, meta: %d", key_code, meta_state);
     
     // Map Android key codes to ImGui key codes (same mapping as in key down)
@@ -107,7 +108,8 @@ Java_com_example_imguihelloworld_ImGuiKeyboardHelper_nativeOnKeyUp(JNIEnv *env, 
         imguiKey = ImGuiKey_A + (key_code - AKEYCODE_A);
     } else if (key_code >= AKEYCODE_0 && key_code <= AKEYCODE_9) {
         imguiKey = ImGuiKey_0 + (key_code - AKEYCODE_0);
-    } else {
+    }
+    else {
         // Map other keys
         switch (key_code) {
             case AKEYCODE_SPACE: imguiKey = ImGuiKey_Space; break;
@@ -139,7 +141,7 @@ Java_com_example_imguihelloworld_ImGuiKeyboardHelper_nativeOnKeyUp(JNIEnv *env, 
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_imguihelloworld_ImGuiKeyboardHelper_nativeOnKeyMultiple(JNIEnv *env, jobject thiz, jint key_code, jint count, jobject event) {
+Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyMultiple(JNIEnv *env, jobject thiz, jint key_code, jint count, jobject event) {
     // Handle repeated key events
     LOGI("Key multiple: %d, count: %d", key_code, count);
     
@@ -177,7 +179,7 @@ Java_com_example_imguihelloworld_ImGuiKeyboardHelper_nativeOnKeyMultiple(JNIEnv 
 
 // JNI method implementations for ImGuiJNI
 JNIEXPORT void JNICALL
-Java_com_example_imguihelloworld_ImGuiJNI_onKeyEvent(JNIEnv *env, jclass clazz, jint key_code, jint action, jint meta_state) {
+Java_com_my_app_ImGuiJNI_onKeyEvent(JNIEnv *env, jclass clazz, jint key_code, jint action, jint meta_state) {
     LOGI("Key event: code=%d, action=%d, meta=%d", key_code, action, meta_state);
     
     // Map Android key codes to ImGui key codes
@@ -186,7 +188,8 @@ Java_com_example_imguihelloworld_ImGuiJNI_onKeyEvent(JNIEnv *env, jclass clazz, 
         imguiKey = ImGuiKey_A + (key_code - AKEYCODE_A);
     } else if (key_code >= AKEYCODE_0 && key_code <= AKEYCODE_9) {
         imguiKey = ImGuiKey_0 + (key_code - AKEYCODE_0);
-    } else {
+    }
+    else {
         // Map other keys
         switch (key_code) {
             case AKEYCODE_SPACE: imguiKey = ImGuiKey_Space; break;
@@ -224,7 +227,7 @@ Java_com_example_imguihelloworld_ImGuiJNI_onKeyEvent(JNIEnv *env, jclass clazz, 
 }
 
 JNIEXPORT void JNICALL
-Java_com_example_imguihelloworld_ImGuiJNI_onTextInput(JNIEnv *env, jclass clazz, jstring text) {
+Java_com_my_app_ImGuiJNI_onTextInput(JNIEnv *env, jclass clazz, jstring text) {
     const char* utf8Text = env->GetStringUTFChars(text, nullptr);
     if (utf8Text != nullptr) {
         LOGI("Received text input: %s", utf8Text);
@@ -235,7 +238,7 @@ Java_com_example_imguihelloworld_ImGuiJNI_onTextInput(JNIEnv *env, jclass clazz,
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_example_imguihelloworld_ImGuiJNI_wantsTextInput(JNIEnv *env, jclass clazz) {
+Java_com_my_app_ImGuiJNI_wantsTextInput(JNIEnv *env, jclass clazz) {
     ImGuiIO& io = ImGui::GetIO();
     LOGI("ImGui WantTextInput: %s", io.WantTextInput ? "true" : "false");
     return io.WantTextInput ? JNI_TRUE : JNI_FALSE;
