@@ -1,54 +1,28 @@
 #pragma once
-#include <string>
-#include <map>
-#include <memory>
-#include <functional>
-#include <stdexcept>
-#include "base_indicator.hpp"
 
-// Factory for creating Indicator subclasses by string name
+#include "base_indicator.hpp"
+#include <memory>
+#include <string>
+#include <vector>
+#include <functional>
+#include <map>
+
+#include "base_fetcher.hpp"
+
+#define REGISTER_INDICATOR(name, class_name) \
+namespace { \
+    bool registered_##class_name = IndicatorFactory::register_indicator(name, \
+        [](const DataFrame& df) { return std::make_unique<class_name>(df); }); \
+}
+
 class IndicatorFactory {
 public:
-    using Creator = std::function<std::unique_ptr<Indicator>(const DataFrame&)>;
+    using IndicatorCreator = std::function<std::unique_ptr<Indicator>(const DataFrame&)>;
 
-    // Registers a creator with a string key (indicator name)
-    static void register_creator(const std::string& name, Creator creator) {
-        get_registry()[name] = std::move(creator);
-    }
-
-    // Creates an Indicator of the given type (by name)
-    static std::unique_ptr<Indicator> create(const std::string& name, const DataFrame& df) {
-        auto it = get_registry().find(name);
-        if (it != get_registry().end()) {
-            return (it->second)(df);
-        } else {
-            throw std::invalid_argument("Unknown indicator type: " + name);
-        }
-    }
-
-    // Returns all registered indicator names
-    static std::vector<std::string> registered_names() {
-        std::vector<std::string> names;
-        for (const auto& kv : get_registry()) names.push_back(kv.first);
-        return names;
-    }
+    static bool register_indicator(const std::string& name, IndicatorCreator creator);
+    static std::unique_ptr<Indicator> create_indicator(const std::string& name, const DataFrame& df);
+    static std::vector<std::string> get_available_indicators();
 
 private:
-    static std::map<std::string, Creator>& get_registry() {
-        static std::map<std::string, Creator> registry;
-        return registry;
-    }
+    static std::map<std::string, IndicatorCreator>& get_creators();
 };
-
-// Helper macro for registering an Indicator subclass
-#define REGISTER_INDICATOR(name, class_type) \
-    namespace { \
-        struct Register##class_type { \
-            Register##class_type() { \
-                IndicatorFactory::register_creator(name, [](const DataFrame& df) { \
-                    return std::make_unique<class_type>(df); \
-                }); \
-            } \
-        }; \
-        static Register##class_type reg_##class_type; \
-    }
