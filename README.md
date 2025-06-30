@@ -93,7 +93,7 @@ The `setup-hooks.sh` script is automatically executed by CMake during the config
 2.  **Let Gradle sync and configure the project.** The `build.gradle` file is set up to execute CMake and build the native C++ code.
 3.  **Build and run the application on an emulator or a physical device.**
 
-#### Customizing App Title and Package Name
+#### Customizing App Title and Package Name (CMake)
 
 To override the default application title and package name for the Android build, you can define the `APP_TITLE` and `APP_PACKAGE` CMake variables. This can be done by passing them as arguments to the CMake command when configuring the project:
 
@@ -102,6 +102,23 @@ cmake -DAPP_TITLE="My Custom App" -DAPP_PACKAGE="com.example.mycustomapp" ..
 ```
 
 These variables will be used to set the `applicationId` in `app/build.gradle` and the `app_name` in `app/src/main/res/values/strings.xml`.
+
+#### Customizing App Title and Package Name (Gradle)
+
+Alternatively, you can override the application title and package name directly within the Gradle build system. This can be done by setting the `appTitle` and `appPackage` properties in your `gradle.properties` file (located in the `android/` directory) or by passing them as command-line arguments to Gradle:
+
+**Via `gradle.properties`:**
+```properties
+appTitle=My Custom App
+appPackage=com.example.mycustomapp
+```
+
+**Via command line:**
+```bash
+./gradlew assembleDebug -PappTitle="My Custom App" -PappPackage="com.example.mycustomapp"
+```
+
+These properties will be used by the `app/build.gradle` file to configure the Android application.
 
 ## Testing
 
