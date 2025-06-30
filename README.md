@@ -1,8 +1,14 @@
 # Cross-Platform C++ Application Template
 
+> [!NOTE]
+> Much of this repository was generated with the help of AI.
+
 This repository provides a template for building C++ applications that can run on multiple platforms, including desktop (Windows, macOS, Linux), Android, and WebAssembly.
 
 It features a clean architecture that separates the core application logic from platform-specific code, making it an ideal starting point for complex projects. The user interface is built with [Dear ImGui](https://github.com/ocornut/imgui), providing a lightweight and performant GUI out of the box.
+
+> [!IMPORTANT]
+> This repository requires a specific commit of Dear ImGui to function correctly. Please ensure you are using commit `69e1fb50cacbde1c2c585ae59898e68c1818d9b7`.
 
 ## Features
 
@@ -39,7 +45,16 @@ A brief overview of the main directories:
 └── README.md             # This file
 ```
 
+### Application Main Rendering
+
+The `src/app/app_main.cpp` file is designed to contain the custom rendering logic for your application's main frame. If this file exists, the `USE_EXTERNAL_RENDER_IMGUI` preprocessor definition is enabled during compilation, directing the `Application` class to use the `renderImGui()` implementation provided in `app_main.cpp`.
+
+If `src/app/app_main.cpp` is not present, a default `renderImGui()` implementation, defined internally within `include/application.h`, will be used instead. This ensures a basic functional application is available even without custom rendering code.
+
 ## Getting Started
+
+> [!WARNING]
+> This repository is currently a work in progress. While the core logic for desktop and WebAssembly targets is present, only the Android target and the C++ tests are fully functional and regularly tested at this time.
 
 ### Prerequisites
 
@@ -89,8 +104,4 @@ cmake --build . --target test
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Additional Documentation
 
-*   [External Dependencies](doc/README_external.md)
-*   [ImGui Details](doc/README_IMGUI.md)
-*   [OpenSSL Details](doc/README_openssl.md)

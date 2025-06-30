@@ -84,42 +84,65 @@ void Application::renderFrame()
     platformRender();
 }
 
+#ifndef USE_EXTERNAL_RENDER_IMGUI
 void Application::renderImGui()
 {
-    // Create a simple window
-    ImGui::Begin("Hello, ImGui!");
-    
-    ImGui::Text("Welcome to Dear ImGui!");
-    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "This is a cross-platform application.");
-    
-    // Add an input text field
-    static char inputBuffer[256] = "";
-    ImGui::Text("Enter some text (tap to show keyboard):");
-    
-    // Use ImGuiInputTextFlags_CallbackAlways to ensure we get callbacks
-    if (ImGui::InputText("##input", inputBuffer, IM_ARRAYSIZE(inputBuffer), 
-                         ImGuiInputTextFlags_EnterReturnsTrue)) {
-        // This code runs when Enter is pressed
-        // You can handle the input submission here
+    // Main window for the application template
+    ImGui::Begin("C++ Application Template");
+
+    // General information and instructions
+    ImGui::Text("Welcome to your cross-platform application!");
+    ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "This is a template demonstrating ImGui features.");
+    ImGui::Separator();
+
+    // --- Basic Widgets Demonstration ---
+
+    // Text input field
+    static char textBuffer[256] = "Hello, world!";
+    ImGui::Text("Enter some text below:");
+    if (ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+        // You can add logic here for when the user presses Enter
     }
-    
-    // Note: Keyboard handling is now managed in platform_android.cpp
-    // ImGui's WantTextInput flag is used naturally without manual setting
-    
+    ImGui::Text("You entered: %s", textBuffer);
+
+    ImGui::Spacing();
+
+    // Button and counter
+    static int buttonClickCount = 0;
+    if (ImGui::Button("Click Me")) {
+        buttonClickCount++;
+    }
     ImGui::SameLine();
-    if (ImGui::Button("Clear")) {
-        inputBuffer[0] = '\0'; // Clear the input buffer
+    ImGui::Text("Button has been clicked %d times.", buttonClickCount);
+
+    ImGui::Separator();
+
+    // --- Advanced Widgets Demonstration ---
+
+    if (ImGui::CollapsingHeader("More Features")) {
+        // Checkbox for a boolean option
+        static bool showExtraInfo = false;
+        ImGui::Checkbox("Show Extra Information", &showExtraInfo);
+        if (showExtraInfo) {
+            ImGui::Text("Here is some extra information, just for you!");
+            ImGui::Text("You can hide this by unchecking the box.");
+        }
+
+        ImGui::Spacing();
+
+        // Slider for a floating-point value
+        static float sliderValue = 0.5f;
+        ImGui::SliderFloat("Value Slider", &sliderValue, 0.0f, 1.0f);
+        ImGui::Text("Current slider value: %.2f", sliderValue);
+
+        ImGui::Spacing();
+
+        // Color editor
+        static ImVec4 color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+        ImGui::ColorEdit3("Color Picker", (float*)&color);
+        ImGui::TextColored(color, "This text changes color!");
     }
-    
-    // Display the entered text
-    ImGui::Text("You entered: %s", inputBuffer);
-    
-    static int clickCount = 0;
-    if (ImGui::Button("Click me!")) {
-        clickCount++;
-    }
-    
-    ImGui::Text("Button clicked %d times", clickCount);
-    
+
     ImGui::End();
 }
+#endif // USE_EXTERNAL_RENDER_IMGUI

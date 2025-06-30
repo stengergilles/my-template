@@ -37,9 +37,14 @@ protected:
     virtual void platformRender() = 0;
     virtual bool platformHandleEvents() = 0;
 
+#ifdef USE_EXTERNAL_RENDER_IMGUI
+    // ImGui rendering code (implemented externally in src/app/app_main.cpp)
+    void renderImGui();
+#else
 private:
     // ImGui rendering code (platform-independent)
     void renderImGui();
+#endif
 
     std::string m_appName;
     ImGuiContext* m_imguiContext;

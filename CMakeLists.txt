@@ -77,10 +77,19 @@ set(IMGUI_SOURCES
     external/imgui/imgui_widgets.cpp
 )
 
-# Auto-collect all *_indicator.cpp files from src/
-file(GLOB APP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/app/*_indicator.cpp")
-add_library(indicators STATIC ${APP_SOURCES})
-target_include_directories(indicators PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/app)
+set(APP_MAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/src/app/app_main.cpp")
+if(EXISTS ${APP_MAIN_FILE})
+    list(APPEND SOURCES ${APP_MAIN_FILE})
+    add_definitions(-DUSE_EXTERNAL_RENDER_IMGUI)
+endif()
+
+# Auto-collect all *.cpp files from src/app
+file(GLOB APP_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/app/*.cpp")
+if(EXISTS ${APP_MAIN_FILE})
+    list(REMOVE_ITEM APP_SOURCES ${APP_MAIN_FILE})
+endif()
+add_library(appcode STATIC ${APP_SOURCES})
+target_include_directories(appcode PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/app)
 
 add_subdirectory(external/json)
 
@@ -164,118 +173,46 @@ get_target_property(CURL_INCLUDE_DIRS libcurl INTERFACE_INCLUDE_DIRECTORIES)
 # Test executables
 
 if(BUILD_TESTS)
-  add_executable(integration_coingecko_fetcher
-      ${PROJECT_ROOT}/tests/fetchers/integration_coingecko_fetcher.cpp
-      ${PROJECT_ROOT}/src/app/coingecko_fetcher.cpp
-      ${PROJECT_ROOT}/src/http_client_curl.cpp
-      ${PROJECT_ROOT}/src/tempfile.cpp
-      ${PROJECT_ROOT}/src/write_cacert.cpp
-  )
-  add_executable(integration_polygon_fetcher
-      ${PROJECT_ROOT}/tests/fetchers/integration_polygon_fetcher.cpp
-      ${PROJECT_ROOT}/src/app/polygon_fetcher.cpp
-      ${PROJECT_ROOT}/src/http_client_curl.cpp
-      ${PROJECT_ROOT}/src/tempfile.cpp
-      ${PROJECT_ROOT}/src/write_cacert.cpp
-  )
-  add_executable(test_atr
-      ${PROJECT_ROOT}/tests/indicators/test_atr.cpp
-      ${PROJECT_ROOT}/src/app/atr_indicator.cpp
-  )
-  add_executable(test_bollinger
-      ${PROJECT_ROOT}/tests/indicators/test_bollinger.cpp
-      ${PROJECT_ROOT}/src/app/bollinger_indicator.cpp
-  )
-  add_executable(test_breakout
-      ${PROJECT_ROOT}/tests/indicators/test_breakout.cpp
-      ${PROJECT_ROOT}/src/app/breakout_indicator.cpp
-  )
-  add_executable(test_ma
-      ${PROJECT_ROOT}/tests/indicators/test_ma.cpp
-      ${PROJECT_ROOT}/src/app/ma_indicator.cpp
-  )
-  add_executable(test_macd
-      ${PROJECT_ROOT}/tests/indicators/test_macd.cpp
-      ${PROJECT_ROOT}/src/app/macd_indicator.cpp
-  )
-  add_executable(test_rsi
-      ${PROJECT_ROOT}/tests/indicators/test_rsi.cpp
-      ${PROJECT_ROOT}/src/app/rsi_indicator.cpp
-  )
-  add_executable(test_volume_spike
-      ${PROJECT_ROOT}/tests/indicators/test_volume_spike.cpp
-      ${PROJECT_ROOT}/src/app/volume_spike_indicator.cpp
-  )
+  # Create a library with all application sources, excluding main.cpp
+  set(LIB_SOURCES ${SOURCES})
+  list(REMOVE_ITEM LIB_SOURCES "src/main.cpp")
   
-  target_link_libraries(integration_coingecko_fetcher PRIVATE
-      CURL::libcurl
-      OpenSSL::SSL
-      OpenSSL::Crypto
-      "${GTEST_ROOT}/lib/libgtest.a"
-      "${GTEST_ROOT}/lib/libgtest_main.a"
-      pthread
-  )
-  target_link_libraries(integration_polygon_fetcher PRIVATE
-      CURL::libcurl
-      OpenSSL::SSL
-      OpenSSL::Crypto
-      "${GTEST_ROOT}/lib/libgtest.a"
-      "${GTEST_ROOT}/lib/libgtest_main.a"
-      pthread
-  )
-  target_link_libraries(test_atr PRIVATE
-      indicators
-      "${GTEST_ROOT}/lib/libgtest.a"
-      "${GTEST_ROOT}/lib/libgtest_main.a"
-      pthread
-  )
-  target_link_libraries(test_bollinger PRIVATE
-      indicators
-      "${GTEST_ROOT}/lib/libgtest.a"
-      "${GTEST_ROOT}/lib/libgtest_main.a"
-      pthread
-  )
-  
-  target_link_libraries(test_breakout PRIVATE
-      indicators
-      "${GTEST_ROOT}/lib/libgtest.a"
-      "${GTEST_ROOT}/lib/libgtest_main.a"
-      pthread
-  )
-  target_link_libraries(test_ma PRIVATE
-      indicators
-      "${GTEST_ROOT}/lib/libgtest.a"
-      "${GTEST_ROOT}/lib/libgtest_main.a"
-      pthread
-  )
-  target_link_libraries(test_macd PRIVATE
-      indicators
-      "${GTEST_ROOT}/lib/libgtest.a"
-      "${GTEST_ROOT}/lib/libgtest_main.a"
-      pthread
-  )
-  target_link_libraries(test_rsi PRIVATE
-      indicators
-      "${GTEST_ROOT}/lib/libgtest.a"
-      "${GTEST_ROOT}/lib/libgtest_main.a"
-      pthread
-  )
-  target_link_libraries(test_volume_spike PRIVATE
-      indicators
-      "${GTEST_ROOT}/lib/libgtest.a"
-      "${GTEST_ROOT}/lib/libgtest_main.a"
-      pthread
+  add_library(app STATIC
+      ${LIB_SOURCES}
+      ${IMGUI_SOURCES}
   )
 
-  add_test(NAME integration_coingecko_fetcher COMMAND integration_coingecko_fetcher)
-  add_test(NAME integration_polygon_fetcher COMMAND integration_polygon_fetcher)
-  add_test(NAME test_atr COMMAND test_atr)
-  add_test(NAME test_bollinger COMMAND test_bollinger)
-  add_test(NAME test_breakout COMMAND test_breakout)
-  add_test(NAME test_ma COMMAND test_ma)
-  add_test(NAME test_macd COMMAND test_macd)
-  add_test(NAME test_rsi COMMAND test_rsi)
-  add_test(NAME test_volume_spike COMMAND test_volume_spike)
+  target_link_libraries(app PUBLIC
+      appcode
+      CURL::libcurl
+      OpenSSL::SSL
+      OpenSSL::Crypto
+      nlohmann_json::nlohmann_json
+  )
+
+  # Automatically discover and add tests
+  file(GLOB_RECURSE TEST_SOURCES 
+      "tests/test_*.cpp"
+      "tests/integration_*.cpp"
+  )
+
+  foreach(TEST_SOURCE ${TEST_SOURCES})
+      # Extract the filename without extension to use as the test name
+      string(REGEX REPLACE ".*/([^/]+)\\.cpp$" "\\1" TEST_NAME ${TEST_SOURCE})
+      add_executable(${TEST_NAME} ${TEST_SOURCE})
+      target_link_libraries(${TEST_NAME} PRIVATE
+          app
+          "${GTEST_ROOT}/lib/libgtest.a"
+          "${GTEST_ROOT}/lib/libgtest_main.a"
+          pthread
+      )
+      add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+
+      # Add dependency on cacert header for fetcher integration tests
+      if (TEST_SOURCE MATCHES "integration_.*_fetcher\\.cpp")
+          add_dependencies(${TEST_NAME} gen_cacert_header)
+      endif()
+  endforeach()
 endif()
 set(CACERT_PEM_URL "https://curl.se/ca/cacert.pem")
 set(CACERT_PEM "${CMAKE_BINARY_DIR}/cacert.pem")
@@ -352,7 +289,7 @@ elseif(EMSCRIPTEN AND NOT BUILD_TESTS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL=2 -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s USE_WEBGL2=1")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shell-file ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/wasm/shell.html")
     set(PLATFORM_LIBS
-        indicators
+        appcode
     )
     add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
 else()
@@ -372,7 +309,7 @@ else()
         CURL::libcurl
         OpenSSL::SSL
         OpenSSL::Crypto
-        indicators
+        appcode
       )
       if(APPLE AND NOT BUILD_TESTS)
         find_library(COCOA_LIBRARY Cocoa)
