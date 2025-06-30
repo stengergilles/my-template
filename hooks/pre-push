@@ -6,7 +6,7 @@ while read local_ref local_sha remote_ref remote_sha; do
     files=$(git diff --name-only $local_sha $remote_sha)
 
     # Define the directories to check
-    restricted_dirs=("src/app" "include/app")
+    restricted_dirs=("src/app" "include/app" "android" "src/platform" "include/platorm")
 
     # Check if any of the changed files are in the restricted directories
     for dir in "${restricted_dirs[@]}"; do
