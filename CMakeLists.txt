@@ -2,12 +2,14 @@ cmake_minimum_required(VERSION 3.10)
 project(imgui_hello_world)
 set(PROJECT_ROOT ${CMAKE_SOURCE_DIR})
 
-# Execute setup-hooks script
-execute_process(
-    COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_ROOT} bash setup-hooks
-    RESULT_VARIABLE SETUP_HOOKS_RESULT
-    COMMAND_ERROR_IS_FATAL ANY
-)
+if(NOT ANDROID)
+    # Execute setup-hooks script
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_ROOT} bash setup-hooks
+        RESULT_VARIABLE SETUP_HOOKS_RESULT
+        COMMAND_ERROR_IS_FATAL ANY
+    )
+endif()
 
 
 # For tests
