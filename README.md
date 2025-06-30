@@ -1,11 +1,11 @@
-# Cross-Platform C++ Application Template
+# My Pricer - Cross-Platform Financial Analysis Application
 
 > [!NOTE]
 > Much of this repository was generated with the help of AI.
 
-This repository provides a template for building C++ applications that can run on multiple platforms, including desktop (Windows, macOS, Linux), Android, and WebAssembly.
+This repository contains **My Pricer**, a C++ application for financial analysis that runs on multiple platforms, including desktop (Windows, macOS, Linux), Android, and WebAssembly.
 
-It features a clean architecture that separates the core application logic from platform-specific code, making it an ideal starting point for complex projects. The user interface is built with [Dear ImGui](https://github.com/ocornut/imgui), providing a lightweight and performant GUI out of the box.
+It features a clean architecture that separates the core financial logic from platform-specific code. The user interface is built with [Dear ImGui](https://github.com/ocornut/imgui), providing a lightweight and performant GUI.
 
 > [!IMPORTANT]
 > This repository requires a specific commit of Dear ImGui to function correctly. Please ensure you are using commit `69e1fb50cacbde1c2c585ae59898e68c1818d9b7`.
@@ -16,13 +16,22 @@ It features a clean architecture that separates the core application logic from 
     *   **Desktop:** Builds on Windows, macOS, and Linux using GLFW.
     *   **Android:** A pre-configured Android Studio project integrates the C++ core.
     *   **WebAssembly:** Ready for web deployment (requires Emscripten setup).
-*   **Extensible Architecture:** The core logic is modular, allowing you to easily add your own features. The template includes example modules for data processing and handling.
-*   **Common Libraries Included:** Comes with essential libraries for modern C++ development:
+*   **Financial Data Fetchers:**
+    *   Integration with [CoinGecko](https://www.coingecko.com/) for cryptocurrency data.
+    *   Integration with [Polygon.io](https://polygon.io/) for stock and crypto data.
+*   **Technical Indicators:**
+    *   Average True Range (ATR)
+    *   Bollinger Bands
+    *   Breakout Indicator
+    *   Moving Average (MA)
+    *   Moving Average Convergence Divergence (MACD)
+    *   Relative Strength Index (RSI)
+    *   Volume Spike Indicator
+*   **Core Libraries Included:**
     *   [**Dear ImGui**](https://github.com/ocornut/imgui) for the user interface.
     *   [**cURL**](https://curl.se/) for HTTP requests.
     *   [**OpenSSL**](https://www.openssl.org/) for HTTPS support. (OpenSSL source code is automatically cloned and built by CMake.)
     *   [**nlohmann/json**](https://github.com/nlohmann/json) for easy JSON parsing.
-*   **Ready to Build:** Includes a `CMakeLists.txt` file that handles the build process for the C++ core and its dependencies.
 
 ## Project Structure
 
@@ -34,22 +43,16 @@ A brief overview of the main directories:
 ├── build/                # (Generated) Build output files
 ├── external/             # External libraries (ImGui, Curl, OpenSSL, etc.)
 ├── include/              # C++ header files for the core application
-│   ├── app/              # Headers for custom application logic/modules
+│   ├── app/              # Headers for financial indicators and data fetchers
 │   └── platform/         # Platform abstraction headers
 ├── src/                  # C++ source code implementation
-│   ├── app/              # Implementation for custom modules
+│   ├── app/              # Implementation for indicators and fetchers
 │   └── platform/         # Platform-specific implementations
 ├── tests/                # C++ unit and integration tests
 ├── CMakeLists.txt        # Main CMake build script for the C++ core
 ├── LICENSE               # Project license
 └── README.md             # This file
 ```
-
-### Application Main Rendering
-
-The `src/app/app_main.cpp` file is designed to contain the custom rendering logic for your application's main frame. If this file exists, the `USE_EXTERNAL_RENDER_IMGUI` preprocessor definition is enabled during compilation, directing the `Application` class to use the `renderImGui()` implementation provided in `app_main.cpp`.
-
-If `src/app/app_main.cpp` is not present, a default `renderImGui()` implementation, defined internally within `include/application.h`, will be used instead. This ensures a basic functional application is available even without custom rendering code.
 
 ## Getting Started
 
@@ -59,7 +62,7 @@ If `src/app/app_main.cpp` is not present, a default `renderImGui()` implementati
 ### Prerequisites
 
 *   A C++17 compatible compiler (GCC, Clang, MSVC).
-*   [CMake](https://cmake.org/) (version 3.10 or higher).
+*   [CMake](https.cmake.org/) (version 3.10 or higher).
 *   **For Desktop:** GLFW and its dependencies.
 *   **For Android:** The Android NDK and Android Studio.
 
@@ -134,5 +137,3 @@ cmake --build . --target test
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-
