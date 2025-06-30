@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 project(imgui_hello_world)
 set(PROJECT_ROOT ${CMAKE_SOURCE_DIR})
 
+option(BUILD_TESTS "Build tests" ON)
+
 # For tests
 # Automatically detect if there are any test files
 file(GLOB_RECURSE TEST_FILES
@@ -9,15 +11,11 @@ file(GLOB_RECURSE TEST_FILES
     "tests/integration_*.cpp"
 )
 
-if(NOT TEST_FILES)
+if(BUILD_TESTS AND NOT TEST_FILES)
+    message(FATAL_ERROR "BUILD_TESTS is ON, but no test files found in 'tests/' directory. Aborting configuration.")
+elseif(NOT TEST_FILES)
     message(STATUS "No test files found in 'tests/' directory. Disabling BUILD_TESTS.")
     set(BUILD_TESTS OFF CACHE BOOL "Build tests" FORCE)
-else()
-    option(BUILD_TESTS "Build tests" ON)
-endif()
-
-if(BUILD_TESTS AND NOT TEST_FILES)
-    message(FATAL_ERROR "BUILD_TESTS is ON, but no test files found in 'tests/' directory.")
 endif()
 
 if(NOT ANDROID)
