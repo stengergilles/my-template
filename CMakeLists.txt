@@ -72,8 +72,6 @@ set(SOURCES
     src/application.cpp
     src/platform/platform_base.cpp
     src/main.cpp
-    src/app/coingecko_fetcher.cpp
-    src/app/polygon_fetcher.cpp
     src/http_client_curl.cpp
     src/write_cacert.cpp
     src/tempfile.cpp
@@ -219,7 +217,7 @@ if(BUILD_TESTS)
       add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 
       # Add dependency on cacert header for fetcher integration tests
-      if (TEST_SOURCE MATCHES "integration_.*_fetcher\\.cpp")
+      if (TEST_SOURCE MATCHES "integration_.*_fetcher\.cpp")
           add_dependencies(${TEST_NAME} gen_cacert_header)
       endif()
   endforeach()
@@ -247,11 +245,6 @@ add_custom_command(
 
 add_custom_target(gen_cacert_header ALL DEPENDS ${CACERT_HEADER})
 
-if(BUILD_TESTS)
-add_dependencies(integration_coingecko_fetcher gen_cacert_header)
-add_dependencies(integration_polygon_fetcher gen_cacert_header)
-endif()
-
 if(ANDROID AND NOT BUILD_TESTS)
     set(PLATFORM_SOURCES
         src/platform/platform_android.cpp
@@ -261,15 +254,6 @@ if(ANDROID AND NOT BUILD_TESTS)
         src/platform/android/imgui_impl_android.cpp
         src/platform/android/keyboard_helper.cpp
         external/imgui/backends/imgui_impl_opengl3.cpp
-        src/app/atr_indicator.cpp
-        src/app/bollinger_indicator.cpp
-        src/app/breakout_indicator.cpp
-        src/app/coingecko_fetcher.cpp
-        src/app/ma_indicator.cpp
-        src/app/macd_indicator.cpp
-        src/app/polygon_fetcher.cpp
-        src/app/rsi_indicator.cpp
-        src/app/volume_spike_indicator.cpp
     )
     include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/android
