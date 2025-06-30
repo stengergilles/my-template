@@ -20,7 +20,7 @@ It features a clean architecture that separates the core application logic from 
 *   **Common Libraries Included:** Comes with essential libraries for modern C++ development:
     *   [**Dear ImGui**](https://github.com/ocornut/imgui) for the user interface.
     *   [**cURL**](https://curl.se/) for HTTP requests.
-    *   [**OpenSSL**](https://www.openssl.org/) for HTTPS support.
+    *   [**OpenSSL**](https://www.openssl.org/) for HTTPS support. (Requires OpenSSL source code to be cloned into `external/openssl-src`.)
     *   [**nlohmann/json**](https://github.com/nlohmann/json) for easy JSON parsing.
 *   **Ready to Build:** Includes a `CMakeLists.txt` file that handles the build process for the C++ core and its dependencies.
 
@@ -63,6 +63,10 @@ If `src/app/app_main.cpp` is not present, a default `renderImGui()` implementati
 *   **For Desktop:** GLFW and its dependencies.
 *   **For Android:** The Android NDK and Android Studio.
 
+### Setup Hooks
+
+The `setup-hooks.sh` script is automatically executed by CMake during the configuration phase. This script is responsible for setting up necessary Git hooks and preparing the development environment. You do not need to run it manually.
+
 ### Desktop (Linux, macOS, Windows)
 
 1.  **Create a build directory:**
@@ -88,6 +92,16 @@ If `src/app/app_main.cpp` is not present, a default `renderImGui()` implementati
 1.  **Open the `android` directory in Android Studio.**
 2.  **Let Gradle sync and configure the project.** The `build.gradle` file is set up to execute CMake and build the native C++ code.
 3.  **Build and run the application on an emulator or a physical device.**
+
+#### Customizing App Title and Package Name
+
+To override the default application title and package name for the Android build, you can define the `APP_TITLE` and `APP_PACKAGE` CMake variables. This can be done by passing them as arguments to the CMake command when configuring the project:
+
+```bash
+cmake -DAPP_TITLE="My Custom App" -DAPP_PACKAGE="com.example.mycustomapp" ..
+```
+
+These variables will be used to set the `applicationId` in `app/build.gradle` and the `app_name` in `app/src/main/res/values/strings.xml`.
 
 ## Testing
 
