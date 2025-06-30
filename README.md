@@ -20,7 +20,7 @@ It features a clean architecture that separates the core application logic from 
 *   **Common Libraries Included:** Comes with essential libraries for modern C++ development:
     *   [**Dear ImGui**](https://github.com/ocornut/imgui) for the user interface.
     *   [**cURL**](https://curl.se/) for HTTP requests.
-    *   [**OpenSSL**](https://www.openssl.org/) for HTTPS support. (Requires OpenSSL source code to be cloned into `external/openssl-src`.)
+    *   [**OpenSSL**](https://www.openssl.org/) for HTTPS support. (OpenSSL source code is automatically cloned and built by CMake.)
     *   [**nlohmann/json**](https://github.com/nlohmann/json) for easy JSON parsing.
 *   **Ready to Build:** Includes a `CMakeLists.txt` file that handles the build process for the C++ core and its dependencies.
 
@@ -109,13 +109,13 @@ Alternatively, you can override the application title and package name directly 
 
 **Via `gradle.properties`:**
 ```properties
-appTitle=My Custom App
-appPackage=com.example.mycustomapp
+overrideAppTitle=My Custom App
+overridePackageName=com.example.mycustomapp
 ```
 
 **Via command line:**
 ```bash
-./gradlew assembleDebug -PappTitle="My Custom App" -PappPackage="com.example.mycustomapp"
+./gradlew assembleDebug -PoverrideAppTitle="My Custom App" -PoverridePackageName="com.example.mycustomapp"
 ```
 
 These properties will be used by the `app/build.gradle` file to configure the Android application.

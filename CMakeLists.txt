@@ -7,7 +7,6 @@ execute_process(
     COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_ROOT} bash setup-hooks
     RESULT_VARIABLE SETUP_HOOKS_RESULT
     COMMAND_ERROR_IS_FATAL ANY
-    COMMENT "Running setup-hooks script"
 )
 
 
