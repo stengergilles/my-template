@@ -1,4 +1,4 @@
-package com.my.app;
+package com.lovers.mypricer;
 
 import android.util.Log;
 

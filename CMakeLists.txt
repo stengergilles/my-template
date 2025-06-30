@@ -289,6 +289,9 @@ if(ANDROID AND NOT BUILD_TESTS)
         OpenSSL::Crypto
     )
     add_library(${PROJECT_NAME} SHARED ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE appcode ${PLATFORM_LIBS})
+    add_dependencies(${PROJECT_NAME} gen_cacert_header)
+
 elseif(EMSCRIPTEN AND NOT BUILD_TESTS)
     set(PLATFORM_SOURCES
         src/platform/platform_wasm.cpp
@@ -302,6 +305,8 @@ elseif(EMSCRIPTEN AND NOT BUILD_TESTS)
         appcode
     )
     add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${PLATFORM_LIBS})
+    add_dependencies(${PROJECT_NAME} gen_cacert_header)
 else()
     if(NOT BUILD_TESTS)
       set(PLATFORM_SOURCES
@@ -332,13 +337,12 @@ else()
         # Add Windows-specific libraries if needed
       endif()
       add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
+      target_link_libraries(${PROJECT_NAME} PRIVATE ${PLATFORM_LIBS})
+      add_dependencies(${PROJECT_NAME} gen_cacert_header)
    endif()
 endif()
 
-if (NOT BUILD_TESTS)
-   target_link_libraries(${PROJECT_NAME} ${PLATFORM_LIBS})
-   add_dependencies(${PROJECT_NAME} gen_cacert_header)
-endif()
+
 
 if(NOT ANDROID)
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)

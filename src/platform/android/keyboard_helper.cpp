@@ -57,7 +57,7 @@ extern "C" bool showKeyboardSafely() {
     jclass mainActivityClass = g_MainActivityClass;
     if (mainActivityClass == nullptr) {
         LOGI("Finding MainActivity class");
-        mainActivityClass = env->FindClass("com/my/app/MainActivity");
+        mainActivityClass = env->FindClass("com/lovers/mypricer/MainActivity");
         if (mainActivityClass == nullptr) {
             LOGE("Failed to find MainActivity class");
             env->ExceptionClear(); // Clear any pending exception
@@ -134,7 +134,7 @@ extern "C" bool hideKeyboardSafely() {
     jclass mainActivityClass = g_MainActivityClass;
     if (mainActivityClass == nullptr) {
         LOGI("Finding MainActivity class");
-        mainActivityClass = env->FindClass("com/my/app/MainActivity");
+        mainActivityClass = env->FindClass("com/lovers/mypricer/MainActivity");
         if (mainActivityClass == nullptr) {
             LOGE("Failed to find MainActivity class");
             env->ExceptionClear(); // Clear any pending exception
