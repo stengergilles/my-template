@@ -47,9 +47,13 @@ A brief overview of the main directories:
 
 ### Application Main Rendering
 
-The `src/app/app_main.cpp` file is designed to contain the custom rendering logic for your application's main frame. If this file exists, the `USE_EXTERNAL_RENDER_IMGUI` preprocessor definition is enabled during compilation, directing the `Application` class to use the `renderImGui()` implementation provided in `app_main.cpp`.
+The rendering of the main user interface is handled by the `renderImGui()` function. The template provides two ways to implement this function:
 
-If `src/app/app_main.cpp` is not present, a default `renderImGui()` implementation, defined internally within `include/application.h`, will be used instead. This ensures a basic functional application is available even without custom rendering code.
+1.  **Default Implementation:** A default `renderImGui()` is defined within `include/application.h`. This implementation serves as a placeholder and can be used for basic applications or as a starting point.
+
+2.  **External Implementation:** To provide a custom implementation, create a file named `app_main.cpp` in the `src/app/` directory. If this file exists, the `USE_EXTERNAL_RENDER_IMGUI` preprocessor definition is automatically enabled by CMake. This directs the `Application` class to use the `renderImGui()` function from `app_main.cpp`, overriding the default implementation.
+
+This setup allows you to keep your application-specific rendering logic separate from the core application structure.
 
 ## Getting Started
 
