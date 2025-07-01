@@ -18,15 +18,6 @@ elseif(NOT TEST_FILES)
     set(BUILD_TESTS OFF CACHE BOOL "Build tests" FORCE)
 endif()
 
-if(NOT ANDROID)
-    # Execute setup-hooks script
-    execute_process(
-        COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_ROOT} bash setup-hooks
-        RESULT_VARIABLE SETUP_HOOKS_RESULT
-        COMMAND_ERROR_IS_FATAL ANY
-    )
-endif()
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
