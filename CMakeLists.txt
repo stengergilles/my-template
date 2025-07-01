@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(imgui_hello_world)
 set(PROJECT_ROOT ${CMAKE_SOURCE_DIR})
 
-option(BUILD_TESTS "Build tests" ON)
+option(BUILD_TESTS "Build tests" OFF)
 
 # For tests
 # Automatically detect if there are any test files
@@ -196,7 +196,6 @@ if(BUILD_TESTS)
   )
 
   target_link_libraries(app PUBLIC
-      ${CMAKE_CURRENT_SOURCE_DIR}/external/json/lib/libjson.a
       CURL::libcurl
       OpenSSL::SSL
       OpenSSL::Crypto
