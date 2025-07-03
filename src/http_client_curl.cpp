@@ -12,7 +12,15 @@ static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* use
     return total_size;
 }
 
-HttpClientLibcurl::HttpClientLibcurl() {}
+HttpClientLibcurl::HttpClientLibcurl() {
+    m_caBundlePath = write_cacert_pem_to_tempfile();
+}
+
+HttpClientLibcurl::~HttpClientLibcurl() {
+    if (!m_caBundlePath.empty()) {
+        std::remove(m_caBundlePath.c_str());
+    }
+}
 
 HttpResponse HttpClientLibcurl::get(const std::string& url,
                                     const std::map<std::string, std::string>& params,
@@ -36,6 +44,7 @@ HttpResponse HttpClientLibcurl::get(const std::string& url,
             first = false;
             char* key_escaped = curl_easy_escape(curl, kv.first.c_str(), 0);
             char* val_escaped = curl_easy_escape(curl, kv.second.c_str(), 0);
+            oss << key_escaped << "=" << val_escaped;
             curl_free(key_escaped);
             curl_free(val_escaped);
         }
@@ -55,12 +64,11 @@ HttpResponse HttpClientLibcurl::get(const std::string& url,
         chunk = curl_slist_append(chunk, header_line.c_str());
     }
     if (chunk) {
-        curl_slist_free_all(chunk);
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
     }
 
-    // Write the embedded cacert.pem to a temp file and set CAINFO
-    std::string ca_bundle_path = write_cacert_pem_to_tempfile();
-    curl_easy_setopt(curl, CURLOPT_CAINFO, ca_bundle_path.c_str());
+    // Set CAINFO from the path stored in the constructor
+    curl_easy_setopt(curl, CURLOPT_CAINFO, m_caBundlePath.c_str());
 
     CURLcode res = curl_easy_perform(curl);
 
@@ -73,9 +81,6 @@ HttpResponse HttpClientLibcurl::get(const std::string& url,
         curl_slist_free_all(chunk);
     }
     curl_easy_cleanup(curl);
-
-    // Clean up temporary file
-    std::remove(ca_bundle_path.c_str());
 
     if (res != CURLE_OK) {
         throw std::runtime_error(std::string("curl_easy_perform() failed: ") + curl_easy_strerror(res));

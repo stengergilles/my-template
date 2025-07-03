@@ -64,6 +64,7 @@ endif()
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include/app
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/platform
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
     ${PROJECT_ROOT}/external/json/include
@@ -78,7 +79,19 @@ set(SOURCES
     src/http_client_curl.cpp
     src/write_cacert.cpp
     src/tempfile.cpp
+    src/logger.cpp
 )
+
+# Define platform-specific logger sources
+if(ANDROID)
+    set(PLATFORM_LOGGER_SOURCES src/platform/android/platform_android_logger.cpp)
+else()
+    set(PLATFORM_LOGGER_SOURCES src/platform/platform_logger.cpp)
+endif()
+
+# Add the platform logger library
+add_library(platform_logger_lib STATIC ${PLATFORM_LOGGER_SOURCES})
+target_include_directories(platform_logger_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/platform)
 
 set(IMGUI_SOURCES
     external/imgui/imgui.cpp
@@ -200,6 +213,7 @@ if(BUILD_TESTS)
       OpenSSL::SSL
       OpenSSL::Crypto
       nlohmann_json::nlohmann_json
+      platform_logger_lib
   )
   if(TARGET appcode)
       target_link_libraries(app PUBLIC appcode)
@@ -280,10 +294,15 @@ if(ANDROID AND NOT BUILD_TESTS)
         OpenSSL::Crypto
     )
     add_library(${PROJECT_NAME} SHARED ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${PLATFORM_LIBS})
+    target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
+
+    set(FINAL_LIBS ${PLATFORM_LIBS})
     if(TARGET appcode)
-        target_link_libraries(${PROJECT_NAME} PRIVATE appcode)
+        list(APPEND FINAL_LIBS appcode)
     endif()
+    list(APPEND FINAL_LIBS platform_logger_lib)
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${FINAL_LIBS})
     add_dependencies(${PROJECT_NAME} gen_cacert_header)
 
 elseif(EMSCRIPTEN AND NOT BUILD_TESTS)
@@ -324,18 +343,8 @@ else()
       if(TARGET appcode)
           list(APPEND PLATFORM_LIBS appcode)
       endif()
-      if(APPLE AND NOT BUILD_TESTS)
-        find_library(COCOA_LIBRARY Cocoa)
-        find_library(IOKIT_LIBRARY IOKit)
-        find_library(CORE_FOUNDATION_LIBRARY CoreFoundation)
-        find_library(CORE_VIDEO_LIBRARY CoreVideo)
-        list(APPEND PLATFORM_LIBS ${COCOA_LIBRARY} ${IOKIT_LIBRARY} ${CORE_FOUNDATION_LIBRARY} ${CORE_VIDEO_LIBRARY})
-      endif()
-      if(WIN32 AND NOT BUILD_TESTS)
-        # Add Windows-specific libraries if needed
-      endif()
       add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
-      target_link_libraries(${PROJECT_NAME} PRIVATE ${PLATFORM_LIBS})
+      target_link_libraries(${PROJECT_NAME} PRIVATE ${PLATFORM_LIBS} platform_logger_lib)
       add_dependencies(${PROJECT_NAME} gen_cacert_header)
    endif()
 endif()

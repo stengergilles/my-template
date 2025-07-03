@@ -239,6 +239,11 @@ Java_com_my_app_ImGuiJNI_onTextInput(JNIEnv *env, jclass clazz, jstring text) {
 
 JNIEXPORT jboolean JNICALL
 Java_com_my_app_ImGuiJNI_wantsTextInput(JNIEnv *env, jclass clazz) {
+    // Before calling GetIO, check if the ImGui context is valid
+    if (ImGui::GetCurrentContext() == nullptr) {
+        // Return false if the context is not yet created
+        return JNI_FALSE;
+    }
     ImGuiIO& io = ImGui::GetIO();
     LOGI("ImGui WantTextInput: %s", io.WantTextInput ? "true" : "false");
     return io.WantTextInput ? JNI_TRUE : JNI_FALSE;

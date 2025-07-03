@@ -4,6 +4,7 @@
 #include <sys/stat.h> // For mkdir
 #include "../../include/platform/platform_android.h"
 #include "../../include/application.h"
+#include "../../include/logger.h"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "ImGuiApp", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "ImGuiApp", __VA_ARGS__))
@@ -14,7 +15,7 @@ extern bool ImGui_ImplAndroid_HandleInputEvent(const AInputEvent* event);
 
 // Global application instance
 static PlatformAndroid* g_app = nullptr;
-static bool g_initialized = false;
+bool g_initialized = false;
 static ANativeWindow* g_savedWindow = nullptr;
 
 // Process Android command events
@@ -111,6 +112,9 @@ static int32_t handle_input(android_app* app, AInputEvent* event) {
 
 // Main entry point for Android applications using native_app_glue
 void android_main(struct android_app* app) {
+    // Initialize the logger
+    g_logger = LoggerFactory::createLogger();
+
     // Make sure glue isn't stripped
     app_dummy();
 

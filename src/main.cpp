@@ -1,4 +1,5 @@
 #include <iostream>
+#include "../include/logger.h"
 
 #if defined(__ANDROID__)
     #include "../include/platform/platform_android.h"
@@ -14,6 +15,9 @@
 
 int main(int argc, char** argv)
 {
+    // Initialize the logger
+    g_logger = LoggerFactory::createLogger();
+
     try {
         // Create platform-specific application instance
         PlatformType app("ImGui Hello World");
@@ -24,7 +28,7 @@ int main(int argc, char** argv)
         return 0;
     }
     catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        LOG_ERROR("Error: %s", e.what());
         return 1;
     }
 }

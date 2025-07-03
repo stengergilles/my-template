@@ -6,6 +6,9 @@
 // Forward declaration
 struct ANativeWindow;
 
+// Declare g_initialized as an external variable
+extern bool g_initialized;
+
 class PlatformAndroid : public PlatformBase {
 public:
     PlatformAndroid(const std::string& title);

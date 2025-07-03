@@ -1,4 +1,5 @@
 #include "../include/application.h"
+#include "../include/logger.h"
 #include "imgui.h"
 #include <iostream>
 
@@ -12,6 +13,7 @@ Application::Application(const std::string& appName)
 {
     // Set singleton instance
     s_instance = this;
+    LOG_INFO("Application created: %s", m_appName.c_str());
 }
 
 Application::~Application()
@@ -27,7 +29,7 @@ bool Application::initImGui()
     // Create ImGui context
     m_imguiContext = ImGui::CreateContext();
     if (!m_imguiContext) {
-        std::cerr << "Failed to create ImGui context" << std::endl;
+        LOG_ERROR("Failed to create ImGui context");
         return false;
     }
 
@@ -44,13 +46,13 @@ void Application::run()
     #ifndef __ANDROID__
     // Initialize platform-specific components
     if (!platformInit()) {
-        std::cerr << "Platform initialization failed" << std::endl;
+        LOG_ERROR("Platform initialization failed");
         return;
     }
 
     // Initialize ImGui
     if (!initImGui()) {
-        std::cerr << "ImGui initialization failed" << std::endl;
+        LOG_ERROR("ImGui initialization failed");
         platformShutdown();
         return;
     }
