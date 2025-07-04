@@ -5,6 +5,7 @@
 #include "../../include/platform/platform_android.h"
 #include "../../include/application.h"
 #include "../../include/logger.h"
+#include "../../include/scaling_manager.h"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "ImGuiApp", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "ImGuiApp", __VA_ARGS__))
@@ -28,7 +29,28 @@ static void handle_cmd(android_app* app, int32_t cmd) {
                 // Save the window pointer globally
                 g_savedWindow = app->window;
                 
-                if (g_app && !g_initialized) {
+                // Reset the scaling manager to force scaling application
+                ScalingManager::getInstance().reset();
+                
+                // Update the Android configuration in the scaling manager
+                if (app && app->config) {
+                    ScalingManager::getInstance().setConfiguration(app->config);
+                }
+                
+                // Always force reinitialization when window is created/shown
+                if (g_app) {
+                    // Shutdown if already initialized
+                    if (g_initialized) {
+                        g_app->platformShutdown();
+                        g_initialized = false;
+                        
+                        // Small delay to ensure complete teardown
+                        struct timespec ts;
+                        ts.tv_sec = 0;
+                        ts.tv_nsec = 100000000; // 100ms
+                        nanosleep(&ts, NULL);
+                    }
+                    
                     // Set the Android app pointer first
                     g_app->setAndroidApp(app);
                     
@@ -53,20 +75,76 @@ static void handle_cmd(android_app* app, int32_t cmd) {
             }
             break;
         case APP_CMD_GAINED_FOCUS:
-            // App gained focus, start rendering
-            LOGI("App gained focus");
-            // Try to initialize if we haven't already
-            if (g_app && !g_initialized && g_savedWindow != nullptr) {
+            // App gained focus after being in background
+            LOGI("APP_CMD_GAINED_FOCUS: App gained focus");
+            
+            // Reset the scaling manager to force scaling application
+            ScalingManager::getInstance().reset();
+            
+            // Update the Android configuration in the scaling manager
+            if (app && app->config) {
+                ScalingManager::getInstance().setConfiguration(app->config);
+            }
+            
+            // ALWAYS force complete reinitialization when gaining focus
+            if (g_app && g_savedWindow != nullptr) {
+                // Always shutdown first regardless of g_initialized state
+                LOGI("Force shutting down before reinitializing on focus gain");
+                g_app->platformShutdown();
+                g_initialized = false;
+                
+                // Longer delay to ensure complete teardown
+                struct timespec ts;
+                ts.tv_sec = 0;
+                ts.tv_nsec = 300000000; // 300ms
+                nanosleep(&ts, NULL);
+                
+                // Set the Android app pointer again
+                g_app->setAndroidApp(app);
+                
+                // Reinitialize with the window
                 bool success = g_app->initWithWindow(g_savedWindow);
                 if (success) {
-                    LOGI("Platform initialized successfully on focus gain");
+                    LOGI("Platform successfully reinitialized on focus gain");
                     g_initialized = true;
+                    
+                    // Force a small delay to ensure initialization completes
+                    nanosleep(&ts, NULL);
+                    
+                    // Force a redraw immediately
+                    Application::getInstance()->renderFrame();
+                } else {
+                    LOGE("Failed to reinitialize on focus gain - will retry");
+                    
+                    // Try one more time after a delay
+                    nanosleep(&ts, NULL);
+                    success = g_app->initWithWindow(g_savedWindow);
+                    if (success) {
+                        LOGI("Platform reinitialized on second attempt");
+                        g_initialized = true;
+                        
+                        // Force a redraw immediately
+                        Application::getInstance()->renderFrame();
+                    } else {
+                        LOGE("Failed to reinitialize on second attempt");
+                    }
                 }
+            } else {
+                LOGE("Cannot reinitialize on focus gain - app or window is null");
             }
             break;
         case APP_CMD_CONFIG_CHANGED:
             // Configuration changed (e.g., orientation)
             LOGI("Configuration changed (possibly orientation)");
+            
+            // Reset the scaling manager to force scaling application
+            ScalingManager::getInstance().reset();
+            
+            // Update the Android configuration in the scaling manager
+            if (app && app->config) {
+                ScalingManager::getInstance().setConfiguration(app->config);
+            }
+            
             if (g_app && g_savedWindow != nullptr) {
                 // Force a complete teardown and reinit to handle the new orientation
                 if (g_initialized) {
@@ -142,6 +220,44 @@ void android_main(struct android_app* app) {
     
     // Create application instance
     g_app = new PlatformAndroid("ImGui Hello World");
+    
+    // Reset the scaling manager to force scaling application
+    ScalingManager& scalingManager = ScalingManager::getInstance();
+    scalingManager.reset();
+    
+    // Set the Android configuration in the scaling manager
+    if (app && app->config) {
+        scalingManager.setConfiguration(app->config);
+        LOGI("Android configuration set in ScalingManager");
+    } else {
+        LOGE("No Android configuration available for ScalingManager");
+    }
+    
+    // Set a scale adjustment factor if needed (1.0 = use the exact density-based scale)
+    // You can adjust this value based on your device preferences
+    scalingManager.setScaleAdjustment(1.5f);  // Increased to 1.5 for better visibility
+    LOGI("Scale adjustment set to 1.5 for better visibility");
+    
+    // Force initialization immediately
+    if (app->window != nullptr) {
+        g_savedWindow = app->window;
+        g_app->setAndroidApp(app);
+        
+        // Initialize with proper scaling
+        bool success = g_app->initWithWindow(g_savedWindow);
+        if (success) {
+            LOGI("Platform initialized successfully at startup");
+            g_initialized = true;
+            
+            // Force a small delay to ensure initialization completes
+            struct timespec ts;
+            ts.tv_sec = 0;
+            ts.tv_nsec = 100000000; // 100ms
+            nanosleep(&ts, NULL);
+        } else {
+            LOGE("Failed to initialize at startup");
+        }
+    }
     
     LOGI("Starting application main loop");
     

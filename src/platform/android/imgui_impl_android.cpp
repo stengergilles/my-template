@@ -5,7 +5,9 @@
 #include <GLES3/gl3.h>
 #include <EGL/egl.h>
 #include <math.h>
+#include <algorithm>
 #include "imgui.h"
+#include "../../../include/scaling_manager.h"
 
 // Based on the official ImGui OpenGL3 backend with Android-specific modifications
 
@@ -15,6 +17,10 @@ static EGLSurface g_EglSurface = EGL_NO_SURFACE;
 static EGLContext g_EglContext = EGL_NO_CONTEXT;
 static ANativeWindow* g_Window = NULL;
 static bool g_Initialized = false;
+
+// Global variables for scaling
+static float g_LastAppliedScale = 0.0f;
+static int forceScaleFrameCount = 0;
 
 // OpenGL Data
 static GLuint g_FontTexture = 0;
@@ -259,16 +265,35 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     // Let ImGui handle WantTextInput naturally
     // Do not manually set io.WantTextInput
     
-    // Set up style with larger elements for touch
-    ImGuiStyle& style = ImGui::GetStyle();
-    style.ScaleAllSizes(2.0f);  // Scale up UI elements for touch
+    // Use the scaling manager to get the appropriate scale
+    ScalingManager& scalingManager = ScalingManager::getInstance();
+    float displayScale = scalingManager.getScaleFactor(windowWidth, windowHeight);
     
-    // Load DroidSans.ttf font with larger size for touch
-    io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 24.0f);
+    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Initial UI scale set to: %f for screen size %dx%d", 
+                       displayScale, windowWidth, windowHeight);
+    
+    // Set up style with proper scaling for touch
+    ImGuiStyle& style = ImGui::GetStyle();
+    style = ImGuiStyle(); // Reset to default first
+    style.ScaleAllSizes(displayScale);
+    
+    // Set global font scale
+    io.FontGlobalScale = displayScale;
+    
+    // Inform the scaling manager that we've applied this scale
+    scalingManager.applyScaling(displayScale);
+    
+    // Load DroidSans.ttf font with appropriate size for touch
+    float baseFontSize = 16.0f;
+    io.Fonts->Clear(); // Clear any existing fonts
+    io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", baseFontSize * displayScale);
     
     // Create OpenGL objects
     CreateDeviceObjects();
     CreateFontsTexture();
+    
+    // Reset the force scale frame counter to ensure scaling is applied for several frames
+    forceScaleFrameCount = 10;
     
     g_Initialized = true;
     return true;
@@ -357,29 +382,55 @@ void ImGui_ImplAndroid_NewFrame()
     lastWidth = windowWidth;
     lastHeight = windowHeight;
     
-    // Set display size based on orientation
+    // Get system insets from ScalingManager
+    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
+    
+    // Set the full display size
     io.DisplaySize = ImVec2((float)windowWidth, (float)windowHeight);
     
-    // Calculate display scale based on screen density
-    static float displayScale = 1.0f;
-    if (orientationChanged) {
-        // Get screen density from Android
-        ANativeWindow_acquire(g_Window);
-        float density = ANativeWindow_getWidth(g_Window) / (float)ANativeWindow_getHeight(g_Window);
-        ANativeWindow_release(g_Window);
+    // Set display scale
+    io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+    
+    // Log the insets for debugging
+    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", 
+                       "System insets: top=%d, bottom=%d, left=%d, right=%d", 
+                       insets.top, insets.bottom, insets.left, insets.right);
+    
+    // Set display safe area (area not covered by navigation bar, status bar, etc.)
+    // Note: DisplaySafeAreaPadding was removed in newer ImGui versions
+    // Instead, we'll handle insets directly in our rendering code
+    
+    // Use the scaling manager to get and apply the appropriate scale
+    ScalingManager& scalingManager = ScalingManager::getInstance();
+    float displayScale = scalingManager.getScaleFactor(windowWidth, windowHeight);
+    
+    // Force scaling application on every frame for debugging
+    scalingManager.forceNextApplication();
+    
+    // Apply scaling on every frame for debugging
+    {
+        __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Applying UI scale in NewFrame: %f", displayScale);
         
-        // Adjust scale based on screen size
-        if (windowWidth > 1080 || windowHeight > 1080) {
-            displayScale = 2.0f; // High-res screens
-        } else if (windowWidth > 720 || windowHeight > 720) {
-            displayScale = 1.5f; // Medium-res screens
-        } else {
-            displayScale = 1.0f; // Low-res screens
-        }
+        // Reset style to default before scaling to avoid cumulative scaling
+        ImGui::GetStyle() = ImGuiStyle();
         
         // Apply the scale to ImGui
         ImGui::GetStyle().ScaleAllSizes(displayScale);
         io.FontGlobalScale = displayScale;
+        
+        // Inform the scaling manager that we've applied this scale
+        scalingManager.applyScaling(displayScale);
+        
+        // Rebuild font atlas with new scale
+        io.Fonts->Clear();
+        float baseFontSize = 16.0f;
+        io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", baseFontSize * displayScale);
+        io.Fonts->Build();
+        CreateFontsTexture();
+        
+        __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", 
+                           "Font scale set to: %f, base size: %f, scaled size: %f", 
+                           io.FontGlobalScale, baseFontSize, baseFontSize * displayScale);
     }
     
     // Setup time step
@@ -409,6 +460,9 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
     int fb_height = (int)(draw_data->DisplaySize.y);
     if (fb_width <= 0 || fb_height <= 0)
         return;
+    
+    // Get system insets from ScalingManager
+    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
     
     // Backup GL state
     GLint last_active_texture; glGetIntegerv(GL_ACTIVE_TEXTURE, &last_active_texture);
@@ -446,6 +500,9 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
     
     // Setup orthographic projection matrix
     // For Android, we need to flip the Y axis
+    
+    // Standard projection matrix without inset adjustments
+    // We'll handle insets by constraining the ImGui windows instead
     float L = 0.0f;
     float R = draw_data->DisplaySize.x;
     float T = 0.0f;
@@ -515,11 +572,18 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
             }
             else
             {
-                // Apply scissor/clipping rectangle - adjusted for Android
-                int scissor_x = (int)(pcmd->ClipRect.x);
-                int scissor_y = (int)(fb_height - pcmd->ClipRect.w);  // Standard OpenGL Y-flip
+                // Get system insets from ScalingManager
+                const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
+                
+                // Apply scissor/clipping rectangle - adjusted for Android and system insets
+                int scissor_x = (int)(pcmd->ClipRect.x) + insets.left;
+                int scissor_y = (int)(fb_height - pcmd->ClipRect.w) + insets.top;  // Standard OpenGL Y-flip
                 int scissor_w = (int)(pcmd->ClipRect.z - pcmd->ClipRect.x);
                 int scissor_h = (int)(pcmd->ClipRect.w - pcmd->ClipRect.y);
+                
+                // Adjust scissor width and height to respect insets
+                scissor_w = fmin(scissor_w, fb_width - insets.left - insets.right);
+                scissor_h = fmin(scissor_h, fb_height - insets.top - insets.bottom);
                 
                 // Ensure scissor rectangle is valid
                 if (scissor_x < 0) scissor_x = 0;

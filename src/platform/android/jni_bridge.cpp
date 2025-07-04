@@ -2,6 +2,7 @@
 #include <android/log.h>
 #include <android/input.h>
 #include "imgui.h"
+#include "../../../include/scaling_manager.h"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "ImGuiJNI", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "ImGuiJNI", __VA_ARGS__))
@@ -12,6 +13,7 @@ JavaVM* g_JavaVM = nullptr;
 jclass g_MainActivityClass = nullptr;
 jmethodID g_ShowKeyboardMethod = nullptr;
 jmethodID g_HideKeyboardMethod = nullptr;
+jmethodID g_GetSystemInsetsMethod = nullptr;
 
 // Called when the library is loaded
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
@@ -45,6 +47,14 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     g_HideKeyboardMethod = env->GetStaticMethodID(g_MainActivityClass, "hideKeyboard", "()V");
     if (g_HideKeyboardMethod == nullptr) {
         LOGE("Failed to find hideKeyboard method");
+        env->ExceptionClear(); // Clear any pending exception
+        // Not a fatal error, we'll try to find it later
+    }
+    
+    // Get the getSystemInsets method ID
+    g_GetSystemInsetsMethod = env->GetStaticMethodID(g_MainActivityClass, "getSystemInsets", "()[I");
+    if (g_GetSystemInsetsMethod == nullptr) {
+        LOGE("Failed to find getSystemInsets method");
         env->ExceptionClear(); // Clear any pending exception
         // Not a fatal error, we'll try to find it later
     }
@@ -247,6 +257,15 @@ Java_com_my_app_ImGuiJNI_wantsTextInput(JNIEnv *env, jclass clazz) {
     ImGuiIO& io = ImGui::GetIO();
     LOGI("ImGui WantTextInput: %s", io.WantTextInput ? "true" : "false");
     return io.WantTextInput ? JNI_TRUE : JNI_FALSE;
+}
+
+// Function to update system insets from Java
+JNIEXPORT void JNICALL
+Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top, jint bottom, jint left, jint right) {
+    LOGI("Updating system insets: top=%d, bottom=%d, left=%d, right=%d", top, bottom, left, right);
+    
+    // Update the insets in the ScalingManager
+    ScalingManager::getInstance().setSystemInsets(top, bottom, left, right);
 }
 
 } // extern "C"

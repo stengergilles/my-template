@@ -103,22 +103,6 @@ bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.IniFilename = nullptr;
     
-    // Set display metrics
-    // Use a safer approach to get screen density
-    float xdpi = 160.0f; // Default density
-    struct android_app* app = (struct android_app*)m_androidApp;
-    if (app && app->config) {
-        // Try to get the screen density if available
-        #ifdef AConfiguration_getScreenDensity
-        xdpi = AConfiguration_getScreenDensity(app->config);
-        #else
-        // Fallback to a reasonable default if the function is not available
-        LOGI("AConfiguration_getScreenDensity not available, using default density");
-        #endif
-    }
-    float scale = xdpi / 160.0f;
-    io.FontGlobalScale = scale;
-    
     // Get window dimensions to handle orientation
     if (m_window) {
         int32_t width = ANativeWindow_getWidth(m_window);
