@@ -11,6 +11,11 @@ import android.util.Log;
 import java.util.List;
 import java.util.ArrayList;
 
+import androidx.core.view.WindowCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.graphics.Insets;
+
 /**
  * Main activity for the ImGui Hello World application.
  * This extends our custom ImGuiKeyboardHelper which provides better keyboard support.
@@ -38,6 +43,18 @@ public class MainActivity extends ImGuiKeyboardHelper {
         
         Log.d(TAG, "MainActivity created");
         
+        // Set up edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        // Listen for window insets changes
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Pass insets to native code
+            ImGuiJNI.updateSystemInsets(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            Log.d(TAG, "System Insets: Left=" + systemBars.left + ", Top=" + systemBars.top + ", Right=" + systemBars.right + ", Bottom=" + systemBars.bottom);
+            return insets;
+        });
+
         startKeyboardVisibilityCheck();
 
     }
@@ -103,16 +120,12 @@ public class MainActivity extends ImGuiKeyboardHelper {
             ImGuiJNI.onKeyEvent(keyCode, action, event.getMetaState());
             
             // For character keys on ACTION_DOWN, also send the character
-            if (action == KeyEvent.ACTION_DOWN) {
-                int unicodeChar = event.getUnicodeChar();
-                if (unicodeChar != 0) {
-                    String charStr = String.valueOf((char)unicodeChar);
-                    Log.d(TAG, "Sending unicode character to ImGui: " + charStr);
-                    ImGuiJNI.onTextInput(charStr);
-                }
+            int unicodeChar = event.getUnicodeChar();
+            if (unicodeChar != 0) {
+                String charStr = String.valueOf((char)unicodeChar);
+                Log.d(TAG, "Sending unicode character to ImGui: " + charStr);
+                ImGuiJNI.onTextInput(charStr);
             }
-            
-            return true;
         }
         
         return super.dispatchKeyEvent(event);

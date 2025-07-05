@@ -79,46 +79,6 @@ void Application::renderFrame()
     platformNewFrame();
     ImGui::NewFrame();
     
-    // Create a safe area constraint for Android
-    #ifdef __ANDROID__
-    // Get system insets from ScalingManager
-    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
-    
-    // Log the insets for debugging
-    LOG_INFO("System insets: top=%d, bottom=%d, left=%d, right=%d", 
-             insets.top, insets.bottom, insets.left, insets.right);
-    
-    // Create a dummy viewport that respects system insets
-    // This will constrain all ImGui windows to stay within the safe area
-    ImGui::SetNextWindowPos(ImVec2(insets.left, insets.top));
-    ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x - insets.left - insets.right, 
-                                   ImGui::GetIO().DisplaySize.y - insets.top - insets.bottom));
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-    
-    // Create an invisible window that covers the safe area
-    ImGui::Begin("SafeAreaViewport", nullptr, 
-                ImGuiWindowFlags_NoTitleBar | 
-                ImGuiWindowFlags_NoResize | 
-                ImGuiWindowFlags_NoMove | 
-                ImGuiWindowFlags_NoScrollbar | 
-                ImGuiWindowFlags_NoScrollWithMouse |
-                ImGuiWindowFlags_NoCollapse | 
-                ImGuiWindowFlags_NoSavedSettings | 
-                ImGuiWindowFlags_NoFocusOnAppearing |
-                ImGuiWindowFlags_NoBringToFrontOnFocus |
-                ImGuiWindowFlags_NoNavFocus |
-                ImGuiWindowFlags_NoBackground);
-    
-    // We'll close this window at the end of renderImGui()
-    // Store a flag to indicate we need to end the window
-    ImGui::GetIO().UserData = (void*)1;
-    
-    // Don't end the window here - we'll do it in renderImGui()
-    ImGui::PopStyleVar(3);
-    #endif
-    
     // Render application frame
     renderImGui();
     

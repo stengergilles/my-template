@@ -13,7 +13,7 @@ JavaVM* g_JavaVM = nullptr;
 jclass g_MainActivityClass = nullptr;
 jmethodID g_ShowKeyboardMethod = nullptr;
 jmethodID g_HideKeyboardMethod = nullptr;
-jmethodID g_GetSystemInsetsMethod = nullptr;
+
 
 // Called when the library is loaded
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
@@ -51,13 +51,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
         // Not a fatal error, we'll try to find it later
     }
     
-    // Get the getSystemInsets method ID
-    g_GetSystemInsetsMethod = env->GetStaticMethodID(g_MainActivityClass, "getSystemInsets", "()[I");
-    if (g_GetSystemInsetsMethod == nullptr) {
-        LOGE("Failed to find getSystemInsets method");
-        env->ExceptionClear(); // Clear any pending exception
-        // Not a fatal error, we'll try to find it later
-    }
+    
     
     LOGI("JNI_OnLoad completed successfully");
     return JNI_VERSION_1_6;
@@ -247,25 +241,22 @@ Java_com_my_app_ImGuiJNI_onTextInput(JNIEnv *env, jclass clazz, jstring text) {
     }
 }
 
+
+
+
+
+// Function to update system insets from Java
 JNIEXPORT jboolean JNICALL
 Java_com_my_app_ImGuiJNI_wantsTextInput(JNIEnv *env, jclass clazz) {
-    // Before calling GetIO, check if the ImGui context is valid
-    if (ImGui::GetCurrentContext() == nullptr) {
-        // Return false if the context is not yet created
-        return JNI_FALSE;
-    }
-    ImGuiIO& io = ImGui::GetIO();
-    LOGI("ImGui WantTextInput: %s", io.WantTextInput ? "true" : "false");
-    return io.WantTextInput ? JNI_TRUE : JNI_FALSE;
+    return ImGui::GetIO().WantTextInput;
 }
 
 // Function to update system insets from Java
 JNIEXPORT void JNICALL
-Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top, jint bottom, jint left, jint right) {
-    LOGI("Updating system insets: top=%d, bottom=%d, left=%d, right=%d", top, bottom, left, right);
-    
+Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint left, jint top, jint right, jint bottom) {
+    LOGI("Updating system insets: left=%d, top=%d, right=%d, bottom=%d", left, top, right, bottom);
     // Update the insets in the ScalingManager
-    ScalingManager::getInstance().setSystemInsets(top, bottom, left, right);
+    ScalingManager::getInstance().setSystemInsets(left, top, right, bottom);
 }
 
 } // extern "C"

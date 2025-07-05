@@ -150,5 +150,14 @@ project.afterEvaluate {
     preBuild.dependsOn updateAppTitle
 }
 
+dependencies {
+    implementation("androidx.core:core-ktx:1.10.1") {
+        exclude group: "org.jetbrains.kotlin"
+    }
+    implementation("androidx.appcompat:appcompat:1.6.1") {
+        exclude group: "org.jetbrains.kotlin"
+    }
+}
+
 apply from: 'openssl.gradle'
 

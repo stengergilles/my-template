@@ -382,9 +382,6 @@ void ImGui_ImplAndroid_NewFrame()
     lastWidth = windowWidth;
     lastHeight = windowHeight;
     
-    // Get system insets from ScalingManager
-    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
-    
     // Set the full display size
     io.DisplaySize = ImVec2((float)windowWidth, (float)windowHeight);
     
@@ -394,7 +391,10 @@ void ImGui_ImplAndroid_NewFrame()
     // Log the insets for debugging
     __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", 
                        "System insets: top=%d, bottom=%d, left=%d, right=%d", 
-                       insets.top, insets.bottom, insets.left, insets.right);
+                       ScalingManager::getInstance().getSystemInsets().top, 
+                       ScalingManager::getInstance().getSystemInsets().bottom, 
+                       ScalingManager::getInstance().getSystemInsets().left, 
+                       ScalingManager::getInstance().getSystemInsets().right);
     
     // Set display safe area (area not covered by navigation bar, status bar, etc.)
     // Note: DisplaySafeAreaPadding was removed in newer ImGui versions
@@ -493,48 +493,27 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_SCISSOR_TEST);
     
-    // Setup viewport
-    glViewport(0, 0, fb_width, fb_height);
+    // Setup viewport to account for system insets
+    glViewport(insets.left, insets.bottom, fb_width - insets.left - insets.right, fb_height - insets.top - insets.bottom);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
     // Setup orthographic projection matrix
     // For Android, we need to flip the Y axis
     
-    // Standard projection matrix without inset adjustments
-    // We'll handle insets by constraining the ImGui windows instead
-    float L = 0.0f;
-    float R = draw_data->DisplaySize.x;
-    float T = 0.0f;
-    float B = draw_data->DisplaySize.y;
-    
-    // Detect orientation
-    bool isPortrait = fb_height > fb_width;
-    
+    // Adjust the projection matrix to account for insets
+    float L = (float)insets.left;
+    float R = (float)fb_width - (float)insets.right;
+    float T = (float)insets.top;
+    float B = (float)fb_height - (float)insets.bottom;
+
     // This projection matrix works for Android's coordinate system
-    float ortho_projection[4][4];
-    
-    // Always use the standard projection matrix for Android
-    // This is the key to fixing the orientation issue
-    ortho_projection[0][0] = 2.0f/(R-L);
-    ortho_projection[0][1] = 0.0f;
-    ortho_projection[0][2] = 0.0f;
-    ortho_projection[0][3] = 0.0f;
-    
-    ortho_projection[1][0] = 0.0f;
-    ortho_projection[1][1] = 2.0f/(T-B);  // Standard Y axis
-    ortho_projection[1][2] = 0.0f;
-    ortho_projection[1][3] = 0.0f;
-    
-    ortho_projection[2][0] = 0.0f;
-    ortho_projection[2][1] = 0.0f;
-    ortho_projection[2][2] = -1.0f;
-    ortho_projection[2][3] = 0.0f;
-    
-    ortho_projection[3][0] = (R+L)/(L-R);
-    ortho_projection[3][1] = (T+B)/(B-T);
-    ortho_projection[3][2] = 0.0f;
-    ortho_projection[3][3] = 1.0f;
+    float ortho_projection[4][4] = {
+        { 2.0f/(R-L),   0.0f,         0.0f,  0.0f },
+        { 0.0f,         2.0f/(T-B),   0.0f,  0.0f },
+        { 0.0f,         0.0f,        -1.0f,  0.0f },
+        { (L+R)/(L-R),  (T+B)/(B-T),  0.0f,  1.0f },
+    };
     
     glUseProgram(g_ShaderHandle);
     glUniform1i(g_AttribLocationTex, 0);
@@ -572,19 +551,14 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
             }
             else
             {
-                // Get system insets from ScalingManager
-                const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
+                
                 
                 // Apply scissor/clipping rectangle - adjusted for Android and system insets
-                int scissor_x = (int)(pcmd->ClipRect.x) + insets.left;
-                int scissor_y = (int)(fb_height - pcmd->ClipRect.w) + insets.top;  // Standard OpenGL Y-flip
+                int scissor_x = (int)(pcmd->ClipRect.x + insets.left);
+                int scissor_y = (int)(fb_height - pcmd->ClipRect.w - insets.bottom);  // Standard OpenGL Y-flip
                 int scissor_w = (int)(pcmd->ClipRect.z - pcmd->ClipRect.x);
                 int scissor_h = (int)(pcmd->ClipRect.w - pcmd->ClipRect.y);
-                
-                // Adjust scissor width and height to respect insets
-                scissor_w = fmin(scissor_w, fb_width - insets.left - insets.right);
-                scissor_h = fmin(scissor_h, fb_height - insets.top - insets.bottom);
-                
+
                 // Ensure scissor rectangle is valid
                 if (scissor_x < 0) scissor_x = 0;
                 if (scissor_y < 0) scissor_y = 0;
