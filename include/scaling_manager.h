@@ -122,6 +122,9 @@ public:
     float getScaleAdjustment() const {
         return m_scaleAdjustment;
     }
+    
+    // Make this public for direct access in imgui_impl_android.cpp
+    bool m_forceNextApplication;
 
 private:
     // Private constructor for singleton

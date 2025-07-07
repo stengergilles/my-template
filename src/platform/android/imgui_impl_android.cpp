@@ -410,9 +410,15 @@ void ImGui_ImplAndroid_NewFrame()
     // Force scaling application on every frame for debugging
     scalingManager.forceNextApplication();
     
-    // Apply scaling on every frame for debugging
-    {
-        __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Applying UI scale in NewFrame: %f", displayScale);
+    // Only apply scaling when necessary to avoid rebuilding fonts every frame
+    float lastAppliedScale = scalingManager.getLastAppliedScale();
+    bool forceScaling = scalingManager.getLastAppliedScale() < 0.1f || // First time
+                        scalingManager.m_forceNextApplication ||       // Forced
+                        std::abs(lastAppliedScale - displayScale) > 0.05f; // Significant change
+    
+    if (forceScaling) {
+        __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Applying UI scale in NewFrame: %f (previous: %f)", 
+                           displayScale, lastAppliedScale);
         
         // Reset style to default before scaling to avoid cumulative scaling
         ImGui::GetStyle() = ImGuiStyle();
@@ -424,7 +430,7 @@ void ImGui_ImplAndroid_NewFrame()
         // Inform the scaling manager that we've applied this scale
         scalingManager.applyScaling(displayScale);
         
-        // Rebuild font atlas with new scale
+        // Only rebuild font atlas when scale changes significantly
         io.Fonts->Clear();
         float baseFontSize = 16.0f;
         io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", baseFontSize * displayScale);

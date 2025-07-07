@@ -63,7 +63,10 @@ public class MainActivity extends ImGuiKeyboardHelper {
         });
 
         startKeyboardVisibilityCheck();
-
+        
+        // Set a reasonable scale factor for Android
+        // This value can be adjusted based on device density
+        adjustScaleFactor(0.8f);
     }
     
     @Override
@@ -241,4 +244,10 @@ public class MainActivity extends ImGuiKeyboardHelper {
             Log.e(TAG, "Cannot hide keyboard - instance is null");
         }
     }
+    
+    /**
+     * Adjust the UI scaling factor
+     * @param factor The scaling factor (0.5 to 1.5 recommended)
+     */
+    public static native void adjustScaleFactor(float factor);
 }
