@@ -465,7 +465,10 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
         return;
     
     // Get system insets from ScalingManager
-    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
+    const SystemInsets& insets_raw = ScalingManager::getInstance().getSystemInsets();
+    SystemInsets insets = insets_raw;
+
+    
     
     // Backup GL state
     GLint last_active_texture; glGetIntegerv(GL_ACTIVE_TEXTURE, &last_active_texture);
@@ -505,6 +508,7 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
     float R = (float)fb_width - (float)insets.right;
     float T = (float)insets.top;
     float B = (float)fb_height - (float)insets.bottom;
+    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "RenderDrawData: fb_width=%d, fb_height=%d, L=%f, R=%f, T=%f, B=%f", fb_width, fb_height, L, R, T, B);
     const float ortho_projection[4][4] =
     {
         { 2.0f/(R-L),   0.0f,         0.0f,   0.0f },

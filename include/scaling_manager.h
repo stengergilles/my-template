@@ -13,6 +13,7 @@ struct SystemInsets {
     int bottom = 0;
     int left = 0;
     int right = 0;
+    bool isLandscape = false;
 };
 
 // Singleton class to manage UI scaling consistently across the application
@@ -31,14 +32,15 @@ public:
     }
 
     // Set system insets (from navigation bar, status bar, etc.)
-    void setSystemInsets(int top, int bottom, int left, int right) {
+    void setSystemInsets(int top, int bottom, int left, int right, bool isLandscape) {
         m_insets.top = top;
         m_insets.bottom = bottom;
         m_insets.left = left;
         m_insets.right = right;
+        m_insets.isLandscape = isLandscape;
         __android_log_print(ANDROID_LOG_INFO, "ScalingManager", 
-                           "System insets set: top=%d, bottom=%d, left=%d, right=%d",
-                           top, bottom, left, right);
+                           "System insets set: top=%d, bottom=%d, left=%d, right=%d, isLandscape=%d",
+                           top, bottom, left, right, isLandscape);
     }
 
     // Get system insets
