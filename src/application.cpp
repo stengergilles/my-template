@@ -45,16 +45,15 @@ void Application::run()
     // For Android, we don't run the main loop here
     // The main loop is handled in android_main.cpp
     #ifndef __ANDROID__
-    // Initialize platform-specific components
-    if (!platformInit()) {
-        LOG_ERROR("Platform initialization failed");
+    // Initialize ImGui first
+    if (!initImGui()) {
+        LOG_ERROR("ImGui initialization failed");
         return;
     }
 
-    // Initialize ImGui
-    if (!initImGui()) {
-        LOG_ERROR("ImGui initialization failed");
-        platformShutdown();
+    // Initialize platform-specific components
+    if (!platformInit()) {
+        LOG_ERROR("Platform initialization failed");
         return;
     }
 

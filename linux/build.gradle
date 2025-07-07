@@ -1,0 +1,19 @@
+// Top-level build file for Linux version
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // Add any build dependencies here
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

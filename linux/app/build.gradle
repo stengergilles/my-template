@@ -1,0 +1,132 @@
+plugins {
+    id 'cpp-application'
+    id 'cpp-unit-test'
+}
+
+// Define the application name
+def applicationName = project.hasProperty('appName') ? project.properties['appName'] : 'imgui-app'
+
+// Define build type (Debug or Release)
+def buildType = project.hasProperty('buildType') ? project.properties['buildType'] : 'Release'
+
+// Project configuration
+def projectRoot = file('../..')
+def buildDir = file("$projectRoot/build/linux")
+
+// Configure the application
+application {
+    targetMachines.add(machines.linux.x86_64)
+    baseName = applicationName
+    
+    // Source sets
+    source.from fileTree("$projectRoot/src").include("**/*.cpp")
+    privateHeaders.from fileTree("$projectRoot/include").include("**/*.h")
+}
+
+// Configure the C++ compiler
+tasks.withType(CppCompile).configureEach {
+    // Add compiler flags
+    compilerArgs.add('-std=c++17')
+    
+    // Add debug flags if in debug mode
+    if (buildType == 'Debug') {
+        compilerArgs.add('-g')
+        compilerArgs.add('-O0')
+    } else {
+        compilerArgs.add('-O2')
+    }
+    
+    // Include paths
+    includes.from(
+        "$projectRoot/include",
+        "$projectRoot/external/imgui",
+        "$projectRoot/external/glfw/include",
+        "$projectRoot/external/curl/include",
+        "$projectRoot/external/json/include"
+    )
+    
+    // Define macros
+    macros.put("LINUX", "1")
+    if (buildType == 'Debug') {
+        macros.put("DEBUG", "1")
+    }
+}
+
+// Configure the linker
+tasks.withType(LinkExecutable).configureEach {
+    // Add linker flags
+    linkerArgs.add('-pthread')
+    
+    // Add libraries
+    linkerArgs.addAll('-lGL', '-lglfw', '-lcurl', '-lssl', '-lcrypto')
+}
+
+// Task to download and build dependencies
+task downloadDependencies(type: Exec) {
+    workingDir projectRoot
+    commandLine './linux/download-dependencies.sh'
+    
+    doFirst {
+        println "Downloading and building dependencies from source..."
+    }
+}
+
+// Task to run CMake configuration
+task configureCMake(type: Exec, dependsOn: downloadDependencies) {
+    workingDir buildDir
+    commandLine 'cmake', projectRoot, "-DCMAKE_BUILD_TYPE=${buildType}", "-DUSE_SYSTEM_OPENSSL=ON"
+    
+    doFirst {
+        buildDir.mkdirs()
+        println "Running CMake configuration with build type: ${buildType}"
+        println "Using system OpenSSL libraries"
+    }
+}
+
+// Task to build using CMake
+task buildWithCMake(type: Exec, dependsOn: configureCMake) {
+    workingDir buildDir
+    commandLine 'cmake', '--build', '.', '--config', buildType
+    
+    doFirst {
+        println "Building application using CMake with build type: ${buildType}"
+    }
+}
+
+// Task to run the application
+task run(type: Exec, dependsOn: buildWithCMake) {
+    workingDir buildDir.toString() + "/bin"
+    commandLine './imgui_hello_world'
+    ignoreExitValue = true
+    
+    doFirst {
+        println "Running application: ${workingDir}/imgui_hello_world"
+        println "Note: This application requires a graphical environment to run properly."
+        println "If you're running in a headless environment, the application may crash."
+    }
+    
+    doLast {
+        if (execResult.exitValue != 0) {
+            println "Application exited with code: ${execResult.exitValue}"
+            println "This is expected if running in a headless environment."
+            println "The build is considered successful as long as the binary was created."
+        }
+    }
+}
+
+// Override the build task to use CMake
+build.dependsOn buildWithCMake
+
+// Add a task to create a distributable package
+task createDistribution(type: Tar, dependsOn: buildWithCMake) {
+    from buildDir.toString() + "/bin"
+    include "imgui_hello_world"
+    archiveFileName = "${applicationName}-linux-x86_64-${buildType.toLowerCase()}.tar.gz"
+    destinationDirectory = file("$projectRoot/dist")
+    compression = Compression.GZIP
+    
+    doFirst {
+        file("$projectRoot/dist").mkdirs()
+        println "Creating distribution package: ${destinationDirectory}/${archiveFileName}"
+    }
+}

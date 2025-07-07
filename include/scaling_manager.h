@@ -1,11 +1,7 @@
 #pragma once
 
 #include <cmath>
-#include <android/log.h>
-#include <android/configuration.h>
-
-// Forward declaration
-struct AConfiguration;
+#include <iostream>
 
 // Structure to hold system insets
 struct SystemInsets {
@@ -16,6 +12,9 @@ struct SystemInsets {
     bool isLandscape = false;
 };
 
+// Forward declaration for Android compatibility
+struct AConfiguration;
+
 // Singleton class to manage UI scaling consistently across the application
 class ScalingManager {
 public:
@@ -25,10 +24,10 @@ public:
         return instance;
     }
 
-    // Set the Android configuration
+    // Set the Android configuration (no-op on Linux)
     void setConfiguration(AConfiguration* config) {
-        m_config = config;
-        __android_log_print(ANDROID_LOG_INFO, "ScalingManager", "Android configuration set");
+        // No-op on Linux
+        std::cout << "ScalingManager: Android configuration set (no-op on Linux)" << std::endl;
     }
 
     // Set system insets (from navigation bar, status bar, etc.)
@@ -38,9 +37,11 @@ public:
         m_insets.left = left;
         m_insets.right = right;
         m_insets.isLandscape = isLandscape;
-        __android_log_print(ANDROID_LOG_INFO, "ScalingManager", 
-                           "System insets set: top=%d, bottom=%d, left=%d, right=%d, isLandscape=%d",
-                           top, bottom, left, right, isLandscape);
+        std::cout << "ScalingManager: System insets set: top=" << top 
+                  << ", bottom=" << bottom 
+                  << ", left=" << left 
+                  << ", right=" << right 
+                  << ", isLandscape=" << isLandscape << std::endl;
     }
 
     // Get system insets
@@ -50,35 +51,18 @@ public:
 
     // Calculate and get the appropriate scale factor based on device density
     float getScaleFactor(int screenWidth, int screenHeight) {
-        // Get the device density if available
-        float xdpi = 160.0f; // Default density
+        // On Linux, we use a simpler approach based on screen dimensions
+        float baseScale = 1.0f;
         
-        if (m_config) {
-            // Try to get the screen density if available
-            #ifdef AConfiguration_getScreenDensity
-            int density = AConfiguration_getScreenDensity(m_config);
-            if (density > 0) {
-                xdpi = (float)density;
-                __android_log_print(ANDROID_LOG_INFO, "ScalingManager", 
-                                  "Got density from AConfiguration: %d", density);
-            } else {
-                __android_log_print(ANDROID_LOG_WARN, "ScalingManager", 
-                                  "AConfiguration_getScreenDensity returned invalid density: %d", density);
-            }
-            #else
-            __android_log_print(ANDROID_LOG_WARN, "ScalingManager", 
-                              "AConfiguration_getScreenDensity not available");
-            #endif
-        } else {
-            __android_log_print(ANDROID_LOG_WARN, "ScalingManager", 
-                              "No Android configuration available for density calculation");
+        // Adjust scale based on screen resolution
+        if (screenWidth > 1920 || screenHeight > 1080) {
+            baseScale = 1.5f;
+        } else if (screenWidth > 1280 || screenHeight > 720) {
+            baseScale = 1.2f;
         }
         
-        // Calculate scale based on device density (normalized to 160dpi)
-        float densityScale = xdpi / 160.0f;
-        
         // Apply the adjustment factor to fine-tune the scale
-        float finalScale = densityScale * m_scaleAdjustment;
+        float finalScale = baseScale * m_scaleAdjustment;
         
         // Ensure minimum scale
         if (finalScale < 1.0f) {
@@ -86,16 +70,10 @@ public:
         }
         
         // Log the scale calculation
-        __android_log_print(ANDROID_LOG_INFO, "ScalingManager", 
-                           "Calculated scale: %f (density: %f, adjustment: %f) for screen dimensions: %dx%d", 
-                           finalScale, densityScale, m_scaleAdjustment, screenWidth, screenHeight);
-        
-        // For debugging, force a minimum scale if the calculated scale is too small
-        if (finalScale < 1.2f) {
-            finalScale = 1.2f;
-            __android_log_print(ANDROID_LOG_INFO, "ScalingManager", 
-                               "Forcing minimum scale to 1.2 for visibility");
-        }
+        std::cout << "ScalingManager: Calculated scale: " << finalScale 
+                  << " (base: " << baseScale 
+                  << ", adjustment: " << m_scaleAdjustment 
+                  << ") for screen dimensions: " << screenWidth << "x" << screenHeight << std::endl;
         
         return finalScale;
     }
@@ -103,9 +81,9 @@ public:
     // Apply scaling to ImGui
     void applyScaling(float scale) {
         if (std::abs(scale - m_lastAppliedScale) > 0.01f || m_forceNextApplication) {
-            __android_log_print(ANDROID_LOG_INFO, "ScalingManager", 
-                              "Applying scale: %f (previous: %f, forced: %s)", 
-                              scale, m_lastAppliedScale, m_forceNextApplication ? "yes" : "no");
+            std::cout << "ScalingManager: Applying scale: " << scale 
+                      << " (previous: " << m_lastAppliedScale 
+                      << ", forced: " << (m_forceNextApplication ? "yes" : "no") << ")" << std::endl;
             
             // Store the scale
             m_lastAppliedScale = scale;
@@ -118,7 +96,7 @@ public:
     // Force the next scaling application
     void forceNextApplication() {
         m_forceNextApplication = true;
-        __android_log_print(ANDROID_LOG_INFO, "ScalingManager", "Forcing next scale application");
+        std::cout << "ScalingManager: Forcing next scale application" << std::endl;
     }
     
     // Get the last applied scale
@@ -130,14 +108,14 @@ public:
     void reset() {
         m_lastAppliedScale = 0.0f;
         m_forceNextApplication = true;
-        __android_log_print(ANDROID_LOG_INFO, "ScalingManager", "Scaling state reset");
+        std::cout << "ScalingManager: Scaling state reset" << std::endl;
     }
     
     // Set the scale adjustment factor (to fine-tune the scaling)
     void setScaleAdjustment(float adjustment) {
         if (adjustment > 0.1f && adjustment < 2.0f) {
             m_scaleAdjustment = adjustment;
-            __android_log_print(ANDROID_LOG_INFO, "ScalingManager", "Scale adjustment set to: %f", adjustment);
+            std::cout << "ScalingManager: Scale adjustment set to: " << adjustment << std::endl;
             // Force reapplication of scaling with the new adjustment
             forceNextApplication();
         }
@@ -150,8 +128,8 @@ public:
 
 private:
     // Private constructor for singleton
-    ScalingManager() : m_lastAppliedScale(0.0f), m_forceNextApplication(true), m_scaleAdjustment(1.0f), m_config(nullptr) {
-        __android_log_print(ANDROID_LOG_INFO, "ScalingManager", "ScalingManager initialized with adjustment: %f", m_scaleAdjustment);
+    ScalingManager() : m_lastAppliedScale(0.0f), m_forceNextApplication(true), m_scaleAdjustment(1.0f) {
+        std::cout << "ScalingManager: ScalingManager initialized with adjustment: " << m_scaleAdjustment << std::endl;
     }
     
     // Prevent copying
@@ -161,6 +139,5 @@ private:
     float m_lastAppliedScale;
     bool m_forceNextApplication;
     float m_scaleAdjustment; // Adjustment factor to fine-tune scaling
-    AConfiguration* m_config; // Pointer to the Android configuration
     SystemInsets m_insets;    // System insets (navigation bar, status bar, etc.)
 };

@@ -42,6 +42,11 @@ bool PlatformGLFW::platformInit()
     glfwMakeContextCurrent(m_window);
     glfwSwapInterval(1); // Enable vsync
 
+    // Make sure ImGui context is created before initializing the GLFW implementation
+    if (ImGui::GetCurrentContext() == nullptr) {
+        ImGui::CreateContext();
+    }
+
     // Initialize ImGui GLFW implementation
     ImGui_ImplGlfw_InitForOpenGL(m_window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);

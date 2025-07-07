@@ -43,14 +43,32 @@ endif()
 message(STATUS "CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}")
 message(STATUS "BUILD_TESTS ${BUILD_TESTS}")
 
-if(NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND BUILD_TESTS OR EXISTS "/data/data/com.termux/files/usr")
-  if(NOT EXISTS "${PROJECT_ROOT}/external/openssl/native/include/openssl/opensslconf.h")
+option(USE_SYSTEM_OPENSSL "Use system OpenSSL libraries" OFF)
+
+if(USE_SYSTEM_OPENSSL)
+  message(STATUS "Using system OpenSSL libraries")
+  find_package(OpenSSL REQUIRED)
+  include_directories(${OPENSSL_INCLUDE_DIR})
+else()
+  # Use bundled OpenSSL
+  message(STATUS "Using bundled OpenSSL")
+  
+  # Set OpenSSL paths
+  set(OPENSSL_ROOT_DIR "${PROJECT_ROOT}/external/openssl/native")
+  set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include")
+  set(OPENSSL_LIBRARIES "${OPENSSL_ROOT_DIR}/lib")
+  set(OPENSSL_SSL_LIBRARY "${OPENSSL_LIBRARIES}/libssl.a")
+  set(OPENSSL_CRYPTO_LIBRARY "${OPENSSL_LIBRARIES}/libcrypto.a")
+  
+  # Check if OpenSSL is already built
+  if(NOT EXISTS "${OPENSSL_INCLUDE_DIR}/openssl/opensslconf.h")
+    message(STATUS "Building OpenSSL from source")
     execute_process(
         COMMAND bash -c "
-	    cd ${PROJECT_ROOT}/external/openssl-src
-	    ./Configure no-tests --prefix=${PROJECT_ROOT}/external/openssl/native
-	    make -j\$(nproc)
-	    make install
+        cd ${PROJECT_ROOT}/external/openssl-src
+        ./Configure no-tests --prefix=${OPENSSL_ROOT_DIR}
+        make -j\$(nproc)
+        make install
         "
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         RESULT_VARIABLE OPENSSL_BUILD_RESULT
@@ -58,7 +76,51 @@ if(NOT CMAKE_SYSTEM_NAME STREQUAL "Android" AND BUILD_TESTS OR EXISTS "/data/dat
     if(NOT OPENSSL_BUILD_RESULT EQUAL 0)
         message(FATAL_ERROR "Failed to build OpenSSL!")
     endif()
+  else()
+    message(STATUS "Using pre-built OpenSSL from ${OPENSSL_ROOT_DIR}")
   endif()
+  
+  # Include OpenSSL headers
+  include_directories(${OPENSSL_INCLUDE_DIR})
+endif()
+
+# Find GLFW
+if(NOT ANDROID)
+  # First try to find system GLFW
+  find_package(glfw3 QUIET)
+  
+  if(NOT glfw3_FOUND)
+    # If not found, use our own GLFW
+    message(STATUS "System GLFW not found, using bundled GLFW")
+    
+    # Check if GLFW is already built
+    if(EXISTS "${PROJECT_ROOT}/external/glfw/build/src/libglfw3.a")
+      message(STATUS "Using pre-built GLFW")
+      set(GLFW_LIBRARIES "${PROJECT_ROOT}/external/glfw/build/src/libglfw3.a")
+      set(GLFW_INCLUDE_DIRS "${PROJECT_ROOT}/external/glfw/include")
+      
+      # Create imported target for GLFW
+      if(NOT TARGET glfw)
+        add_library(glfw STATIC IMPORTED GLOBAL)
+        set_target_properties(glfw PROPERTIES
+          IMPORTED_LOCATION "${GLFW_LIBRARIES}"
+          INTERFACE_INCLUDE_DIRECTORIES "${GLFW_INCLUDE_DIRS}"
+        )
+      endif()
+    else()
+      # If not built, add as subdirectory
+      set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+      set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+      set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+      set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+      add_subdirectory(${PROJECT_ROOT}/external/glfw)
+      set(GLFW_INCLUDE_DIRS "${PROJECT_ROOT}/external/glfw/include")
+    endif()
+  else()
+    message(STATUS "Using system GLFW")
+  endif()
+  
+  include_directories(${GLFW_INCLUDE_DIRS})
 endif()
 
 include_directories(
@@ -160,10 +222,28 @@ if(ANDROID)
     add_subdirectory(external/curl)
 else()
     # For native platforms, always use project-controlled OpenSSL build
-    set(OPENSSL_ROOT_DIR "${PROJECT_ROOT}/external/openssl/native")
-    set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include")
-    set(OPENSSL_CRYPTO_LIBRARY "${OPENSSL_ROOT_DIR}/lib/libcrypto.a")
-    set(OPENSSL_SSL_LIBRARY "${OPENSSL_ROOT_DIR}/lib/libssl.a")
+    if(NOT USE_SYSTEM_OPENSSL)
+        # Define imported OpenSSL targets for use by curl and your code
+        if(NOT TARGET OpenSSL::SSL)
+            add_library(OpenSSL::SSL STATIC IMPORTED GLOBAL)
+            set_target_properties(OpenSSL::SSL PROPERTIES
+                IMPORTED_LOCATION "${OPENSSL_SSL_LIBRARY}"
+                INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INCLUDE_DIR}"
+            )
+        endif()
+        if(NOT TARGET OpenSSL::Crypto)
+            add_library(OpenSSL::Crypto STATIC IMPORTED GLOBAL)
+            set_target_properties(OpenSSL::Crypto PROPERTIES
+                IMPORTED_LOCATION "${OPENSSL_CRYPTO_LIBRARY}"
+                INTERFACE_INCLUDE_DIRECTORIES "${OPENSSL_INCLUDE_DIR}"
+            )
+        endif()
+    endif()
+
+    set(CURL_USE_OPENSSL ON CACHE BOOL "Use OpenSSL with libcurl" FORCE)
+    set(CURL_ENABLE_OPENSSL_AUTO_FETCH OFF CACHE BOOL "" FORCE)
+    set(CURL_DISABLE_LIBPSL ON CACHE BOOL "Disable PSL support" FORCE)
+    set(CURL_USE_LIBPSL OFF CACHE BOOL "Use PSL support" FORCE)
 
     if(EXISTS "${OPENSSL_SSL_LIBRARY}" AND EXISTS "${OPENSSL_CRYPTO_LIBRARY}")
         if(NOT TARGET OpenSSL::SSL)
@@ -181,7 +261,12 @@ else()
             )
         endif()
     else()
-        message(FATAL_ERROR "OpenSSL libraries not found in ${OPENSSL_ROOT_DIR}. Build OpenSSL before configuring this project.")
+        if(USE_SYSTEM_OPENSSL)
+            # If using system OpenSSL, we should have already found it
+            message(STATUS "Using system OpenSSL libraries")
+        else()
+            message(FATAL_ERROR "OpenSSL libraries not found in ${OPENSSL_ROOT_DIR}. Build OpenSSL before configuring this project.")
+        endif()
     endif()
 
     set(CURL_USE_OPENSSL ON CACHE BOOL "Use OpenSSL with libcurl" FORCE)
@@ -333,13 +418,42 @@ else()
         cmake_policy(SET CMP0072 NEW)
       endif()
       find_package(OpenGL REQUIRED)
+      find_package(X11 REQUIRED)
+      
+      # Set up platform libraries
       set(PLATFORM_LIBS
         OpenGL::GL
-        glfw
         CURL::libcurl
         OpenSSL::SSL
         OpenSSL::Crypto
+        ${X11_LIBRARIES}
+        ${X11_Xrandr_LIB}
+        ${X11_Xcursor_LIB}
+        ${X11_Xinerama_LIB}
+        ${X11_Xinput_LIB}
+        ${X11_Xkb_LIB}
+        ${X11_Xext_LIB}
+        ${X11_Xfixes_LIB}
+        X11
+        Xrandr
+        Xcursor
+        Xinerama
+        Xi
+        Xext
+        Xfixes
+        Xxf86vm
       )
+      
+      # Add GLFW library
+      if(TARGET glfw)
+        list(APPEND PLATFORM_LIBS glfw)
+      elseif(TARGET glfw_objlib)
+        list(APPEND PLATFORM_LIBS glfw_objlib)
+      elseif(EXISTS "${PROJECT_ROOT}/external/glfw/build/src/libglfw3.a")
+        list(APPEND PLATFORM_LIBS "${PROJECT_ROOT}/external/glfw/build/src/libglfw3.a")
+      else()
+        list(APPEND PLATFORM_LIBS glfw3)
+      endif()
       if(TARGET appcode)
           list(APPEND PLATFORM_LIBS appcode)
       endif()
