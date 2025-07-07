@@ -1,0 +1,1376 @@
+--------- beginning of main
+07-07 09:39:09.219 14008 14029 I ImGuiApp: Attempting to change directory to: /data/user/0/com.my.app/files
+07-07 09:39:09.219 14008 14029 I ImGuiApp: Successfully changed directory to: /data/user/0/com.my.app/files
+07-07 09:39:09.219 14008 14029 I ImGuiApp: Application created: ImGui Hello World
+07-07 09:39:09.219 14008 14029 I ImGuiApp: Android configuration set in ScalingManager
+07-07 09:39:09.219 14008 14029 I ImGuiApp: Scale adjustment set to 1.5 for better visibility
+07-07 09:39:09.219 14008 14029 I ImGuiApp: Starting application main loop
+07-07 09:39:09.280 14008 14029 I ImGuiApp: Android app pointer set: 0xb400007e04b3abb0
+07-07 09:39:09.280 14008 14029 I ImGuiApp: Window pointer stored directly: 0xb400007c74aff0a0
+07-07 09:39:09.280 14008 14029 I ImGuiApp: Creating ImGui context
+07-07 09:39:09.280 14008 14029 I ImGuiApp: Window dimensions: 1080 x 2309
+07-07 09:39:09.280 14008 14029 I ImGuiApp: Initializing ImGui for Android with window: 0xb400007c74aff0a0
+07-07 09:39:09.280 14008 14029 I ImGuiApp: ImGui_ImplAndroid_Init with window: 0xb400007c74aff0a0, dimensions: 1080x2309
+07-07 09:39:09.300 14008 14029 I ImGuiApp: EGL initialized: version 1.5
+07-07 09:39:09.302 14008 14029 I ImGuiApp: Initial UI scale set to: 1.500000 for screen size 1080x2309
+07-07 09:39:09.322 14008 14029 I ImGuiApp: ImGui Android init result: SUCCESS
+07-07 09:39:09.322 14008 14029 I ImGuiApp: Orientation/size changed: 0x0 -> 1080x2309
+07-07 09:39:09.322 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.322 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.334 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.387 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.387 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.408 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.435 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.435 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.442 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.459 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.460 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.469 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.486 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.486 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.497 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.514 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.514 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.522 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.540 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.540 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.548 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.569 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.569 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.591 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.610 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.610 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.617 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.635 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.635 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.643 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.661 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.662 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.669 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.686 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.686 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.693 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.711 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.711 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.718 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.736 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.736 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.744 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.761 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.761 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.770 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.787 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.787 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.795 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.812 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.812 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.832 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.850 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.851 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.872 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.890 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.890 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.912 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.930 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.930 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.951 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:09.969 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:09.969 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:09.991 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.009 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.009 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.030 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.048 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.049 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.071 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.089 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.089 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.097 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.114 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.114 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.121 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.138 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.138 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.146 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.163 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.163 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.172 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.191 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.191 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.199 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.217 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.217 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.226 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.244 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.244 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.253 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.271 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.271 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.279 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.298 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.298 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.306 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.324 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.324 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.333 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.351 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.351 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.359 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.377 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.378 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.386 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.405 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.405 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.414 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.432 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.432 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.441 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.460 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.460 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.469 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.487 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.487 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.495 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.513 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.513 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.521 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.539 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.539 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.548 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.566 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.566 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.574 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.592 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.592 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.601 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.619 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.619 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.627 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.646 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.646 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.654 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.672 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.672 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.681 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.699 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.699 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.708 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.726 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.726 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.734 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.752 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.752 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.760 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.778 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.778 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.786 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.804 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.804 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.813 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.830 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.830 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.838 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.856 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.856 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.864 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.881 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.881 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.889 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.907 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.907 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.915 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.934 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.934 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.942 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.960 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.960 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.969 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:10.987 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:10.987 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:10.995 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.013 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.013 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.021 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.038 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.038 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.046 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.065 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.065 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.074 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.092 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.092 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.100 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.118 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.119 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.132 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.149 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.149 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.161 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.179 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.180 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.194 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.212 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.213 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.227 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.245 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.245 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.259 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.277 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.277 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.290 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.309 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.309 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.322 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.340 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.340 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.354 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.372 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.373 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.386 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.404 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.404 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.418 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.436 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.436 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.450 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.468 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.468 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.481 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.499 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.499 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.513 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.531 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.531 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.553 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.570 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.570 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.577 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.594 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:11.594 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.618 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.638 14008 14029 I ImGuiApp: Orientation/size changed: 1080x2309 -> 2309x1080
+07-07 09:39:11.639 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.639 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.648 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.665 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.666 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.677 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.695 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.695 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.705 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.722 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.722 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.729 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.746 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.746 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.754 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.771 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.771 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.779 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.796 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.796 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.804 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.821 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.821 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.829 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.846 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.846 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.855 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.872 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.872 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.880 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.898 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.898 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.905 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.923 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.923 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.930 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.947 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.947 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.954 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.972 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.972 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:11.980 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:11.998 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:11.998 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.005 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.023 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.024 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.031 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.048 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.049 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.056 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.074 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.074 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.082 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.100 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.100 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.108 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.126 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.126 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.134 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.152 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.152 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.160 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.177 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.177 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.185 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.203 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.203 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.212 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.230 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.230 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.239 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.257 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.257 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.266 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.284 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.284 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.292 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.310 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.310 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.318 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.336 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.336 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.343 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.361 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.361 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.369 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.387 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.387 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.395 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.413 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.413 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.420 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.438 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.439 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.446 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.464 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.464 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.472 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.490 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.490 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.497 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.514 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.514 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.522 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.540 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.540 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.548 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.566 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.566 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.575 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.593 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.593 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.601 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.619 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.619 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.627 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.645 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.645 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.653 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.671 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.671 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.679 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.696 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.696 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.704 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.722 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.722 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.730 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.747 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.747 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.754 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.772 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.772 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.780 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.798 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.798 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.805 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.824 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.824 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.832 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.849 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.849 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.856 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.873 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.873 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.880 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.897 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.897 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.906 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.924 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.924 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.931 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.948 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.948 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.955 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.973 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.973 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:12.981 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:12.998 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:12.998 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.006 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.024 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.024 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.032 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.050 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.050 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.058 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.076 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.076 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.083 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.101 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.101 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.108 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.126 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.126 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.135 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.153 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.153 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.162 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.180 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.180 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.194 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.212 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.212 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.226 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.244 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.244 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.259 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.277 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.277 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.291 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.310 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.310 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.324 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.343 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.343 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.357 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.375 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.376 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.389 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.407 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.407 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.420 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.438 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.439 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.453 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.471 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.471 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.485 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.503 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.503 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.517 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.535 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.536 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.549 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.567 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.567 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.581 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.599 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.599 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.613 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.631 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.631 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.645 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.662 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.662 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.676 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.694 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.694 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.704 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.722 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.722 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.737 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.755 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.755 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.770 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.787 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.787 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.803 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.820 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.820 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.828 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.846 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.846 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.859 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.878 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.878 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.892 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.910 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.910 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.924 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.942 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.942 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.957 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:13.975 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:13.975 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:13.988 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.007 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.007 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.020 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.039 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.039 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.053 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.071 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.072 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.085 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.103 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.103 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.115 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.133 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.133 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.148 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.166 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.167 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.180 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.199 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.199 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.213 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.231 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.231 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.245 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.263 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.263 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.277 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.295 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.295 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.309 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.327 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.327 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.336 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.354 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.355 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.370 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.388 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.388 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.403 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.421 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.422 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.436 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.454 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.454 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.468 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.487 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.487 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.501 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.519 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.519 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.532 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.550 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.550 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.564 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.583 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.583 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.597 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.615 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.615 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.629 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.648 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.648 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.661 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.679 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.679 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.693 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.711 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.711 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.720 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.738 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.739 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.754 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.772 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.772 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.787 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.806 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.806 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.820 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.839 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.839 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.853 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.872 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.872 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.885 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.903 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.904 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.917 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.936 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.936 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.949 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.968 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:14.968 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:14.981 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:14.999 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.000 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.013 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.032 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.032 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.047 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.065 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.066 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.082 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.100 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.101 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.116 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.134 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.134 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.148 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.167 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.167 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.181 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.199 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.200 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.213 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.231 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.232 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.245 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.264 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.264 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.279 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.296 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.296 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.310 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.328 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.328 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.344 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.361 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.362 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.378 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.396 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.396 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.410 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.428 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.428 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.442 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.461 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.461 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.475 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.492 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.493 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.506 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.524 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.524 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.539 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.557 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.557 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.571 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.590 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.590 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.603 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.621 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.621 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.635 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.653 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.653 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.668 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.686 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.686 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.700 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.718 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.718 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.733 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.751 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.752 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.765 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.783 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.783 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.797 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.815 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.815 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.828 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.847 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.847 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.861 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.879 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.879 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.893 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.911 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.911 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.925 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.943 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.943 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.957 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:15.975 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:15.976 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:15.984 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.003 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.003 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.018 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.037 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.037 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.052 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.070 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.070 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.084 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.103 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.103 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.118 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.136 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.137 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.170 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.190 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.190 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.206 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.225 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.225 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.253 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.272 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.272 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.285 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.303 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.303 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.316 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.333 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.333 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.345 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.362 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.362 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.369 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.386 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.386 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.393 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.411 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.411 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.418 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.434 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.435 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.442 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.460 14008 14029 I ImGuiApp: Touch event: action=0, x=532.000000, y=237.000000
+07-07 09:39:16.460 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.460 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.468 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.486 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.486 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.495 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.512 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.512 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.523 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.540 14008 14029 I ImGuiApp: Touch event: action=2, x=536.525391, y=239.262695
+07-07 09:39:16.540 14008 14029 I ImGuiApp: Touch event: action=2, x=540.493164, y=241.246094
+07-07 09:39:16.540 14008 14029 I ImGuiApp: Touch event: action=2, x=544.517578, y=243.517578
+07-07 09:39:16.541 14008 14029 I ImGuiApp: Touch event: action=2, x=550.264648, y=247.758789
+07-07 09:39:16.541 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.541 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.549 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.566 14008 14029 I ImGuiApp: Touch event: action=2, x=557.955078, y=252.716797
+07-07 09:39:16.566 14008 14029 I ImGuiApp: Touch event: action=2, x=566.194336, y=257.477539
+07-07 09:39:16.566 14008 14029 I ImGuiApp: Touch event: action=2, x=575.390625, y=261.833984
+07-07 09:39:16.567 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.567 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.574 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.591 14008 14029 I ImGuiApp: Touch event: action=2, x=585.102539, y=266.275391
+07-07 09:39:16.591 14008 14029 I ImGuiApp: Touch event: action=2, x=595.984375, y=269.850586
+07-07 09:39:16.591 14008 14029 I ImGuiApp: Touch event: action=2, x=610.462891, y=275.366211
+07-07 09:39:16.592 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.592 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.601 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.619 14008 14029 I ImGuiApp: Touch event: action=2, x=619.470703, y=278.368164
+07-07 09:39:16.619 14008 14029 I ImGuiApp: Touch event: action=2, x=632.154297, y=281.182617
+07-07 09:39:16.619 14008 14029 I ImGuiApp: Touch event: action=2, x=648.177734, y=286.191406
+07-07 09:39:16.620 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.620 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.628 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.646 14008 14029 I ImGuiApp: Touch event: action=2, x=663.583984, y=289.369141
+07-07 09:39:16.646 14008 14029 I ImGuiApp: Touch event: action=2, x=679.172852, y=292.396484
+07-07 09:39:16.646 14008 14029 I ImGuiApp: Touch event: action=2, x=694.243164, y=294.405273
+07-07 09:39:16.646 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.646 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.655 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.672 14008 14029 I ImGuiApp: Touch event: action=2, x=706.920898, y=295.000000
+07-07 09:39:16.672 14008 14029 I ImGuiApp: Touch event: action=2, x=717.371094, y=295.000000
+07-07 09:39:16.672 14008 14029 I ImGuiApp: Touch event: action=2, x=729.779297, y=295.000000
+07-07 09:39:16.673 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.673 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.682 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.699 14008 14029 I ImGuiApp: Touch event: action=2, x=744.644531, y=295.000000
+07-07 09:39:16.699 14008 14029 I ImGuiApp: Touch event: action=2, x=758.205078, y=295.000000
+07-07 09:39:16.699 14008 14029 I ImGuiApp: Touch event: action=2, x=769.430664, y=295.000000
+07-07 09:39:16.699 14008 14029 I ImGuiApp: Touch event: action=2, x=778.890625, y=295.000000
+07-07 09:39:16.699 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.700 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.707 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.725 14008 14029 I ImGuiApp: Touch event: action=2, x=792.198242, y=295.000000
+07-07 09:39:16.725 14008 14029 I ImGuiApp: Touch event: action=2, x=812.095703, y=294.000000
+07-07 09:39:16.725 14008 14029 I ImGuiApp: Touch event: action=2, x=824.416016, y=293.646484
+07-07 09:39:16.725 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.725 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.734 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.752 14008 14029 I ImGuiApp: Touch event: action=2, x=833.674805, y=292.665039
+07-07 09:39:16.752 14008 14029 I ImGuiApp: Touch event: action=2, x=844.679688, y=291.000000
+07-07 09:39:16.752 14008 14029 I ImGuiApp: Touch event: action=2, x=857.386719, y=290.000000
+07-07 09:39:16.752 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.752 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.761 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.778 14008 14029 I ImGuiApp: Touch event: action=2, x=872.225586, y=289.000000
+07-07 09:39:16.778 14008 14029 I ImGuiApp: Touch event: action=2, x=883.644531, y=288.000000
+07-07 09:39:16.778 14008 14029 I ImGuiApp: Touch event: action=2, x=893.665039, y=287.000000
+07-07 09:39:16.778 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.778 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.786 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.804 14008 14029 I ImGuiApp: Touch event: action=2, x=902.542969, y=287.000000
+07-07 09:39:16.804 14008 14029 I ImGuiApp: Touch event: action=2, x=913.080078, y=287.000000
+07-07 09:39:16.804 14008 14029 I ImGuiApp: Touch event: action=2, x=925.834961, y=285.645508
+07-07 09:39:16.804 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.804 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.812 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.830 14008 14029 I ImGuiApp: Touch event: action=2, x=939.801758, y=285.000000
+07-07 09:39:16.830 14008 14029 I ImGuiApp: Touch event: action=2, x=949.846680, y=285.000000
+07-07 09:39:16.830 14008 14029 I ImGuiApp: Touch event: action=2, x=959.892578, y=285.000000
+07-07 09:39:16.830 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.830 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.840 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.857 14008 14029 I ImGuiApp: Touch event: action=2, x=970.798828, y=285.000000
+07-07 09:39:16.857 14008 14029 I ImGuiApp: Touch event: action=2, x=981.137695, y=285.000000
+07-07 09:39:16.857 14008 14029 I ImGuiApp: Touch event: action=2, x=993.635742, y=285.000000
+07-07 09:39:16.857 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.857 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.866 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.883 14008 14029 I ImGuiApp: Touch event: action=2, x=1010.216797, y=284.000000
+07-07 09:39:16.883 14008 14029 I ImGuiApp: Touch event: action=2, x=1020.468750, y=284.000000
+07-07 09:39:16.883 14008 14029 I ImGuiApp: Touch event: action=2, x=1030.254883, y=283.624023
+07-07 09:39:16.883 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.883 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.892 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.910 14008 14029 I ImGuiApp: Touch event: action=2, x=1041.750977, y=283.000000
+07-07 09:39:16.910 14008 14029 I ImGuiApp: Touch event: action=2, x=1053.817383, y=283.000000
+07-07 09:39:16.910 14008 14029 I ImGuiApp: Touch event: action=2, x=1063.796875, y=283.000000
+07-07 09:39:16.910 14008 14029 I ImGuiApp: Touch event: action=2, x=1074.111328, y=283.000000
+07-07 09:39:16.910 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.910 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.919 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.936 14008 14029 I ImGuiApp: Touch event: action=2, x=1084.714844, y=284.000000
+07-07 09:39:16.937 14008 14029 I ImGuiApp: Touch event: action=2, x=1094.760742, y=285.352539
+07-07 09:39:16.937 14008 14029 I ImGuiApp: Touch event: action=2, x=1103.788086, y=286.357422
+07-07 09:39:16.937 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.937 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.946 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.963 14008 14029 I ImGuiApp: Touch event: action=2, x=1112.341797, y=288.334961
+07-07 09:39:16.963 14008 14029 I ImGuiApp: Touch event: action=2, x=1120.360352, y=290.000000
+07-07 09:39:16.963 14008 14029 I ImGuiApp: Touch event: action=2, x=1127.004883, y=291.000000
+07-07 09:39:16.963 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.963 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.972 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:16.989 14008 14029 I ImGuiApp: Touch event: action=2, x=1132.663086, y=292.000000
+07-07 09:39:16.989 14008 14029 I ImGuiApp: Touch event: action=2, x=1136.600586, y=293.000000
+07-07 09:39:16.989 14008 14029 I ImGuiApp: Touch event: action=2, x=1140.337891, y=293.000000
+07-07 09:39:16.989 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:16.989 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:16.998 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.016 14008 14029 I ImGuiApp: Touch event: action=2, x=1142.324219, y=293.000000
+07-07 09:39:17.016 14008 14029 I ImGuiApp: Touch event: action=2, x=1144.314453, y=293.000000
+07-07 09:39:17.016 14008 14029 I ImGuiApp: Touch event: action=2, x=1145.500000, y=293.000000
+07-07 09:39:17.016 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.016 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.025 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.041 14008 14029 I ImGuiApp: Touch event: action=2, x=1143.694336, y=293.000000
+07-07 09:39:17.042 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.042 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.049 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.066 14008 14029 I ImGuiApp: Touch event: action=2, x=1141.703125, y=293.000000
+07-07 09:39:17.066 14008 14029 I ImGuiApp: Touch event: action=2, x=1140.684570, y=293.000000
+07-07 09:39:17.067 14008 14029 I ImGuiApp: Touch event: action=2, x=1138.711914, y=293.000000
+07-07 09:39:17.067 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.067 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.075 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.092 14008 14029 I ImGuiApp: Touch event: action=2, x=1137.707031, y=293.000000
+07-07 09:39:17.092 14008 14029 I ImGuiApp: Touch event: action=2, x=1136.334961, y=293.000000
+07-07 09:39:17.093 14008 14029 I ImGuiApp: Touch event: action=2, x=1135.333008, y=293.000000
+07-07 09:39:17.093 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.093 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.102 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.119 14008 14029 I ImGuiApp: Touch event: action=2, x=1134.500000, y=293.000000
+07-07 09:39:17.119 14008 14029 I ImGuiApp: Touch event: action=2, x=1133.662109, y=293.000000
+07-07 09:39:17.119 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.120 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.128 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.146 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.146 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.155 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.172 14008 14029 I ImGuiApp: Touch event: action=2, x=1134.000000, y=292.000000
+07-07 09:39:17.173 14008 14029 I ImGuiApp: Touch event: action=2, x=1135.105469, y=292.000000
+07-07 09:39:17.173 14008 14029 I ImGuiApp: Touch event: action=2, x=1136.335938, y=292.000000
+07-07 09:39:17.173 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.173 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.182 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.200 14008 14029 I ImGuiApp: Touch event: action=2, x=1138.327148, y=292.000000
+07-07 09:39:17.200 14008 14029 I ImGuiApp: Touch event: action=2, x=1139.169922, y=292.000000
+07-07 09:39:17.200 14008 14029 I ImGuiApp: Touch event: action=2, x=1140.363281, y=292.000000
+07-07 09:39:17.200 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.200 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.208 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.226 14008 14029 I ImGuiApp: Touch event: action=2, x=1141.688477, y=292.000000
+07-07 09:39:17.226 14008 14029 I ImGuiApp: Touch event: action=2, x=1143.319336, y=292.000000
+07-07 09:39:17.226 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.226 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.235 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.253 14008 14029 I ImGuiApp: Touch event: action=2, x=1144.000000, y=293.330078
+07-07 09:39:17.253 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.253 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.262 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.280 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.280 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.289 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.307 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.307 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.316 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.334 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.334 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.343 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.361 14008 14029 I ImGuiApp: Touch event: action=2, x=1143.000000, y=293.000000
+07-07 09:39:17.362 14008 14029 I ImGuiApp: Touch event: action=2, x=1142.000000, y=293.000000
+07-07 09:39:17.362 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.362 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.369 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.387 14008 14029 I ImGuiApp: Touch event: action=2, x=1140.913086, y=293.000000
+07-07 09:39:17.387 14008 14029 I ImGuiApp: Touch event: action=2, x=1139.824219, y=293.000000
+07-07 09:39:17.387 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.387 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.395 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.413 14008 14029 I ImGuiApp: Touch event: action=2, x=1138.657227, y=293.000000
+07-07 09:39:17.413 14008 14029 I ImGuiApp: Touch event: action=2, x=1137.318359, y=293.000000
+07-07 09:39:17.413 14008 14029 I ImGuiApp: Touch event: action=2, x=1135.648438, y=293.000000
+07-07 09:39:17.413 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.413 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.423 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.441 14008 14029 I ImGuiApp: Touch event: action=2, x=1133.673828, y=293.000000
+07-07 09:39:17.441 14008 14029 I ImGuiApp: Touch event: action=2, x=1131.649414, y=293.000000
+07-07 09:39:17.441 14008 14029 I ImGuiApp: Touch event: action=2, x=1128.283203, y=293.000000
+07-07 09:39:17.441 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.441 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.450 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.468 14008 14029 I ImGuiApp: Touch event: action=2, x=1124.308594, y=293.000000
+07-07 09:39:17.468 14008 14029 I ImGuiApp: Touch event: action=2, x=1120.361328, y=292.680664
+07-07 09:39:17.468 14008 14029 I ImGuiApp: Touch event: action=2, x=1116.288086, y=292.000000
+07-07 09:39:17.468 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.468 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.477 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.495 14008 14029 I ImGuiApp: Touch event: action=2, x=1111.945312, y=291.000000
+07-07 09:39:17.495 14008 14029 I ImGuiApp: Touch event: action=2, x=1106.033203, y=290.677734
+07-07 09:39:17.495 14008 14029 I ImGuiApp: Touch event: action=2, x=1099.625000, y=290.000000
+07-07 09:39:17.495 14008 14029 I ImGuiApp: Touch event: action=2, x=1083.455078, y=290.718750
+07-07 09:39:17.495 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.495 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.503 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.521 14008 14029 I ImGuiApp: Touch event: action=2, x=1048.919922, y=296.679688
+07-07 09:39:17.521 14008 14029 I ImGuiApp: Touch event: action=2, x=1027.506836, y=301.698242
+07-07 09:39:17.521 14008 14029 I ImGuiApp: Touch event: action=2, x=1009.152344, y=307.049805
+07-07 09:39:17.521 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.521 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.529 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.546 14008 14029 I ImGuiApp: Touch event: action=2, x=988.430664, y=311.649414
+07-07 09:39:17.546 14008 14029 I ImGuiApp: Touch event: action=2, x=966.596680, y=315.680664
+07-07 09:39:17.546 14008 14029 I ImGuiApp: Touch event: action=2, x=947.444336, y=319.646484
+07-07 09:39:17.546 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.546 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.555 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.572 14008 14029 I ImGuiApp: Touch event: action=2, x=926.724609, y=323.327148
+07-07 09:39:17.572 14008 14029 I ImGuiApp: Touch event: action=2, x=905.559570, y=326.688477
+07-07 09:39:17.573 14008 14029 I ImGuiApp: Touch event: action=2, x=885.981445, y=330.334961
+07-07 09:39:17.573 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.573 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.581 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.599 14008 14029 I ImGuiApp: Touch event: action=2, x=866.218750, y=333.343750
+07-07 09:39:17.599 14008 14029 I ImGuiApp: Touch event: action=2, x=845.277344, y=336.338867
+07-07 09:39:17.599 14008 14029 I ImGuiApp: Touch event: action=2, x=827.603516, y=338.342773
+07-07 09:39:17.599 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.599 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.609 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.626 14008 14029 I ImGuiApp: Touch event: action=2, x=813.016602, y=340.332031
+07-07 09:39:17.626 14008 14029 I ImGuiApp: Touch event: action=2, x=797.723633, y=342.325195
+07-07 09:39:17.626 14008 14029 I ImGuiApp: Touch event: action=2, x=786.630859, y=344.342773
+07-07 09:39:17.626 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.626 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.636 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.653 14008 14029 I ImGuiApp: Touch event: action=2, x=778.683594, y=345.329102
+07-07 09:39:17.653 14008 14029 I ImGuiApp: Touch event: action=2, x=770.748047, y=347.313477
+07-07 09:39:17.653 14008 14029 I ImGuiApp: Touch event: action=2, x=762.671875, y=348.332031
+07-07 09:39:17.653 14008 14029 I ImGuiApp: Touch event: action=2, x=756.004883, y=350.000000
+07-07 09:39:17.653 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.653 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.663 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.680 14008 14029 I ImGuiApp: Touch event: action=2, x=750.022461, y=350.000000
+07-07 09:39:17.680 14008 14029 I ImGuiApp: Touch event: action=2, x=745.341797, y=350.000000
+07-07 09:39:17.680 14008 14029 I ImGuiApp: Touch event: action=2, x=741.322266, y=350.000000
+07-07 09:39:17.680 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.680 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.690 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.708 14008 14029 I ImGuiApp: Touch event: action=2, x=738.666992, y=351.000000
+07-07 09:39:17.709 14008 14029 I ImGuiApp: Touch event: action=2, x=736.655273, y=351.000000
+07-07 09:39:17.709 14008 14029 I ImGuiApp: Touch event: action=2, x=734.672852, y=351.000000
+07-07 09:39:17.709 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.709 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.718 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.737 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.737 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.747 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.765 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.765 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.774 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.793 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.793 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.802 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.819 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.819 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.829 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.847 14008 14029 I ImGuiApp: Touch event: action=2, x=735.000000, y=350.000000
+07-07 09:39:17.848 14008 14029 I ImGuiApp: Touch event: action=1, x=735.000000, y=350.000000
+07-07 09:39:17.848 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.848 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.857 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.875 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.875 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.884 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.902 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.902 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.911 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.930 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.930 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.939 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.957 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.957 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.965 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:17.983 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:17.984 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:17.992 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.011 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.011 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.020 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.038 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.038 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.047 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.065 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.065 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.074 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.092 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.092 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.100 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.118 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.118 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.127 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.145 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.145 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.154 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.172 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.172 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.182 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.200 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.200 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.209 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.227 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.227 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.236 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.255 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.255 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.263 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.282 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.282 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.291 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.310 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.310 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.317 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.335 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.335 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.343 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.361 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.361 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.369 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.386 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.386 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.394 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.411 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.411 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.418 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.436 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.436 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.444 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.461 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.461 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.472 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.489 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.489 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.497 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.514 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.514 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.521 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.538 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.538 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.545 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.562 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.562 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.569 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.587 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.587 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.594 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.611 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.611 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.619 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.637 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.637 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.645 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.662 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.663 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.670 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.689 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.689 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.698 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.716 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.716 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.724 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.742 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.742 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.750 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.768 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.768 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.776 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.794 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.794 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.803 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.820 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.820 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.831 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.849 14008 14029 I ImGuiApp: System insets: top=0, bottom=0, left=132, right=0
+07-07 09:39:18.849 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.865 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.883 14008 14029 I ImGuiApp: Orientation/size changed: 2309x1080 -> 1080x2309
+07-07 09:39:18.883 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:18.883 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.890 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.907 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:18.907 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.915 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.944 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:18.945 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.955 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.974 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:18.974 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:18.981 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:18.998 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:18.998 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.006 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.027 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.027 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.035 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.053 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.053 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.067 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.084 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.084 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.091 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.108 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.108 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.115 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.132 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.132 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.140 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.156 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.157 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.165 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.183 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.183 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.191 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.209 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.209 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.219 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.237 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.237 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.246 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.265 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.265 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.274 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.292 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.292 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.301 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.320 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.320 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.330 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.348 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.348 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.357 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.376 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.376 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.385 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.403 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.404 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.413 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.431 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.431 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.440 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.458 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.458 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.467 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.485 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.485 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.495 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.513 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.513 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.523 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.541 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.541 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.551 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.569 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.569 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.579 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.597 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.597 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.607 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.625 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.625 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.635 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.653 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.653 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.662 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.681 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.681 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.690 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.708 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.708 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.717 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.734 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.734 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.744 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.761 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.761 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.769 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.786 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.786 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.796 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.814 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.814 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.822 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.839 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.839 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.853 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.870 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.870 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.890 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.914 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.914 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.927 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.945 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.945 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:19.954 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:19.976 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:19.976 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.004 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.022 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.022 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.031 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.048 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.048 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.056 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.073 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.073 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.080 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.097 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.097 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.113 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.130 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.130 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.138 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.155 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.156 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.163 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.180 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.180 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.189 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.206 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.206 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.233 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.252 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.252 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.274 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.291 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.291 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.298 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.315 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.315 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.323 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.340 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.340 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.347 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.364 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.365 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.374 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.390 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.390 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.401 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.418 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.418 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.427 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.445 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.445 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.455 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.472 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.472 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.479 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.496 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.496 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.505 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.522 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.522 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.532 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.549 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.549 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.557 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.574 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.574 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.582 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.599 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.599 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.606 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.623 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.623 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.631 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.648 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.648 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.656 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.673 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.673 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.681 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.697 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.697 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.705 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.722 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.722 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.731 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.748 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.748 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.756 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.773 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.773 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.782 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.799 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.799 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.808 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.825 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.825 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.833 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.850 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.850 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.859 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.876 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.876 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.884 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.901 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.901 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.909 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.926 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.926 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.934 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.951 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.951 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:20.960 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:20.977 14008 14029 I ImGuiApp: System insets: top=0, bottom=132, left=0, right=0
+07-07 09:39:20.977 14008 14029 I ImGuiApp: Applying UI scale in NewFrame: 1.500000
+07-07 09:39:21.011 14008 14029 I ImGuiApp: Font scale set to: 1.500000, base size: 16.000000, scaled size: 24.000000
+07-07 09:39:21.029 14008 14029 I ImGuiApp: Platform Android shutdown called
+07-07 09:39:21.029 14008 14029 I ImGuiApp: ImGui_ImplAndroid_Shutdown called
+07-07 09:39:21.033 14008 14029 I ImGuiApp: Destroying EGL resources
+07-07 09:39:21.112 14008 14029 I ImGuiApp: ImGui_ImplAndroid_Shutdown completed
+07-07 09:39:21.113 14008 14029 I ImGuiApp: ImGui context destroyed
+07-07 09:39:21.120 14008 14029 I ImGuiApp: Exiting application
+07-07 09:39:21.120 14008 14029 I ImGuiApp: Platform Android shutdown called
+07-07 09:39:21.120 14008 14029 I ImGuiApp: ImGui_ImplAndroid_Shutdown called
+07-07 09:39:21.120 14008 14029 I ImGuiApp: ImGui_ImplAndroid_Shutdown completed
+^C

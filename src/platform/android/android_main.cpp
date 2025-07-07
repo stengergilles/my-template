@@ -23,154 +23,33 @@ static ANativeWindow* g_savedWindow = nullptr;
 static void handle_cmd(android_app* app, int32_t cmd) {
     switch (cmd) {
         case APP_CMD_INIT_WINDOW:
-            // Window is being shown, initialize
-            LOGI("APP_CMD_INIT_WINDOW received, window pointer: %p", app->window);
             if (app->window != nullptr) {
-                // Save the window pointer globally
                 g_savedWindow = app->window;
-                
-                // Reset the scaling manager to force scaling application
-                ScalingManager::getInstance().reset();
-                
-                // Update the Android configuration in the scaling manager
-                if (app && app->config) {
-                    ScalingManager::getInstance().setConfiguration(app->config);
-                }
-                
-                // Always force reinitialization when window is created/shown
-                if (g_app) {
-                    // Shutdown if already initialized
-                    if (g_initialized) {
-                        g_app->platformShutdown();
-                        g_initialized = false;
-                        
-                        // Small delay to ensure complete teardown
-                        struct timespec ts;
-                        ts.tv_sec = 0;
-                        ts.tv_nsec = 100000000; // 100ms
-                        nanosleep(&ts, NULL);
-                    }
-                    
-                    // Set the Android app pointer first
+                if (g_app && !g_initialized) {
                     g_app->setAndroidApp(app);
-                    
-                    // Initialize directly with the window pointer
-                    bool success = g_app->initWithWindow(g_savedWindow);
-                    if (success) {
-                        LOGI("Platform initialized successfully with direct window pointer");
+                    if (g_app->initWithWindow(g_savedWindow)) {
                         g_initialized = true;
                     } else {
-                        LOGE("Platform initialization failed with direct window pointer, will retry");
+                        LOGE("Platform initialization failed");
                     }
                 }
             }
             break;
         case APP_CMD_TERM_WINDOW:
-            // Window is being hidden or closed
-            LOGI("Window terminated");
-            g_savedWindow = nullptr;
-            if (g_app) {
+            if (g_app && g_initialized) {
                 g_app->platformShutdown();
                 g_initialized = false;
             }
+            g_savedWindow = nullptr;
             break;
         case APP_CMD_GAINED_FOCUS:
-            // App gained focus after being in background
-            LOGI("APP_CMD_GAINED_FOCUS: App gained focus");
-            
-            // Reset the scaling manager to force scaling application
-            ScalingManager::getInstance().reset();
-            
-            // Update the Android configuration in the scaling manager
-            if (app && app->config) {
-                ScalingManager::getInstance().setConfiguration(app->config);
-            }
-            
-            // ALWAYS force complete reinitialization when gaining focus
-            if (g_app && g_savedWindow != nullptr) {
-                // Always shutdown first regardless of g_initialized state
-                LOGI("Force shutting down before reinitializing on focus gain");
-                g_app->platformShutdown();
-                g_initialized = false;
-                
-                // Longer delay to ensure complete teardown
-                struct timespec ts;
-                ts.tv_sec = 0;
-                ts.tv_nsec = 300000000; // 300ms
-                nanosleep(&ts, NULL);
-                
-                // Set the Android app pointer again
-                g_app->setAndroidApp(app);
-                
-                // Reinitialize with the window
-                bool success = g_app->initWithWindow(g_savedWindow);
-                if (success) {
-                    LOGI("Platform successfully reinitialized on focus gain");
-                    g_initialized = true;
-                    
-                    // Force a small delay to ensure initialization completes
-                    nanosleep(&ts, NULL);
-                    
-                    // Force a redraw immediately
-                    Application::getInstance()->renderFrame();
-                } else {
-                    LOGE("Failed to reinitialize on focus gain - will retry");
-                    
-                    // Try one more time after a delay
-                    nanosleep(&ts, NULL);
-                    success = g_app->initWithWindow(g_savedWindow);
-                    if (success) {
-                        LOGI("Platform reinitialized on second attempt");
-                        g_initialized = true;
-                        
-                        // Force a redraw immediately
-                        Application::getInstance()->renderFrame();
-                    } else {
-                        LOGE("Failed to reinitialize on second attempt");
-                    }
-                }
-            } else {
-                LOGE("Cannot reinitialize on focus gain - app or window is null");
-            }
             break;
         case APP_CMD_CONFIG_CHANGED:
             // Configuration changed (e.g., orientation)
-            LOGI("Configuration changed (possibly orientation)");
-            
-            // Reset the scaling manager to force scaling application
-            ScalingManager::getInstance().reset();
-            
-            // Update the Android configuration in the scaling manager
-            if (app && app->config) {
-                ScalingManager::getInstance().setConfiguration(app->config);
-            }
-            
-            if (g_app && g_savedWindow != nullptr) {
-                // Force a complete teardown and reinit to handle the new orientation
-                if (g_initialized) {
-                    g_app->platformShutdown();
-                    g_initialized = false;
-                }
-                
-                // Small delay to ensure complete teardown
-                struct timespec ts;
-                ts.tv_sec = 0;
-                ts.tv_nsec = 200000000; // 200ms
-                nanosleep(&ts, NULL);
-                
-                // Reinitialize with the window
-                bool success = g_app->initWithWindow(g_savedWindow);
-                if (success) {
-                    LOGI("Successfully reinitialized after orientation change");
-                    g_initialized = true;
-                } else {
-                    LOGE("Failed to reinitialize after orientation change");
-                }
-            }
+            // The window will be re-initialized by the system, so we don't need to do anything here.
+            // The APP_CMD_TERM_WINDOW and APP_CMD_INIT_WINDOW events will handle the shutdown and re-initialization.
             break;
         case APP_CMD_LOST_FOCUS:
-            // App lost focus, stop rendering
-            LOGI("App lost focus");
             break;
         default:
             break;

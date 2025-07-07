@@ -96,11 +96,13 @@ public class MainActivity extends ImGuiKeyboardHelper {
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // For Android 11+
-            top = insets.getInsets(WindowInsets.Type.statusBars()).top;
-            bottom = insets.getInsets(WindowInsets.Type.navigationBars()).bottom;
-            left = insets.getInsets(WindowInsets.Type.navigationBars()).left;
-            right = insets.getInsets(WindowInsets.Type.navigationBars()).right;
-            
+            WindowInsets.Insets systemBarsInsets = insets.getInsets(WindowInsets.Type.systemBars());
+
+            top = systemBarsInsets.top;
+            bottom = systemBarsInsets.bottom;
+            left = systemBarsInsets.left;
+            right = systemBarsInsets.right;
+
             // Add additional padding to ensure we're below the status bar
             top += 10; // Add a small buffer
         } else {

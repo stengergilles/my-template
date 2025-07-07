@@ -4,6 +4,8 @@
 #include "imgui.h"
 #include "../../../include/scaling_manager.h"
 
+extern bool g_initialized;
+
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "ImGuiJNI", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "ImGuiJNI", __VA_ARGS__))
 #define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "ImGuiJNI", __VA_ARGS__))
@@ -248,6 +250,10 @@ Java_com_my_app_ImGuiJNI_onTextInput(JNIEnv *env, jclass clazz, jstring text) {
 // Function to update system insets from Java
 JNIEXPORT jboolean JNICALL
 Java_com_my_app_ImGuiJNI_wantsTextInput(JNIEnv *env, jclass clazz) {
+    // Check if ImGui is initialized before accessing its context
+    if (!g_initialized) {
+        return JNI_FALSE;
+    }
     return ImGui::GetIO().WantTextInput;
 }
 
@@ -256,7 +262,7 @@ JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint left, jint top, jint right, jint bottom) {
     LOGI("Updating system insets: left=%d, top=%d, right=%d, bottom=%d", left, top, right, bottom);
     // Update the insets in the ScalingManager
-    ScalingManager::getInstance().setSystemInsets(left, top, right, bottom);
+    ScalingManager::getInstance().setSystemInsets(top, bottom, left, right);
 }
 
 } // extern "C"

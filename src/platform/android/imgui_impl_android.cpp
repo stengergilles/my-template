@@ -388,13 +388,16 @@ void ImGui_ImplAndroid_NewFrame()
     // Set display scale
     io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
     
+    // Get system insets from ScalingManager
+    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
+
     // Log the insets for debugging
     __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", 
                        "System insets: top=%d, bottom=%d, left=%d, right=%d", 
-                       ScalingManager::getInstance().getSystemInsets().top, 
-                       ScalingManager::getInstance().getSystemInsets().bottom, 
-                       ScalingManager::getInstance().getSystemInsets().left, 
-                       ScalingManager::getInstance().getSystemInsets().right);
+                       insets.top, 
+                       insets.bottom, 
+                       insets.left, 
+                       insets.right);
     
     // Set display safe area (area not covered by navigation bar, status bar, etc.)
     // Note: DisplaySafeAreaPadding was removed in newer ImGui versions
@@ -485,35 +488,32 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
     GLboolean last_enable_depth_test = glIsEnabled(GL_DEPTH_TEST);
     GLboolean last_enable_scissor_test = glIsEnabled(GL_SCISSOR_TEST);
     
-    // Setup render state
+    // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled
     glEnable(GL_BLEND);
     glBlendEquation(GL_FUNC_ADD);
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_SCISSOR_TEST);
-    
-    // Setup viewport to account for system insets
-    glViewport(insets.left, insets.bottom, fb_width - insets.left - insets.right, fb_height - insets.top - insets.bottom);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
+
+    // Setup viewport to cover the entire framebuffer
+    glViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
+
     // Setup orthographic projection matrix
-    // For Android, we need to flip the Y axis
-    
-    // Adjust the projection matrix to account for insets
+    // The projection matrix now maps ImGui's full-screen coordinates to the safe area within the framebuffer.
     float L = (float)insets.left;
     float R = (float)fb_width - (float)insets.right;
     float T = (float)insets.top;
     float B = (float)fb_height - (float)insets.bottom;
-
-    // This projection matrix works for Android's coordinate system
-    float ortho_projection[4][4] = {
-        { 2.0f/(R-L),   0.0f,         0.0f,  0.0f },
-        { 0.0f,         2.0f/(T-B),   0.0f,  0.0f },
-        { 0.0f,         0.0f,        -1.0f,  0.0f },
-        { (L+R)/(L-R),  (T+B)/(B-T),  0.0f,  1.0f },
+    const float ortho_projection[4][4] =
+    {
+        { 2.0f/(R-L),   0.0f,         0.0f,   0.0f },
+        { 0.0f,         2.0f/(T-B),   0.0f,   0.0f },
+        { 0.0f,         0.0f,        -1.0f,   0.0f },
+        { (L+R)/(L-R),  (T+B)/(B-T),  0.0f,   1.0f },
     };
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
     
     glUseProgram(g_ShaderHandle);
     glUniform1i(g_AttribLocationTex, 0);
@@ -551,20 +551,38 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
             }
             else
             {
-                
-                
-                // Apply scissor/clipping rectangle - adjusted for Android and system insets
-                int scissor_x = (int)(pcmd->ClipRect.x + insets.left);
-                int scissor_y = (int)(fb_height - pcmd->ClipRect.w - insets.bottom);  // Standard OpenGL Y-flip
-                int scissor_w = (int)(pcmd->ClipRect.z - pcmd->ClipRect.x);
-                int scissor_h = (int)(pcmd->ClipRect.w - pcmd->ClipRect.y);
+                // Apply scissor/clipping rectangle
+                // pcmd->ClipRect is in ImGui screen coordinates (Y-down from top-left).
+                // glScissor is in OpenGL window coordinates (Y-up from bottom-left).
 
-                // Ensure scissor rectangle is valid
-                if (scissor_x < 0) scissor_x = 0;
-                if (scissor_y < 0) scissor_y = 0;
+                // Convert ImGui ClipRect to OpenGL Y-up coordinates (relative to window origin)
+                float gl_clip_x1 = pcmd->ClipRect.x;
+                float gl_clip_y1 = fb_height - pcmd->ClipRect.w; // Bottom of ImGui clip rect in OpenGL Y-up
+                float gl_clip_x2 = pcmd->ClipRect.z;
+                float gl_clip_y2 = fb_height - pcmd->ClipRect.y; // Top of ImGui clip rect in OpenGL Y-up
+
+                // Define safe area in OpenGL Y-up, bottom-left origin
+                float safe_gl_x1 = (float)insets.left;
+                float safe_gl_y1 = (float)insets.bottom;
+                float safe_gl_x2 = (float)fb_width - (float)insets.right;
+                float safe_gl_y2 = (float)fb_height - (float)insets.top;
+
+                // Calculate intersection of ImGui clip rect and safe area
+                float final_gl_x1 = std::max(gl_clip_x1, safe_gl_x1);
+                float final_gl_y1 = std::max(gl_clip_y1, safe_gl_y1);
+                float final_gl_x2 = std::min(gl_clip_x2, safe_gl_x2);
+                float final_gl_y2 = std::min(gl_clip_y2, safe_gl_y2);
+
+                // Scissor dimensions
+                int scissor_x = (int)final_gl_x1;
+                int scissor_y = (int)final_gl_y1;
+                int scissor_w = (int)(final_gl_x2 - final_gl_x1);
+                int scissor_h = (int)(final_gl_y2 - final_gl_y1);
+
+                // Ensure valid dimensions
                 if (scissor_w < 0) scissor_w = 0;
                 if (scissor_h < 0) scissor_h = 0;
-                
+
                 glScissor(scissor_x, scissor_y, scissor_w, scissor_h);
                 
                 // Bind texture, Draw
