@@ -1,7 +1,34 @@
 def opensslBuildDir = "${rootProject.projectDir}/../external/openssl/android/arm64-v8a"
 def opensslSourceDir = "${rootProject.projectDir}/../external/openssl-src"
 
+task cleanOpenSSL(type: Delete) {
+    delete opensslBuildDir
+}
+
+task prepareOpenSSLSource {
+    doLast {
+        // Ensure the source directory exists and is clean
+        if (!file(opensslSourceDir).exists()) {
+            exec {
+                commandLine "git", "clone", "https://github.com/openssl/openssl.git", opensslSourceDir
+            }
+        } else {
+            // Clean the source directory to avoid conflicts with previous builds
+            exec {
+                workingDir opensslSourceDir
+                commandLine "git", "clean", "-fdx"
+            }
+            exec {
+                workingDir opensslSourceDir
+                commandLine "git", "reset", "--hard"
+            }
+        }
+    }
+}
+
 task buildOpensslArm64 {
+    dependsOn prepareOpenSSLSource
+    
     def requiredFiles = [
         "${opensslBuildDir}/include/openssl/opensslconf.h",
         "${opensslBuildDir}/lib/libssl.a",
@@ -16,20 +43,19 @@ task buildOpensslArm64 {
 
     doFirst {
         file(opensslBuildDir).mkdirs()
-	requiredFiles.each { println "${it}: ${file(it).absolutePath} exists? ${file(it).exists()}" }
+        requiredFiles.each { println "${it}: ${file(it).absolutePath} exists? ${file(it).exists()}" }
     }
+    
     doLast {
         def allFilesExist = requiredFiles.every { file(it).exists() }
         if (!allFilesExist) {
             exec {
                 commandLine "bash", "-c", """
                     set -e && \
-                    if [ ! -d "${opensslSourceDir}" ]; then \
-                        git clone https://github.com/openssl/openssl.git ${opensslSourceDir}; \
-                    fi && \
                     cd ${opensslSourceDir} && \
                     ./Configure android-arm64 no-tests --prefix=${opensslBuildDir} && \
                     ls include/openssl/opensslconf.h && \
+                    make clean && \
                     make -j\$(nproc) && \
                     make install_sw
                 """
@@ -38,7 +64,12 @@ task buildOpensslArm64 {
             println "OpenSSL build artifacts are up-to-date. Skipping build."
         }
     }
-    
 }
 
+preBuild.dependsOn buildOpensslArm64
+
+// Add a clean task to the clean lifecycle
+clean.dependsOn cleanOpenSSL
+
+// Add the build task to preBuild
 preBuild.dependsOn buildOpensslArm64

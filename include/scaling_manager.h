@@ -123,9 +123,6 @@ public:
         return m_scaleAdjustment;
     }
     
-    // Make this public for direct access in imgui_impl_android.cpp
-    bool m_forceNextApplication;
-
 private:
     // Private constructor for singleton
     ScalingManager() : m_lastAppliedScale(0.0f), m_forceNextApplication(true), m_scaleAdjustment(1.0f) {
@@ -137,7 +134,10 @@ private:
     ScalingManager& operator=(const ScalingManager&) = delete;
     
     float m_lastAppliedScale;
-    bool m_forceNextApplication;
     float m_scaleAdjustment; // Adjustment factor to fine-tune scaling
     SystemInsets m_insets;    // System insets (navigation bar, status bar, etc.)
+    
+public:
+    // Make this public for direct access in imgui_impl_android.cpp
+    bool m_forceNextApplication;
 };
