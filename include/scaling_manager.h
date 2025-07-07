@@ -9,7 +9,6 @@ struct SystemInsets {
     int bottom = 0;
     int left = 0;
     int right = 0;
-    bool isLandscape = false;
 };
 
 // Forward declaration for Android compatibility
@@ -31,17 +30,15 @@ public:
     }
 
     // Set system insets (from navigation bar, status bar, etc.)
-    void setSystemInsets(int top, int bottom, int left, int right, bool isLandscape) {
+    void setSystemInsets(int top, int bottom, int left, int right, bool unused) {
         m_insets.top = top;
         m_insets.bottom = bottom;
         m_insets.left = left;
         m_insets.right = right;
-        m_insets.isLandscape = isLandscape;
         std::cout << "ScalingManager: System insets set: top=" << top 
                   << ", bottom=" << bottom 
                   << ", left=" << left 
-                  << ", right=" << right 
-                  << ", isLandscape=" << isLandscape << std::endl;
+                  << ", right=" << right << std::endl;
     }
 
     // Get system insets

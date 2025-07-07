@@ -48,9 +48,6 @@ public class MainActivity extends ImGuiKeyboardHelper {
 
         // Listen for window insets changes
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
-            // Get screen orientation
-            boolean isLandscape = getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             Insets displayCutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout());
 
@@ -59,9 +56,9 @@ public class MainActivity extends ImGuiKeyboardHelper {
             int right = Math.max(systemBars.right, displayCutout.right);
             int bottom = Math.max(systemBars.bottom, displayCutout.bottom);
 
-            // Pass insets to native code
-            ImGuiJNI.updateSystemInsets(top, bottom, left, right, isLandscape);
-            Log.d(TAG, "System Insets: Left=" + left + ", Top=" + top + ", Right=" + right + ", Bottom=" + bottom + ", Landscape=" + isLandscape);
+            // Pass insets to native code (always portrait mode)
+            ImGuiJNI.updateSystemInsets(top, bottom, left, right, false);
+            Log.d(TAG, "System Insets: Left=" + left + ", Top=" + top + ", Right=" + right + ", Bottom=" + bottom);
             return insets;
         });
 

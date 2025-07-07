@@ -259,10 +259,10 @@ Java_com_my_app_ImGuiJNI_wantsTextInput(JNIEnv *env, jclass clazz) {
 
 // Function to update system insets from Java
 JNIEXPORT void JNICALL
-Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top, jint bottom, jint left, jint right, jboolean isLandscape) {
-    LOGI("Updating system insets: top=%d, bottom=%d, left=%d, right=%d, isLandscape=%d", top, bottom, left, right, isLandscape);
-    // Update the insets in the ScalingManager
-    ScalingManager::getInstance().setSystemInsets(top, bottom, left, right, isLandscape);
+Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top, jint bottom, jint left, jint right, jboolean unused) {
+    LOGI("Updating system insets: top=%d, bottom=%d, left=%d, right=%d", top, bottom, left, right);
+    // Update the insets in the ScalingManager (always portrait mode)
+    ScalingManager::getInstance().setSystemInsets(top, bottom, left, right, false);
 }
 
 } // extern "C"
