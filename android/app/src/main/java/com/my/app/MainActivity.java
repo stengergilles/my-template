@@ -59,14 +59,18 @@ public class MainActivity extends ImGuiKeyboardHelper {
             // Pass insets to native code (always portrait mode)
             ImGuiJNI.updateSystemInsets(top, bottom, left, right, false);
             Log.d(TAG, "System Insets: Left=" + left + ", Top=" + top + ", Right=" + right + ", Bottom=" + bottom);
+
+
+            // Get screen density and pass it to native code
+            float density = getResources().getDisplayMetrics().density;
+            ImGuiJNI.setScreenDensity(density);
+            Log.d(TAG, "Screen Density: " + density);
+
             return insets;
         });
 
         startKeyboardVisibilityCheck();
         
-        // Set a reasonable scale factor for Android
-        // This value can be adjusted based on device density
-        adjustScaleFactor(0.8f);
     }
     
     @Override
@@ -244,10 +248,4 @@ public class MainActivity extends ImGuiKeyboardHelper {
             Log.e(TAG, "Cannot hide keyboard - instance is null");
         }
     }
-    
-    /**
-     * Adjust the UI scaling factor
-     * @param factor The scaling factor (0.5 to 1.5 recommended)
-     */
-    public static native void adjustScaleFactor(float factor);
 }

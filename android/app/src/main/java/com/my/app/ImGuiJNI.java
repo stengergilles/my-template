@@ -23,6 +23,7 @@ public class ImGuiJNI {
     public static native void onTextInput(String text);
     public static native boolean wantsTextInput();
     public static native void updateSystemInsets(int top, int bottom, int left, int right, boolean unused);
+    public static native void setScreenDensity(float density);
     
     // Helper method to log and forward text input
     public static void sendTextInput(String text) {

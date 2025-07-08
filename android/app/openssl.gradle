@@ -69,7 +69,7 @@ task buildOpensslArm64 {
 preBuild.dependsOn buildOpensslArm64
 
 // Add a clean task to the clean lifecycle
-clean.dependsOn cleanOpenSSL
+// clean.dependsOn cleanOpenSSL
 
 // Add the build task to preBuild
 preBuild.dependsOn buildOpensslArm64

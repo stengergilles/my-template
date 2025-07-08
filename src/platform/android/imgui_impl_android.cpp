@@ -277,16 +277,15 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     style = ImGuiStyle(); // Reset to default first
     style.ScaleAllSizes(displayScale);
     
-    // Set global font scale
-    io.FontGlobalScale = displayScale;
-    
     // Inform the scaling manager that we've applied this scale
     scalingManager.applyScaling(displayScale);
     
     // Load DroidSans.ttf font with appropriate size for touch
-    float baseFontSize = 16.0f;
     io.Fonts->Clear(); // Clear any existing fonts
-    io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", baseFontSize * displayScale);
+    io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 12.0f * displayScale);
+    io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 14.0f * displayScale);
+    io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 16.0f * displayScale);
+    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Loaded DroidSans.ttf with sizes 12, 14, 16");
     
     // Create OpenGL objects
     CreateDeviceObjects();
@@ -425,21 +424,21 @@ void ImGui_ImplAndroid_NewFrame()
         
         // Apply the scale to ImGui
         ImGui::GetStyle().ScaleAllSizes(displayScale);
-        io.FontGlobalScale = displayScale;
         
         // Inform the scaling manager that we've applied this scale
         scalingManager.applyScaling(displayScale);
         
         // Only rebuild font atlas when scale changes significantly
         io.Fonts->Clear();
-        float baseFontSize = 16.0f;
-        io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", baseFontSize * displayScale);
+        io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 12.0f * displayScale);
+        io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 14.0f * displayScale);
+        io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 16.0f * displayScale);
         io.Fonts->Build();
         CreateFontsTexture();
         
         __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", 
                            "Font scale set to: %f, base size: %f, scaled size: %f", 
-                           io.FontGlobalScale, baseFontSize, baseFontSize * displayScale);
+                           io.FontGlobalScale, 16.0f, 16.0f * displayScale);
     }
     
     // Setup time step

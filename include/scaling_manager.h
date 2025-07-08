@@ -46,17 +46,20 @@ public:
         return m_insets;
     }
 
+    // Set the screen density (for Android)
+    void setScreenDensity(float density) {
+        if (density > 0) {
+            m_screenDensity = density;
+            std::cout << "ScalingManager: Screen density set to: " << density << std::endl;
+            // Force reapplication of scaling with the new density
+            forceNextApplication();
+        }
+    }
+
     // Calculate and get the appropriate scale factor based on device density
     float getScaleFactor(int screenWidth, int screenHeight) {
-        // On Linux, we use a simpler approach based on screen dimensions
-        float baseScale = 1.0f;
-        
-        // Adjust scale based on screen resolution
-        if (screenWidth > 1920 || screenHeight > 1080) {
-            baseScale = 1.5f;
-        } else if (screenWidth > 1280 || screenHeight > 720) {
-            baseScale = 1.2f;
-        }
+        // On Android, we use the screen density
+        float baseScale = m_screenDensity;
         
         // Apply the adjustment factor to fine-tune the scale
         float finalScale = baseScale * m_scaleAdjustment;
@@ -70,6 +73,7 @@ public:
         std::cout << "ScalingManager: Calculated scale: " << finalScale 
                   << " (base: " << baseScale 
                   << ", adjustment: " << m_scaleAdjustment 
+                  << ", density: " << m_screenDensity
                   << ") for screen dimensions: " << screenWidth << "x" << screenHeight << std::endl;
         
         return finalScale;
@@ -125,7 +129,7 @@ public:
     
 private:
     // Private constructor for singleton
-    ScalingManager() : m_lastAppliedScale(0.0f), m_forceNextApplication(true), m_scaleAdjustment(1.0f) {
+    ScalingManager() : m_lastAppliedScale(0.0f), m_forceNextApplication(true), m_scaleAdjustment(1.0f), m_screenDensity(1.0f) {
         std::cout << "ScalingManager: ScalingManager initialized with adjustment: " << m_scaleAdjustment << std::endl;
     }
     
@@ -135,6 +139,7 @@ private:
     
     float m_lastAppliedScale;
     float m_scaleAdjustment; // Adjustment factor to fine-tune scaling
+    float m_screenDensity;   // Screen density for Android
     SystemInsets m_insets;    // System insets (navigation bar, status bar, etc.)
     
 public:

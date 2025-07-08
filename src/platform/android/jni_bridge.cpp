@@ -265,4 +265,12 @@ Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top,
     ScalingManager::getInstance().setSystemInsets(top, bottom, left, right, false);
 }
 
+// Function to set screen density from Java
+JNIEXPORT void JNICALL
+Java_com_my_app_ImGuiJNI_setScreenDensity(JNIEnv *env, jclass clazz, jfloat density) {
+    LOGI("Setting screen density: %f", density);
+    // Update the density in the ScalingManager
+    ScalingManager::getInstance().setScreenDensity(density);
+}
+
 } // extern "C"

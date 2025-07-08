@@ -89,8 +89,11 @@ void Application::renderFrame()
 #ifndef USE_EXTERNAL_RENDER_IMGUI
 void Application::renderImGui()
 {
+    // Push the 12px font
+    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
+
     // Main window for the application template
-    ImGui::Begin("C++ Application Template");
+    ImGui::Begin("C++ Application Template", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
     // General information and instructions
     ImGui::Text("Welcome to your cross-platform application!");
@@ -154,5 +157,8 @@ void Application::renderImGui()
         ImGui::GetIO().UserData = nullptr; // Reset the flag
     }
     #endif
+
+    // Pop the font
+    ImGui::PopFont();
 }
 #endif // USE_EXTERNAL_RENDER_IMGUI
