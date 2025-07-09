@@ -133,13 +133,7 @@ public class MainActivity extends ImGuiKeyboardHelper {
             Log.d(TAG, "Sending key event to ImGui: " + keyCode + ", action: " + action);
             ImGuiJNI.onKeyEvent(keyCode, action, event.getMetaState());
             
-            // For character keys on ACTION_DOWN, also send the character
-            int unicodeChar = event.getUnicodeChar();
-            if (unicodeChar != 0) {
-                String charStr = String.valueOf((char)unicodeChar);
-                Log.d(TAG, "Sending unicode character to ImGui: " + charStr);
-                ImGuiJNI.onTextInput(charStr);
-            }
+            
         }
         
         return super.dispatchKeyEvent(event);
