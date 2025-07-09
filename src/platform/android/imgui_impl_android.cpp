@@ -508,12 +508,12 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
     glViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
 
     // Setup orthographic projection matrix
-    // The projection matrix now maps ImGui's full-screen coordinates to the safe area within the framebuffer.
-    float L = (float)insets.left;
-    float R = (float)fb_width - (float)insets.right;
-    float T = (float)insets.top;
-    float B = (float)fb_height - (float)insets.bottom;
-    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "RenderDrawData: fb_width=%d, fb_height=%d, L=%f, R=%f, T=%f, B=%f", fb_width, fb_height, L, R, T, B);
+    // The projection matrix maps ImGui's coordinates to the full framebuffer.
+    // The safe area is handled by the scissor rectangle.
+    float L = 0.0f;
+    float R = (float)fb_width;
+    float T = 0.0f;
+    float B = (float)fb_height;
     const float ortho_projection[4][4] =
     {
         { 2.0f/(R-L),   0.0f,         0.0f,   0.0f },
