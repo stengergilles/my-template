@@ -11,7 +11,7 @@ extern bool g_initialized;
 
 class PlatformAndroid : public PlatformBase {
 public:
-    PlatformAndroid(const std::string& title);
+    PlatformAndroid(const std::string& title, LogWidget* logWidget);
     virtual ~PlatformAndroid();
     
     virtual bool platformInit() override;

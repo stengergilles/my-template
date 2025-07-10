@@ -1,4 +1,5 @@
 #include "../include/logger.h"
+#include "../include/log_widget.h"
 #include <iostream>
 #include <cstdarg>
 
@@ -37,6 +38,12 @@ public:
 // Android logcat logger
 class AndroidLogger : public ILogger {
 public:
+    AndroidLogger() : m_log_widget(nullptr) {}
+
+    void set_log_widget(LogWidget* widget) {
+        m_log_widget = widget;
+    }
+
     void log(LogLevel level, const char* fmt, ...) override {
         int android_level;
         switch (level) {
@@ -51,11 +58,24 @@ public:
                 break;
         }
 
-        va_list args;
-        va_start(args, fmt);
-        __android_log_vprint(android_level, "ImGuiApp", fmt, args);
-        va_end(args);
+        va_list args_android;
+        va_list args_widget;
+
+        va_start(args_android, fmt);
+        va_copy(args_widget, args_android);
+
+        __android_log_vprint(android_level, "ImGuiApp", fmt, args_android);
+        
+        if (m_log_widget) {
+            m_log_widget->AddLogV(fmt, args_widget);
+        }
+
+        va_end(args_android);
+        va_end(args_widget);
     }
+
+private:
+    LogWidget* m_log_widget;
 };
 #endif
 
@@ -65,5 +85,16 @@ std::unique_ptr<ILogger> LoggerFactory::createLogger() {
     return std::make_unique<AndroidLogger>();
 #else
     return std::make_unique<StdLogger>();
+#endif
+}
+
+void LoggerFactory::set_android_logger_widget(LogWidget* widget) {
+#if defined(__ANDROID__)
+    if (g_logger) {
+        AndroidLogger* android_logger = dynamic_cast<AndroidLogger*>(g_logger.get());
+        if (android_logger) {
+            android_logger->set_log_widget(widget);
+        }
+    }
 #endif
 }

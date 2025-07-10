@@ -4,6 +4,8 @@
 #include <string>
 #include <memory>
 
+class LogWidget;
+
 // Enum for log levels
 enum class LogLevel {
     Info,
@@ -22,6 +24,9 @@ public:
 class LoggerFactory {
 public:
     static std::unique_ptr<ILogger> createLogger();
+#if defined(__ANDROID__)
+    static void set_android_logger_widget(LogWidget* widget);
+#endif
 };
 
 // Global logger instance

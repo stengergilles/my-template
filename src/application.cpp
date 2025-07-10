@@ -1,24 +1,38 @@
 #include "../include/application.h"
 #include "../include/logger.h"
 #include "../include/scaling_manager.h"
+#include "../include/platform_http_client.hpp" // Added for PlatformHttpClient
+#include "../include/state_manager.h"
+
 #include "imgui.h"
 #include <iostream>
 
 // Initialize static instance
 Application* Application::s_instance = nullptr;
 
-Application::Application(const std::string& appName)
+Application::Application(const std::string& appName, LogWidget* logWidget)
     : m_appName(appName)
     , m_imguiContext(nullptr)
     , m_running(false)
+    , m_show_log_widget(true) // Initialize to true for debugging
+    , m_log_widget(logWidget) // Initialize with passed pointer
 {
     // Set singleton instance
     s_instance = this;
     LOG_INFO("Application created: %s", m_appName.c_str());
+
+    // Initialize HTTP client
+    m_httpClient = std::make_unique<PlatformHttpClient>();
+
+    // Load application state
+    StateManager::getInstance().loadState();
 }
 
 Application::~Application()
 {
+    // Save application state
+    StateManager::getInstance().saveState();
+
     // ImGui cleanup is handled in platformShutdown()
     if (s_instance == this) {
         s_instance = nullptr;
@@ -93,7 +107,17 @@ void Application::renderImGui()
     ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 
     // Main window for the application template
-    ImGui::Begin("C++ Application Template", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+    const char* windowName = "C++ Application Template";
+    float x, y;
+    if (StateManager::getInstance().loadWindowPosition(windowName, x, y)) {
+        ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_Once);
+    }
+
+    ImGui::Begin(windowName, nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+
+    // Save window position
+    ImVec2 pos = ImGui::GetWindowPos();
+    StateManager::getInstance().saveWindowPosition(windowName, pos.x, pos.y);
 
     // General information and instructions
     ImGui::Text("Welcome to your cross-platform application!");
@@ -148,7 +172,54 @@ void Application::renderImGui()
         ImGui::TextColored(color, "This text changes color!");
     }
 
+    ImGui::Separator();
+
+    // --- HTTP GET Demonstration ---
+    if (ImGui::CollapsingHeader("HTTP GET Demo")) {
+        static char urlBuffer[256] = "https://www.google.com";
+        static std::string httpGetResponse = "No request made yet.";
+        static bool httpRequestRunning = false;
+
+        ImGui::InputText("URL", urlBuffer, IM_ARRAYSIZE(urlBuffer));
+
+        if (ImGui::Button("Send HTTP GET Request") && !httpRequestRunning) {
+            httpRequestRunning = true;
+            httpGetResponse = "Requesting...";
+            // Start the worker in a lambda
+            m_httpWorker.start([this, url = std::string(urlBuffer)]() {
+                return m_httpClient->get(url, {}, {});
+            });
+        }
+        ImGui::SameLine();
+        if (httpRequestRunning) {
+            ImGui::Text("Request in progress...");
+        } else {
+            ImGui::Text("Ready.");
+        }
+
+        // Check if the worker has finished
+        if (httpRequestRunning && !m_httpWorker.is_running()) {
+            HttpResponse response = m_httpWorker.get();
+            httpGetResponse = "Status: " + std::to_string(response.status_code) + "\nBody: " + response.text.substr(0, 500) + "..."; // Limit body to 500 chars
+            httpRequestRunning = false;
+        }
+
+        ImGui::TextWrapped("%s", httpGetResponse.c_str());
+    }
+
+    ImGui::Separator();
+
+    // Log Widget Button
+    if (ImGui::Button("Toggle Log Window")) {
+        m_show_log_widget = !m_show_log_widget;
+    }
+
     ImGui::End();
+    
+    // Render Log Widget if visible
+    if (m_show_log_widget && m_log_widget) {
+        m_log_widget->Draw("Application Log", &m_show_log_widget);
+    }
     
     // Close the SafeAreaConstraint child window if it was opened
     #ifdef __ANDROID__

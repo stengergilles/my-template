@@ -8,6 +8,7 @@ import android.view.View;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import com.my.app.AppLogger;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -41,7 +42,10 @@ public class MainActivity extends ImGuiKeyboardHelper {
         // Store instance for JNI access
         instance = this;
         
-        Log.d(TAG, "MainActivity created");
+        AppLogger.info(TAG, "MainActivity created");
+        
+        // Pass package name to native code
+        ImGuiJNI.setPackageName(getPackageName());
         
         // Set up edge-to-edge display
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
@@ -58,13 +62,13 @@ public class MainActivity extends ImGuiKeyboardHelper {
 
             // Pass insets to native code (always portrait mode)
             ImGuiJNI.updateSystemInsets(top, bottom, left, right, false);
-            Log.d(TAG, "System Insets: Left=" + left + ", Top=" + top + ", Right=" + right + ", Bottom=" + bottom);
+            AppLogger.info(TAG, "System Insets: Left=" + left + ", Top=" + top + ", Right=" + right + ", Bottom=" + bottom);
 
 
             // Get screen density and pass it to native code
             float density = getResources().getDisplayMetrics().density;
             ImGuiJNI.setScreenDensity(density);
-            Log.d(TAG, "Screen Density: " + density);
+            AppLogger.info(TAG, "Screen Density: " + density);
 
             return insets;
         });
@@ -122,7 +126,7 @@ public class MainActivity extends ImGuiKeyboardHelper {
         if (action == KeyEvent.ACTION_MULTIPLE && keyCode == KeyEvent.KEYCODE_UNKNOWN) {
             String characters = event.getCharacters();
             if (characters != null && !characters.isEmpty()) {
-                Log.d(TAG, "Sending text input to ImGui: " + characters);
+                AppLogger.info(TAG, "Sending text input to ImGui: " + characters);
                 ImGuiJNI.onTextInput(characters);
                 return true;
             }
@@ -130,7 +134,7 @@ public class MainActivity extends ImGuiKeyboardHelper {
         
         // For normal keys, pass to the native code
         if (action == KeyEvent.ACTION_DOWN || action == KeyEvent.ACTION_UP) {
-            Log.d(TAG, "Sending key event to ImGui: " + keyCode + ", action: " + action);
+            AppLogger.info(TAG, "Sending key event to ImGui: " + keyCode + ", action: " + action);
             ImGuiJNI.onKeyEvent(keyCode, action, event.getMetaState());
             
             
@@ -149,7 +153,7 @@ public class MainActivity extends ImGuiKeyboardHelper {
                 try {
                     // Check if ImGui wants text input
                     boolean wantsTextInput = ImGuiJNI.wantsTextInput();
-                    Log.d(TAG, "ImGui WantTextInput: " + wantsTextInput + ", Keyboard visible: " + mKeyboardVisible);
+                    AppLogger.info(TAG, "ImGui WantTextInput: " + wantsTextInput + ", Keyboard visible: " + mKeyboardVisible);
                     
                     // Show or hide keyboard based on ImGui's WantTextInput flag
                     if (wantsTextInput && !mKeyboardVisible) {
@@ -161,7 +165,7 @@ public class MainActivity extends ImGuiKeyboardHelper {
                     // Continue checking
                     mHandler.postDelayed(this, 500); // Check every 500ms
                 } catch (Exception e) {
-                    Log.e(TAG, "Error in keyboard visibility check: " + e.getMessage(), e);
+                    AppLogger.error(TAG, "Error in keyboard visibility check: " + e.getMessage());
                 }
             }
         }, 1000); // Start after 1 second
@@ -171,14 +175,14 @@ public class MainActivity extends ImGuiKeyboardHelper {
      * Static method to show the keyboard - called from native code via JNI
      */
     public static void showKeyboard() {
-        Log.d(TAG, "Static showKeyboard called");
+        AppLogger.info(TAG, "Static showKeyboard called");
         if (instance != null) {
             // Run on UI thread to avoid crashes
             instance.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        Log.d(TAG, "Showing keyboard on UI thread");
+                        AppLogger.info(TAG, "Showing keyboard on UI thread");
                         InputMethodManager imm = (InputMethodManager) instance.getSystemService(Context.INPUT_METHOD_SERVICE);
                         if (imm != null) {
                             View view = instance.getWindow().getDecorView().getRootView();
@@ -195,17 +199,17 @@ public class MainActivity extends ImGuiKeyboardHelper {
                             // Update visibility flag
                             instance.mKeyboardVisible = true;
                             
-                            Log.d(TAG, "Keyboard show methods attempted");
+                            AppLogger.info(TAG, "Keyboard show methods attempted");
                         } else {
-                            Log.e(TAG, "InputMethodManager is null");
+                            AppLogger.error(TAG, "InputMethodManager is null");
                         }
                     } catch (Exception e) {
-                        Log.e(TAG, "Error showing keyboard: " + e.getMessage(), e);
+                        AppLogger.error(TAG, "Error showing keyboard: " + e.getMessage());
                     }
                 }
             });
         } else {
-            Log.e(TAG, "Cannot show keyboard - instance is null");
+            AppLogger.error(TAG, "Cannot show keyboard - instance is null");
         }
     }
     
@@ -213,14 +217,14 @@ public class MainActivity extends ImGuiKeyboardHelper {
      * Static method to hide the keyboard - called from native code via JNI
      */
     public static void hideKeyboard() {
-        Log.d(TAG, "Static hideKeyboard called");
+        AppLogger.info(TAG, "Static hideKeyboard called");
         if (instance != null) {
             // Run on UI thread to avoid crashes
             instance.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        Log.d(TAG, "Hiding keyboard on UI thread");
+                        AppLogger.info(TAG, "Hiding keyboard on UI thread");
                         InputMethodManager imm = (InputMethodManager) instance.getSystemService(Context.INPUT_METHOD_SERVICE);
                         if (imm != null) {
                             View view = instance.getWindow().getDecorView().getRootView();
@@ -229,17 +233,17 @@ public class MainActivity extends ImGuiKeyboardHelper {
                             // Update visibility flag
                             instance.mKeyboardVisible = false;
                             
-                            Log.d(TAG, "Keyboard hide attempted");
+                            AppLogger.info(TAG, "Keyboard hide attempted");
                         } else {
-                            Log.e(TAG, "InputMethodManager is null");
+                            AppLogger.error(TAG, "InputMethodManager is null");
                         }
                     } catch (Exception e) {
-                        Log.e(TAG, "Error hiding keyboard: " + e.getMessage(), e);
+                        AppLogger.error(TAG, "Error hiding keyboard: " + e.getMessage());
                     }
                 }
             });
         } else {
-            Log.e(TAG, "Cannot hide keyboard - instance is null");
+            AppLogger.error(TAG, "Cannot hide keyboard - instance is null");
         }
     }
 }

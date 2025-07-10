@@ -1,5 +1,6 @@
 #include "http_client_curl.hpp"
 #include "write_cacert.hpp"
+#include "logger.h" // Include logger.h
 #include <curl/curl.h>
 #include <sstream>
 #include <stdexcept>
@@ -50,6 +51,7 @@ HttpResponse HttpClientLibcurl::get(const std::string& url,
         }
     }
     std::string full_url = oss.str();
+    LOG_INFO("HTTP GET Request to: %s", full_url.c_str());
 
     curl_easy_setopt(curl, CURLOPT_URL, full_url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);

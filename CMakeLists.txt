@@ -142,6 +142,8 @@ set(SOURCES
     src/write_cacert.cpp
     src/tempfile.cpp
     src/logger.cpp
+    src/log_widget.cpp
+    src/state_manager.cpp
 )
 
 # Define platform-specific logger sources

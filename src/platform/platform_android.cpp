@@ -59,8 +59,8 @@ static struct android_app* ImGui_ImplAndroid_GetApp() {
 }
 
 
-PlatformAndroid::PlatformAndroid(const std::string& title) 
-    : PlatformBase(title), m_androidApp(nullptr), m_keyboardVisible(false) {
+PlatformAndroid::PlatformAndroid(const std::string& title, LogWidget* logWidget)
+    : PlatformBase(title, logWidget), m_androidApp(nullptr), m_keyboardVisible(false) {
 	 
 }
 

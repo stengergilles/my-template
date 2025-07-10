@@ -1,6 +1,12 @@
 #pragma once
 
 #include <string>
+#include <memory> // For std::unique_ptr
+
+#include "http_client.hpp"
+#include "worker.hpp"
+#include "platform_http_client.hpp" // For createPlatformHttpClient()
+#include "log_widget.h"
 
 // Forward declarations
 struct ImGuiContext;
@@ -8,7 +14,7 @@ class PlatformBase;
 
 class Application {
 public:
-    Application(const std::string& appName = "ImGui Hello World");
+    Application(const std::string& appName = "ImGui Hello World", LogWidget* logWidget = nullptr);
     virtual ~Application();
 
     // Initialize ImGui (platform-independent)
@@ -37,19 +43,17 @@ protected:
     virtual void platformRender() = 0;
     virtual bool platformHandleEvents() = 0;
 
-#ifdef USE_EXTERNAL_RENDER_IMGUI
-    // ImGui rendering code (implemented externally in src/app/app_main.cpp)
-    void renderImGui();
-#else
-private:
-    // ImGui rendering code (platform-independent)
-    void renderImGui();
-#endif
-
     std::string m_appName;
     ImGuiContext* m_imguiContext;
     bool m_running;
-    
-    // Singleton instance
-    static Application* s_instance;
+    bool m_show_log_widget; // Moved from Application.cpp
+    LogWidget* m_log_widget; // Log widget instance
+    std::unique_ptr<HttpClient> m_httpClient;
+    Worker<HttpResponse> m_httpWorker;
+
+private:
+    // ImGui rendering code (platform-independent)
+    void renderImGui();
+
+    static Application* s_instance; // Singleton instance
 };

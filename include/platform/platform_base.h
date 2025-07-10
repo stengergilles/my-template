@@ -5,7 +5,7 @@
 // Base class for platform-specific implementations
 class PlatformBase : public Application {
 public:
-    PlatformBase(const std::string& appName = "ImGui Hello World");
+    PlatformBase(const std::string& appName = "ImGui Hello World", LogWidget* logWidget = nullptr);
     virtual ~PlatformBase();
     
     // Add a method to get the Android app pointer
