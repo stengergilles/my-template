@@ -1,13 +1,13 @@
 #include <android/native_window.h>
 #include <android/input.h>
 #include <android/keycodes.h>
-#include <android/log.h>
 #include <GLES3/gl3.h>
 #include <EGL/egl.h>
 #include <math.h>
 #include <algorithm>
 #include "imgui.h"
 #include "../../../include/scaling_manager.h"
+#include "../../../include/logger.h" // Include logger.h
 
 // Based on the official ImGui OpenGL3 backend with Android-specific modifications
 
@@ -76,7 +76,7 @@ static bool CheckShader(GLuint handle, const char* desc)
         {
             char* buf = (char*)malloc(log_length + 1);
             glGetShaderInfoLog(handle, log_length, NULL, buf);
-            __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "ERROR: %s shader failed to compile: %s", desc, buf);
+            LOG_ERROR("ERROR: %s shader failed to compile: %s", desc, buf);
             free(buf);
         }
         return false;
@@ -95,7 +95,7 @@ static bool CheckProgram(GLuint handle, const char* desc)
         {
             char* buf = (char*)malloc(log_length + 1);
             glGetProgramInfoLog(handle, log_length, NULL, buf);
-            __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "ERROR: %s program failed to link: %s", desc, buf);
+            LOG_ERROR("ERROR: %s program failed to link: %s", desc, buf);
             free(buf);
         }
         return false;
@@ -169,7 +169,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     g_Window = window;
     if (!window)
     {
-        __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "Null window passed to ImGui_ImplAndroid_Init");
+        LOG_ERROR("Null window passed to ImGui_ImplAndroid_Init");
         return false;
     }
     
@@ -182,12 +182,12 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     int32_t windowHeight = ANativeWindow_getHeight(window);
     ANativeWindow_release(window);
     
-    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "ImGui_ImplAndroid_Init with window: %p, dimensions: %dx%d", 
+    LOG_INFO( "ImGui_ImplAndroid_Init with window: %p, dimensions: %dx%d", 
                        window, windowWidth, windowHeight);
     
     if (windowWidth <= 0 || windowHeight <= 0)
     {
-        __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "Invalid window dimensions");
+        LOG_ERROR("Invalid window dimensions");
         return false;
     }
     
@@ -195,18 +195,18 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     g_EglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     if (g_EglDisplay == EGL_NO_DISPLAY)
     {
-        __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "Failed to get EGL display");
+        LOG_ERROR("Failed to get EGL display");
         return false;
     }
     
     EGLint major, minor;
     if (eglInitialize(g_EglDisplay, &major, &minor) != EGL_TRUE)
     {
-        __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "Failed to initialize EGL");
+        LOG_ERROR("Failed to initialize EGL");
         return false;
     }
     
-    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "EGL initialized: version %d.%d", major, minor);
+    LOG_INFO( "EGL initialized: version %d.%d", major, minor);
     
     // Configure EGL
     EGLint attribs[] = {
@@ -225,7 +225,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     EGLint numConfigs;
     if (eglChooseConfig(g_EglDisplay, attribs, &config, 1, &numConfigs) != EGL_TRUE)
     {
-        __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "Failed to choose EGL config");
+        LOG_ERROR("Failed to choose EGL config");
         return false;
     }
     
@@ -233,7 +233,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     g_EglSurface = eglCreateWindowSurface(g_EglDisplay, config, g_Window, NULL);
     if (g_EglSurface == EGL_NO_SURFACE)
     {
-        __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "Failed to create EGL surface");
+        LOG_ERROR("Failed to create EGL surface");
         return false;
     }
     
@@ -245,13 +245,13 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     g_EglContext = eglCreateContext(g_EglDisplay, config, EGL_NO_CONTEXT, contextAttribs);
     if (g_EglContext == EGL_NO_CONTEXT)
     {
-        __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "Failed to create EGL context");
+        LOG_ERROR("Failed to create EGL context");
         return false;
     }
     
     if (eglMakeCurrent(g_EglDisplay, g_EglSurface, g_EglSurface, g_EglContext) != EGL_TRUE)
     {
-        __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "Failed to make EGL context current");
+        LOG_ERROR("Failed to make EGL context current");
         return false;
     }
     
@@ -269,7 +269,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     ScalingManager& scalingManager = ScalingManager::getInstance();
     float displayScale = scalingManager.getScaleFactor(windowWidth, windowHeight);
     
-    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Initial UI scale set to: %f for screen size %dx%d", 
+    LOG_INFO( "Initial UI scale set to: %f for screen size %dx%d", 
                        displayScale, windowWidth, windowHeight);
     
     // Set up style with proper scaling for touch
@@ -285,7 +285,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 12.0f * displayScale);
     io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 14.0f * displayScale);
     io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 16.0f * displayScale);
-    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Loaded DroidSans.ttf with sizes 12, 14, 16");
+    LOG_INFO( "Loaded DroidSans.ttf with sizes 12, 14, 16");
     
     // Create OpenGL objects
     CreateDeviceObjects();
@@ -300,7 +300,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
 
 void ImGui_ImplAndroid_Shutdown()
 {
-    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "ImGui_ImplAndroid_Shutdown called");
+    LOG_INFO( "ImGui_ImplAndroid_Shutdown called");
     
     // Cleanup OpenGL objects
     if (g_VboHandle) glDeleteBuffers(1, &g_VboHandle);
@@ -328,7 +328,7 @@ void ImGui_ImplAndroid_Shutdown()
     // Cleanup EGL
     if (g_EglDisplay != EGL_NO_DISPLAY)
     {
-        __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Destroying EGL resources");
+        LOG_INFO( "Destroying EGL resources");
         eglMakeCurrent(g_EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         
         if (g_EglContext != EGL_NO_CONTEXT)
@@ -346,19 +346,19 @@ void ImGui_ImplAndroid_Shutdown()
     g_Window = NULL;
     g_Initialized = false;
     
-    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "ImGui_ImplAndroid_Shutdown completed");
+    LOG_INFO( "ImGui_ImplAndroid_Shutdown completed");
 }
 
 void ImGui_ImplAndroid_NewFrame()
 {
     if (!g_Initialized) {
-        __android_log_print(ANDROID_LOG_WARN, "ImGuiApp", "ImGui_ImplAndroid_NewFrame called but not initialized");
+        LOG_WARN("ImGui_ImplAndroid_NewFrame called but not initialized");
         return;
     }
     
     // Make sure the correct context is current
     if (eglMakeCurrent(g_EglDisplay, g_EglSurface, g_EglSurface, g_EglContext) != EGL_TRUE) {
-        __android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", "Failed to make EGL context current in NewFrame");
+        LOG_ERROR("Failed to make EGL context current in NewFrame");
         return;
     }
     
@@ -374,7 +374,7 @@ void ImGui_ImplAndroid_NewFrame()
     bool orientationChanged = (lastWidth != windowWidth || lastHeight != windowHeight);
     
     if (orientationChanged) {
-        __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Orientation/size changed: %dx%d -> %dx%d", 
+        LOG_INFO( "Orientation/size changed: %dx%d -> %dx%d", 
                            lastWidth, lastHeight, windowWidth, windowHeight);
     }
     
@@ -391,7 +391,7 @@ void ImGui_ImplAndroid_NewFrame()
     const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
 
     // Log the insets for debugging
-    __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", 
+    LOG_INFO( 
                        "System insets: top=%d, bottom=%d, left=%d, right=%d", 
                        insets.top, 
                        insets.bottom, 
@@ -416,7 +416,7 @@ void ImGui_ImplAndroid_NewFrame()
                         std::abs(lastAppliedScale - displayScale) > 0.05f; // Significant change
     
     if (forceScaling) {
-        __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Applying UI scale in NewFrame: %f (previous: %f)", 
+        LOG_INFO( "Applying UI scale in NewFrame: %f (previous: %f)", 
                            displayScale, lastAppliedScale);
         
         // Reset style to default before scaling to avoid cumulative scaling
@@ -436,7 +436,7 @@ void ImGui_ImplAndroid_NewFrame()
         io.Fonts->Build();
         CreateFontsTexture();
         
-        __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", 
+        LOG_INFO( 
                            "Font scale set to: %f, base size: %f, scaled size: %f", 
                            io.FontGlobalScale, 16.0f, 16.0f * displayScale);
     }
@@ -641,7 +641,7 @@ bool ImGui_ImplAndroid_HandleInputEvent(const AInputEvent* event)
         float y = AMotionEvent_getY(event, pointerIndex);
         
         // Log touch events for debugging
-        __android_log_print(ANDROID_LOG_INFO, "ImGuiApp", "Touch event: action=%d, x=%f, y=%f", actionMasked, x, y);
+        LOG_INFO( "Touch event: action=%d, x=%f, y=%f", actionMasked, x, y);
         
         // Process touch events
         switch (actionMasked)

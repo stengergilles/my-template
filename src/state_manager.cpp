@@ -4,14 +4,7 @@
 #include <sstream>
 #include <iomanip>
 
-#if defined(__ANDROID__)
-#include <android/log.h>
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "StateManager", __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "StateManager", __VA_ARGS__))
-#else
-#define LOGI(...) LOG_INFO(__VA_ARGS__)
-#define LOGE(...) LOG_ERROR(__VA_ARGS__)
-#endif
+
 
 StateManager::StateManager() : m_internalDataPath(".") {
     updateStateFilePath();
@@ -31,7 +24,7 @@ void StateManager::setInternalDataPath(const std::string& path) {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_internalDataPath = path;
     updateStateFilePath();
-    LOGI("State file path updated to: %s", m_stateFilePath.c_str());
+    LOG_INFO("State file path updated to: %s", m_stateFilePath.c_str());
 }
 
 void StateManager::updateStateFilePath() {
@@ -43,7 +36,7 @@ void StateManager::saveWindowPosition(const std::string& windowName, float x, fl
     std::stringstream ss;
     ss << std::fixed << std::setprecision(2) << x << "," << y;
     m_state["window_pos_" + windowName] = ss.str();
-    LOGI("Saved window position for %s: %f, %f", windowName.c_str(), x, y);
+    LOG_INFO("Saved window position for %s: %f, %f", windowName.c_str(), x, y);
 }
 
 bool StateManager::loadWindowPosition(const std::string& windowName, float& x, float& y) {
@@ -56,10 +49,10 @@ bool StateManager::loadWindowPosition(const std::string& windowName, float& x, f
             try {
                 x = std::stof(value.substr(0, commaPos));
                 y = std::stof(value.substr(commaPos + 1));
-                LOGI("Loaded window position for %s: %f, %f", windowName.c_str(), x, y);
+                LOG_INFO("Loaded window position for %s: %f, %f", windowName.c_str(), x, y);
                 return true;
             } catch (const std::exception& e) {
-                LOGE("Error parsing window position for %s: %s", windowName.c_str(), e.what());
+                LOG_ERROR("Error parsing window position for %s: %s", windowName.c_str(), e.what());
             }
         }
     }
@@ -69,14 +62,14 @@ bool StateManager::loadWindowPosition(const std::string& windowName, float& x, f
 void StateManager::saveString(const std::string& key, const std::string& value) {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_state[key] = value;
-    LOGI("Saved string for key %s", key.c_str());
+    LOG_INFO("Saved string for key %s", key.c_str());
 }
 
 bool StateManager::loadString(const std::string& key, std::string& value) {
     std::lock_guard<std::mutex> lock(m_mutex);
     if (m_state.count(key)) {
         value = m_state[key];
-        LOGI("Loaded string for key %s", key.c_str());
+        LOG_INFO("Loaded string for key %s", key.c_str());
         return true;
     }
     return false;
@@ -97,9 +90,9 @@ void StateManager::loadState() {
             }
         }
         file.close();
-        LOGI("State loaded from %s", m_stateFilePath.c_str());
+        LOG_INFO("State loaded from %s", m_stateFilePath.c_str());
     } else {
-        LOGI("No state file found at %s, starting with empty state.", m_stateFilePath.c_str());
+        LOG_INFO("No state file found at %s, starting with empty state.", m_stateFilePath.c_str());
     }
 }
 
@@ -111,8 +104,8 @@ void StateManager::saveState() {
             file << pair.first << "=" << pair.second << "\n";
         }
         file.close();
-        LOGI("State saved to %s", m_stateFilePath.c_str());
+        LOG_INFO("State saved to %s", m_stateFilePath.c_str());
     } else {
-        LOGE("Failed to save state to %s", m_stateFilePath.c_str());
+        LOG_ERROR("Failed to save state to %s", m_stateFilePath.c_str());
     }
 }

@@ -3,8 +3,8 @@
 #include <android/input.h>
 #include <string>
 #include "imgui.h"
+#include "../../../include/logger.h"
 #include "../../../include/scaling_manager.h"
-#include "platform/platform_logger.h"
 
 extern bool g_initialized;
 
@@ -29,7 +29,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     // Find and cache the MainActivity class and keyboard methods
     jclass mainActivityClass = env->FindClass("com/my/app/MainActivity");
     if (mainActivityClass == nullptr) {
-        platform_logger::log_error("ImGuiJNI", "Failed to find MainActivity class");
+        LOG_ERROR("Failed to find MainActivity class");
         env->ExceptionClear(); // Clear any pending exception
         return JNI_VERSION_1_6; // Continue loading even if class not found
     }
@@ -40,7 +40,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     // Get the showKeyboard method ID
     g_ShowKeyboardMethod = env->GetStaticMethodID(g_MainActivityClass, "showKeyboard", "()V");
     if (g_ShowKeyboardMethod == nullptr) {
-        platform_logger::log_error("ImGuiJNI", "Failed to find showKeyboard method");
+        LOG_ERROR("Failed to find showKeyboard method");
         env->ExceptionClear(); // Clear any pending exception
         // Not a fatal error, we'll try to find it later
     }
@@ -48,14 +48,14 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     // Get the hideKeyboard method ID
     g_HideKeyboardMethod = env->GetStaticMethodID(g_MainActivityClass, "hideKeyboard", "()V");
     if (g_HideKeyboardMethod == nullptr) {
-        platform_logger::log_error("ImGuiJNI", "Failed to find hideKeyboard method");
+        LOG_ERROR("Failed to find hideKeyboard method");
         env->ExceptionClear(); // Clear any pending exception
         // Not a fatal error, we'll try to find it later
     }
     
     
     
-    platform_logger::log_info("ImGuiJNI", "JNI_OnLoad completed successfully");
+    LOG_INFO("JNI_OnLoad completed successfully");
     return JNI_VERSION_1_6;
 }
 
@@ -64,7 +64,7 @@ extern "C" {
 
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyDown(JNIEnv *env, jobject thiz, jint key_code, jint meta_state) {
-    platform_logger::log_info("ImGuiJNI", "Key down: " + std::to_string(key_code) + ", meta: " + std::to_string(meta_state));
+    LOG_INFO("Key down: %s, meta: %s", std::to_string(key_code).c_str(), std::to_string(meta_state).c_str());
     
     // Map Android key codes to ImGui key codes
     int imguiKey = -1;
@@ -106,7 +106,7 @@ Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyDown(JNIEnv *env, jobject thiz, j
 
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyUp(JNIEnv *env, jobject thiz, jint key_code, jint meta_state) {
-    platform_logger::log_info("ImGuiJNI", "Key up: " + std::to_string(key_code) + ", meta: " + std::to_string(meta_state));
+    LOG_INFO("Key up: %s, meta: %s", std::to_string(key_code).c_str(), std::to_string(meta_state).c_str());
     
     // Map Android key codes to ImGui key codes (same mapping as in key down)
     int imguiKey = -1;
@@ -149,7 +149,7 @@ Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyUp(JNIEnv *env, jobject thiz, jin
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyMultiple(JNIEnv *env, jobject thiz, jint key_code, jint count, jobject event) {
     // Handle repeated key events
-    platform_logger::log_info("ImGuiJNI", "Key multiple: " + std::to_string(key_code) + ", count: " + std::to_string(count));
+    LOG_INFO("Key multiple: %s, count: %s", std::to_string(key_code).c_str(), std::to_string(count).c_str());
     
     // For text input, we can extract the characters
     if (key_code == AKEYCODE_UNKNOWN) {
@@ -159,14 +159,14 @@ Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyMultiple(JNIEnv *env, jobject thi
         // Get the getCharacters method
         jmethodID getCharactersMethod = env->GetMethodID(keyEventClass, "getCharacters", "()Ljava/lang/String;");
         if (getCharactersMethod == nullptr) {
-            platform_logger::log_error("ImGuiJNI", "Could not find getCharacters method");
+            LOG_ERROR("Could not find getCharacters method");
             return;
         }
         
         // Call getCharacters
         jstring jChars = (jstring)env->CallObjectMethod(event, getCharactersMethod);
         if (jChars == nullptr) {
-            platform_logger::log_error("ImGuiJNI", "getCharacters returned null");
+            LOG_ERROR("getCharacters returned null");
             return;
         }
         
@@ -186,7 +186,7 @@ Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyMultiple(JNIEnv *env, jobject thi
 // JNI method implementations for ImGuiJNI
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiJNI_onKeyEvent(JNIEnv *env, jclass clazz, jint key_code, jint action, jint meta_state) {
-    platform_logger::log_info("ImGuiJNI", "Key event: code=" + std::to_string(key_code) + ", action=" + std::to_string(action) + ", meta=" + std::to_string(meta_state));
+    LOG_INFO("Key event: code=%s, action=%s, meta=%s", std::to_string(key_code).c_str(), std::to_string(action).c_str(), std::to_string(meta_state).c_str());
     
     // Map Android key codes to ImGui key codes
     int imguiKey = -1;
@@ -236,7 +236,7 @@ JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiJNI_onTextInput(JNIEnv *env, jclass clazz, jstring text) {
     const char* utf8Text = env->GetStringUTFChars(text, nullptr);
     if (utf8Text != nullptr) {
-        platform_logger::log_info("ImGuiJNI", "Received text input: " + std::string(utf8Text));
+        LOG_INFO("Received text input: %s", std::string(utf8Text).c_str());
         ImGuiIO& io = ImGui::GetIO();
         io.AddInputCharactersUTF8(utf8Text);
         env->ReleaseStringUTFChars(text, utf8Text);
@@ -260,7 +260,7 @@ Java_com_my_app_ImGuiJNI_wantsTextInput(JNIEnv *env, jclass clazz) {
 // Function to update system insets from Java
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top, jint bottom, jint left, jint right, jboolean unused) {
-    platform_logger::log_info("ImGuiJNI", "Updating system insets: top=" + std::to_string(top) + ", bottom=" + std::to_string(bottom) + ", left=" + std::to_string(left) + ", right=" + std::to_string(right));
+    LOG_INFO("Updating system insets: top=%s, bottom=%s, left=%s, right=%s", std::to_string(top).c_str(), std::to_string(bottom).c_str(), std::to_string(left).c_str(), std::to_string(right).c_str());
     // Update the insets in the ScalingManager (always portrait mode)
     ScalingManager::getInstance().setSystemInsets(top, bottom, left, right, false);
 }
@@ -268,7 +268,7 @@ Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top,
 // Function to set screen density from Java
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiJNI_setScreenDensity(JNIEnv *env, jclass clazz, jfloat density) {
-    platform_logger::log_info("ImGuiJNI", "Setting screen density: " + std::to_string(density));
+    LOG_INFO("Setting screen density: %s", std::to_string(density).c_str());
     // Update the density in the ScalingManager
     ScalingManager::getInstance().setScreenDensity(density);
 }
@@ -278,7 +278,7 @@ Java_com_my_app_ImGuiJNI_setPackageName(JNIEnv* env, jclass clazz, jstring packa
     const char* packageNameCStr = env->GetStringUTFChars(packageName, nullptr);
     if (packageNameCStr != nullptr) {
         g_PackageName = packageNameCStr;
-        platform_logger::log_info("ImGuiJNI", "Package name set to: " + g_PackageName);
+        LOG_INFO("Package name set to: %s", g_PackageName.c_str());
         env->ReleaseStringUTFChars(packageName, packageNameCStr);
     }
 }
@@ -288,7 +288,7 @@ Java_com_my_app_ImGuiJNI_nativeLogInfo(JNIEnv* env, jclass clazz, jstring tag, j
     const char* tagCStr = env->GetStringUTFChars(tag, nullptr);
     const char* messageCStr = env->GetStringUTFChars(message, nullptr);
     if (tagCStr != nullptr && messageCStr != nullptr) {
-        platform_logger::log_info(tagCStr, messageCStr);
+        LOG_INFO(tagCStr, messageCStr);
         env->ReleaseStringUTFChars(tag, tagCStr);
         env->ReleaseStringUTFChars(message, messageCStr);
     }
@@ -299,7 +299,7 @@ Java_com_my_app_ImGuiJNI_nativeLogError(JNIEnv* env, jclass clazz, jstring tag, 
     const char* tagCStr = env->GetStringUTFChars(tag, nullptr);
     const char* messageCStr = env->GetStringUTFChars(message, nullptr);
     if (tagCStr != nullptr && messageCStr != nullptr) {
-        platform_logger::log_error(tagCStr, messageCStr);
+        LOG_ERROR(tagCStr, messageCStr);
         env->ReleaseStringUTFChars(tag, tagCStr);
         env->ReleaseStringUTFChars(message, messageCStr);
     }

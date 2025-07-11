@@ -1,4 +1,3 @@
-#include <android/log.h>
 #include <android_native_app_glue.h>
 #include <unistd.h> // For chdir
 #include <sys/stat.h> // For mkdir
@@ -8,10 +7,6 @@
 #include "../../include/log_widget.h"
 #include "../../include/scaling_manager.h"
 #include "../../include/state_manager.h" // Include StateManager
-
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "ImGuiApp", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "ImGuiApp", __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", __VA_ARGS__))
 
 // Forward declaration for ImGui Android functions
 extern bool ImGui_ImplAndroid_HandleInputEvent(const AInputEvent* event);
@@ -35,7 +30,7 @@ static void handle_cmd(android_app* app, int32_t cmd) {
                     if (g_app->initWithWindow(g_savedWindow)) {
                         g_initialized = true;
                     } else {
-                        LOGE("Platform initialization failed"); // Removed
+                        LOG_ERROR("Platform initialization failed");
                     }
                 }
             }
@@ -86,20 +81,20 @@ void android_main(struct android_app* app) {
     // Change the current directory to the app's internal data directory
     if (app->activity->internalDataPath != nullptr) {
         const char* path = app->activity->internalDataPath;
-        LOGI("Attempting to change directory to: %s", path);
+        LOG_INFO("Attempting to change directory to: %s", path);
         // Create the directory if it doesn't exist
         struct stat st = {0};
         if (stat(path, &st) == -1) {
             mkdir(path, 0700);
         }
         if (chdir(path) == 0) {
-            LOGI("Successfully changed directory to: %s", path); // Removed
+            LOG_INFO("Successfully changed directory to: %s", path);
             StateManager::getInstance().setInternalDataPath(path); // Set path for StateManager
         } else {
-            LOGE("Failed to change directory to: %s", path); // Removed
+            LOG_ERROR("Failed to change directory to: %s", path);
         }
     } else {
-        LOGE("Internal data path is null, cannot change directory.");
+        LOG_ERROR("Internal data path is null, cannot change directory.");
     }
     
     // Load state at startup
@@ -119,15 +114,15 @@ void android_main(struct android_app* app) {
     // Set the Android configuration in the scaling manager
     if (app && app->config) {
         scalingManager.setConfiguration(app->config);
-        LOGI("Android configuration set in ScalingManager"); // Removed
+        LOG_INFO("Android configuration set in ScalingManager");
     } else {
-        LOGE("No Android configuration available for ScalingManager"); // Removed
+        LOG_ERROR("No Android configuration available for ScalingManager");
     }
     
     // Set a scale adjustment factor if needed (1.0 = use the exact density-based scale)
     // You can adjust this value based on your device preferences
     scalingManager.setScaleAdjustment(1.5f);  // Increased to 1.5 for better visibility
-    LOGI("Scale adjustment set to 1.5 for better visibility"); // Removed
+    LOG_INFO("Scale adjustment set to 1.5 for better visibility");
     
     // Force initialization immediately
     if (app->window != nullptr) {
@@ -137,7 +132,7 @@ void android_main(struct android_app* app) {
         // Initialize with proper scaling
         bool success = g_app->initWithWindow(g_savedWindow);
         if (success) {
-            LOGI("Platform initialized successfully at startup"); // Removed
+            LOG_INFO("Platform initialized successfully at startup");
             g_initialized = true;
             
             // Force a small delay to ensure initialization completes
@@ -146,11 +141,11 @@ void android_main(struct android_app* app) {
             ts.tv_nsec = 100000000; // 100ms
             nanosleep(&ts, NULL);
         } else {
-            LOGE("Failed to initialize at startup"); // Removed
+            LOG_ERROR("Failed to initialize at startup");
         }
     }
     
-    LOGI("Starting application main loop"); // Removed
+    LOG_INFO("Starting application main loop");
     
     // Main loop
     while (1) {
@@ -166,7 +161,7 @@ void android_main(struct android_app* app) {
             
             // Check if we are exiting
             if (app->destroyRequested != 0) {
-                LOGI("Exiting application");
+                LOG_INFO("Exiting application");
                 if (g_app) {
                     delete g_app;
                     g_app = nullptr;

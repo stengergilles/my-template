@@ -6,10 +6,9 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <android/log.h>
+
 
 LogWidget::LogWidget(size_t max_size, size_t max_lines) : max_size(max_size), max_lines(max_lines) {
-    __android_log_print(ANDROID_LOG_INFO, "LogWidget", "LogWidget created: %p", this);
     Buf = new char[max_size]; // Allocate buffer
     BufOffset = 0;
     ScrollToBottom = false;
@@ -98,7 +97,7 @@ void LogWidget::AddLog(const char* fmt, ...) {
 }
 
 void LogWidget::Draw(const char* title, bool* p_open) {
-    __android_log_print(ANDROID_LOG_INFO, "LogWidget", "LogWidget::Draw called for instance: %p", this);
+    AddLog("LogWidget::Draw called for instance: %p", this);
     // Load position
     float x = 0.0f, y = 0.0f;
     bool loaded_pos = StateManager::getInstance().loadWindowPosition(title, x, y);

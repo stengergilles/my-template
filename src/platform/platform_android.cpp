@@ -2,25 +2,17 @@
 #include <android/native_activity.h>
 #include <android/input.h>
 #include <android/looper.h>  // For ALooper_pollAll
-#include <android/log.h>     // Added for Android logging
+
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
 #include "imgui.h"
 #include "../include/platform/platform_android.h"
+#include "../../include/logger.h"
 
 // Include keyboard helper
 #include "android/keyboard_helper.h"
 
-// Define log macros if not defined
-#ifndef ANDROID_LOG_INFO
-#define ANDROID_LOG_INFO 4
-#endif
-#ifndef ANDROID_LOG_ERROR
-#define ANDROID_LOG_ERROR 6
-#endif
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "ImGuiApp", __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "ImGuiApp", __VA_ARGS__))
 
 // Forward declarations for Android NDK types
 struct android_app;
@@ -70,7 +62,7 @@ PlatformAndroid::~PlatformAndroid() {
 
 void PlatformAndroid::setAndroidApp(void* app) {
     m_androidApp = app;
-    LOGI("Android app pointer set: %p", app);
+    LOG_INFO("Android app pointer set: %p", app);
 }
 
 void* PlatformAndroid::getAndroidApp() {
@@ -79,20 +71,20 @@ void* PlatformAndroid::getAndroidApp() {
 
 bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
     if (!window) {
-        LOGE("Null window passed to initWithWindow");
+        LOG_ERROR("Null window passed to initWithWindow");
         return false;
     }
     
     // Store the window pointer directly
     m_window = window;
-    LOGI("Window pointer stored directly: %p", m_window);
+    LOG_INFO("Window pointer stored directly: %p", m_window);
     
-    LOGI("Creating ImGui context");
+    LOG_INFO("Creating ImGui context");
     // Don't create a new context if one already exists
     if (!m_imguiContext) {
         m_imguiContext = ImGui::CreateContext();
         if (!m_imguiContext) {
-            LOGE("Failed to create ImGui context");
+            LOG_ERROR("Failed to create ImGui context");
             return false;
         }
         ImGui::SetCurrentContext(m_imguiContext); // Set the newly created context as current
@@ -108,13 +100,13 @@ bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
         int32_t width = ANativeWindow_getWidth(m_window);
         int32_t height = ANativeWindow_getHeight(m_window);
         io.DisplaySize = ImVec2((float)width, (float)height);
-        LOGI("Window dimensions: %d x %d", width, height);
+        LOG_INFO("Window dimensions: %d x %d", width, height);
     }
     
     // Initialize ImGui for Android with the direct window pointer
-    LOGI("Initializing ImGui for Android with window: %p", m_window);
+    LOG_INFO("Initializing ImGui for Android with window: %p", m_window);
     bool success = ImGui_ImplAndroid_Init(m_window);
-    LOGI("ImGui Android init result: %s", success ? "SUCCESS" : "FAILED");
+    LOG_INFO("ImGui Android init result: %s", success ? "SUCCESS" : "FAILED");
     
     return success;
 }
@@ -122,21 +114,21 @@ bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
 bool PlatformAndroid::platformInit() {
     struct android_app* app = (struct android_app*)m_androidApp;
     if (!app) {
-        LOGE("No Android app in platformInit");
+        LOG_ERROR("No Android app in platformInit");
         return false;
     }
     
-    LOGI("Platform init with app: %p, window: %p", app, app->window);
+    LOG_INFO("Platform init with app: %p, window: %p", app, app->window);
     
     // If we already have a stored window pointer, use that
     if (m_window) {
-        LOGI("Using previously stored window pointer: %p", m_window);
+        LOG_INFO("Using previously stored window pointer: %p", m_window);
         return initWithWindow(m_window);
     }
     
     // Otherwise try to get the window from the app
     if (!app->window) {
-        LOGE("No window available in platformInit");
+        LOG_ERROR("No window available in platformInit");
         return false;
     }
     
@@ -159,12 +151,12 @@ void PlatformAndroid::platformNewFrame() {
         // ImGui wants text input - show keyboard
         showKeyboard();
         m_keyboardVisible = true;
-        LOGI("Showing keyboard - ImGui wants text input");
+        LOG_INFO("Showing keyboard - ImGui wants text input");
     } else if (!wantsTextInput && m_keyboardVisible) {
         // ImGui no longer wants text input - hide keyboard
         hideKeyboard();
         m_keyboardVisible = false;
-        LOGI("Hiding keyboard - ImGui no longer wants text input");
+        LOG_INFO("Hiding keyboard - ImGui no longer wants text input");
     }
     
     // Note: Don't call ImGui::NewFrame() here, it's called in Application::renderFrame()
@@ -195,7 +187,7 @@ bool PlatformAndroid::platformHandleEvents() {
 }
 
 void PlatformAndroid::platformShutdown() {
-    LOGI("Platform Android shutdown called");
+    LOG_INFO("Platform Android shutdown called");
     
     // First shut down ImGui Android implementation
     ImGui_ImplAndroid_Shutdown();
@@ -205,7 +197,7 @@ void PlatformAndroid::platformShutdown() {
         ImGui::SetCurrentContext(m_imguiContext); // Set the context as current before destroying
         ImGui::DestroyContext(m_imguiContext);
         m_imguiContext = nullptr;
-        LOGI("ImGui context destroyed");
+        LOG_INFO("ImGui context destroyed");
     }
     
     // Clear the window pointer
