@@ -8,7 +8,7 @@
 #endif
 
 // Global logger instance
-std::unique_ptr<ILogger> g_logger;
+ILogger* g_logger = nullptr;
 
 // Standard output/error logger
 class StdLogger : public ILogger {
@@ -91,7 +91,7 @@ std::unique_ptr<ILogger> LoggerFactory::createLogger() {
 void LoggerFactory::set_android_logger_widget(LogWidget* widget) {
 #if defined(__ANDROID__)
     if (g_logger) {
-        AndroidLogger* android_logger = dynamic_cast<AndroidLogger*>(g_logger.get());
+        AndroidLogger* android_logger = dynamic_cast<AndroidLogger*>(g_logger);
         if (android_logger) {
             android_logger->set_log_widget(widget);
         }

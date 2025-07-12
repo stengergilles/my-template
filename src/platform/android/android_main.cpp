@@ -73,11 +73,8 @@ static int32_t handle_input(android_app* app, AInputEvent* event) {
 
 // Main entry point for Android applications using native_app_glue
 void android_main(struct android_app* app) {
-    // Pass the asset manager to ImGui_ImplAndroid
-    ImGui_ImplAndroid_SetAssetManager(app->activity->assetManager);
-
     // Initialize the logger
-    g_logger = LoggerFactory::createLogger();
+    g_logger = LoggerFactory::createLogger().release(); // Initialize global logger
     LoggerFactory::set_android_logger_widget(&g_logWidget);
 
     
@@ -85,10 +82,19 @@ void android_main(struct android_app* app) {
     // Make sure glue isn't stripped
     app_dummy();
 
+    // Debugging: Log the initial directory change message with hex values
+    const char* initial_path = app->activity->internalDataPath;
+    std::string debug_str = "";
+    for (int i = 0; i < std::min((int)strlen(initial_path), 10); ++i) {
+        debug_str += std::to_string((int)initial_path[strlen(initial_path) - 10 + i]) + " ";
+    }
+    LOG_INFO("LogWidget: Initial path last 10 chars (hex): %s", debug_str.c_str());
+
     // Change the current directory to the app's internal data directory
     if (app->activity->internalDataPath != nullptr) {
         const char* path = app->activity->internalDataPath;
         LOG_INFO("Attempting to change directory to: %s", path);
+        
         // Create the directory if it doesn't exist
         struct stat st = {0};
         if (stat(path, &st) == -1) {
@@ -96,6 +102,7 @@ void android_main(struct android_app* app) {
         }
         if (chdir(path) == 0) {
             LOG_INFO("Successfully changed directory to: %s", path);
+            
             StateManager::getInstance().setInternalDataPath(path); // Set path for StateManager
         } else {
             LOG_ERROR("Failed to change directory to: %s", path);
@@ -129,7 +136,8 @@ void android_main(struct android_app* app) {
     // Set a scale adjustment factor if needed (1.0 = use the exact density-based scale)
     // You can adjust this value based on your device preferences
     scalingManager.setScaleAdjustment(1.0f);  // Adjusted for better visibility
-    LOG_INFO("Scale adjustment set to 1.5 for better visibility");
+    LOG_INFO("Scale adjustment set to 1.0 for better visibility");
+    
     
     // Force initialization immediately
     if (app->window != nullptr) {
@@ -140,6 +148,7 @@ void android_main(struct android_app* app) {
         bool success = g_app->initWithWindow(g_savedWindow);
         if (success) {
             LOG_INFO("Platform initialized successfully at startup");
+            
             g_initialized = true;
             
             // Force a small delay to ensure initialization completes
@@ -152,7 +161,7 @@ void android_main(struct android_app* app) {
         }
     }
     
-    LOG_INFO("Starting application main loop");
+    
     
     // Main loop
     while (1) {
@@ -168,10 +177,13 @@ void android_main(struct android_app* app) {
             
             // Check if we are exiting
             if (app->destroyRequested != 0) {
-                LOG_INFO("Exiting application");
                 if (g_app) {
                     delete g_app;
                     g_app = nullptr;
+                }
+                if (g_logger) { // Delete global logger
+                    delete g_logger;
+                    g_logger = nullptr;
                 }
                 StateManager::getInstance().saveState(); // Save state on exit
                 g_logWidget.Clear(); // Clear log widget to prevent memory leak

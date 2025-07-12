@@ -30,7 +30,7 @@ public:
 };
 
 // Global logger instance
-extern std::unique_ptr<ILogger> g_logger;
+extern ILogger* g_logger;
 
 // Helper macros for easy logging
 #define LOG_INFO(fmt, ...) g_logger->log(LogLevel::Info, fmt, ##__VA_ARGS__)

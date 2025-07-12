@@ -55,7 +55,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     
     
     
-    LOG_INFO("JNI_OnLoad completed successfully");
+    
     return JNI_VERSION_1_6;
 }
 
@@ -64,7 +64,7 @@ extern "C" {
 
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyDown(JNIEnv *env, jobject thiz, jint key_code, jint meta_state) {
-    LOG_INFO("Key down: %s, meta: %s", std::to_string(key_code).c_str(), std::to_string(meta_state).c_str());
+    
     
     // Map Android key codes to ImGui key codes
     int imguiKey = -1;
@@ -106,7 +106,7 @@ Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyDown(JNIEnv *env, jobject thiz, j
 
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyUp(JNIEnv *env, jobject thiz, jint key_code, jint meta_state) {
-    LOG_INFO("Key up: %s, meta: %s", std::to_string(key_code).c_str(), std::to_string(meta_state).c_str());
+    
     
     // Map Android key codes to ImGui key codes (same mapping as in key down)
     int imguiKey = -1;
@@ -149,7 +149,7 @@ Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyUp(JNIEnv *env, jobject thiz, jin
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyMultiple(JNIEnv *env, jobject thiz, jint key_code, jint count, jobject event) {
     // Handle repeated key events
-    LOG_INFO("Key multiple: %s, count: %s", std::to_string(key_code).c_str(), std::to_string(count).c_str());
+    
     
     // For text input, we can extract the characters
     if (key_code == AKEYCODE_UNKNOWN) {
@@ -186,7 +186,7 @@ Java_com_my_app_ImGuiKeyboardHelper_nativeOnKeyMultiple(JNIEnv *env, jobject thi
 // JNI method implementations for ImGuiJNI
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiJNI_onKeyEvent(JNIEnv *env, jclass clazz, jint key_code, jint action, jint meta_state) {
-    LOG_INFO("Key event: code=%s, action=%s, meta=%s", std::to_string(key_code).c_str(), std::to_string(action).c_str(), std::to_string(meta_state).c_str());
+    
     
     // Map Android key codes to ImGui key codes
     int imguiKey = -1;
@@ -236,7 +236,7 @@ JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiJNI_onTextInput(JNIEnv *env, jclass clazz, jstring text) {
     const char* utf8Text = env->GetStringUTFChars(text, nullptr);
     if (utf8Text != nullptr) {
-        LOG_INFO("Received text input: %s", std::string(utf8Text).c_str());
+        
         ImGuiIO& io = ImGui::GetIO();
         io.AddInputCharactersUTF8(utf8Text);
         env->ReleaseStringUTFChars(text, utf8Text);
@@ -260,7 +260,7 @@ Java_com_my_app_ImGuiJNI_wantsTextInput(JNIEnv *env, jclass clazz) {
 // Function to update system insets from Java
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top, jint bottom, jint left, jint right, jboolean unused) {
-    LOG_INFO("Updating system insets: top=%s, bottom=%s, left=%s, right=%s", std::to_string(top).c_str(), std::to_string(bottom).c_str(), std::to_string(left).c_str(), std::to_string(right).c_str());
+    
     // Update the insets in the ScalingManager (always portrait mode)
     ScalingManager::getInstance().setSystemInsets(top, bottom, left, right, false);
 }
@@ -268,7 +268,7 @@ Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top,
 // Function to set screen density from Java
 JNIEXPORT void JNICALL
 Java_com_my_app_ImGuiJNI_setScreenDensity(JNIEnv *env, jclass clazz, jfloat density) {
-    LOG_INFO("Setting screen density: %s", std::to_string(density).c_str());
+    
     // Update the density in the ScalingManager
     ScalingManager::getInstance().setScreenDensity(density);
 }
@@ -278,7 +278,7 @@ Java_com_my_app_ImGuiJNI_setPackageName(JNIEnv* env, jclass clazz, jstring packa
     const char* packageNameCStr = env->GetStringUTFChars(packageName, nullptr);
     if (packageNameCStr != nullptr) {
         g_PackageName = packageNameCStr;
-        LOG_INFO("Package name set to: %s", g_PackageName.c_str());
+        
         env->ReleaseStringUTFChars(packageName, packageNameCStr);
     }
 }
@@ -288,7 +288,7 @@ Java_com_my_app_ImGuiJNI_nativeLogInfo(JNIEnv* env, jclass clazz, jstring tag, j
     const char* tagCStr = env->GetStringUTFChars(tag, nullptr);
     const char* messageCStr = env->GetStringUTFChars(message, nullptr);
     if (tagCStr != nullptr && messageCStr != nullptr) {
-        LOG_INFO(tagCStr, messageCStr);
+        
         env->ReleaseStringUTFChars(tag, tagCStr);
         env->ReleaseStringUTFChars(message, messageCStr);
     }

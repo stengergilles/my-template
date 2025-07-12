@@ -21,7 +21,7 @@ static LogWidget main_log_widget;
 int main(int argc, char** argv)
 {
     // Initialize the logger
-    g_logger = LoggerFactory::createLogger();
+    g_logger = LoggerFactory::createLogger().release();
 
 #if !defined(__ANDROID__)
     LoggerFactory::set_android_logger_widget(&main_log_widget);

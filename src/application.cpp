@@ -19,7 +19,7 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
 {
     // Set singleton instance
     s_instance = this;
-    LOG_INFO("Application created: %s", m_appName.c_str());
+    
 
     // Initialize HTTP client
     m_httpClient = std::make_unique<PlatformHttpClient>();
@@ -146,7 +146,7 @@ void Application::renderImGui()
 
     // Font Awesome Icon Button
     if (ImGui::Button(ICON_FA_STAR " Star Button")) {
-        LOG_INFO("Star button clicked!");
+        
     }
 
     ImGui::Separator();

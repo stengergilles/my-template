@@ -62,7 +62,7 @@ PlatformAndroid::~PlatformAndroid() {
 
 void PlatformAndroid::setAndroidApp(void* app) {
     m_androidApp = app;
-    LOG_INFO("Android app pointer set: %p", app);
+    
 }
 
 void* PlatformAndroid::getAndroidApp() {
@@ -77,9 +77,9 @@ bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
     
     // Store the window pointer directly
     m_window = window;
-    LOG_INFO("Window pointer stored directly: %p", m_window);
     
-    LOG_INFO("Creating ImGui context");
+    
+    
     // Don't create a new context if one already exists
     if (!m_imguiContext) {
         m_imguiContext = ImGui::CreateContext();
@@ -100,13 +100,13 @@ bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
         int32_t width = ANativeWindow_getWidth(m_window);
         int32_t height = ANativeWindow_getHeight(m_window);
         io.DisplaySize = ImVec2((float)width, (float)height);
-        LOG_INFO("Window dimensions: %d x %d", width, height);
+        
     }
     
     // Initialize ImGui for Android with the direct window pointer
-    LOG_INFO("Initializing ImGui for Android with window: %p", m_window);
+    
     bool success = ImGui_ImplAndroid_Init(m_window);
-    LOG_INFO("ImGui Android init result: %s", success ? "SUCCESS" : "FAILED");
+    
     
     return success;
 }
@@ -118,11 +118,11 @@ bool PlatformAndroid::platformInit() {
         return false;
     }
     
-    LOG_INFO("Platform init with app: %p, window: %p", app, app->window);
+    
     
     // If we already have a stored window pointer, use that
     if (m_window) {
-        LOG_INFO("Using previously stored window pointer: %p", m_window);
+        
         return initWithWindow(m_window);
     }
     
@@ -151,12 +151,12 @@ void PlatformAndroid::platformNewFrame() {
         // ImGui wants text input - show keyboard
         showKeyboard();
         m_keyboardVisible = true;
-        LOG_INFO("Showing keyboard - ImGui wants text input");
+        
     } else if (!wantsTextInput && m_keyboardVisible) {
         // ImGui no longer wants text input - hide keyboard
         hideKeyboard();
         m_keyboardVisible = false;
-        LOG_INFO("Hiding keyboard - ImGui no longer wants text input");
+        
     }
     
     // Note: Don't call ImGui::NewFrame() here, it's called in Application::renderFrame()
@@ -187,7 +187,7 @@ bool PlatformAndroid::platformHandleEvents() {
 }
 
 void PlatformAndroid::platformShutdown() {
-    LOG_INFO("Platform Android shutdown called");
+    
     
     // First shut down ImGui Android implementation
     ImGui_ImplAndroid_Shutdown();
@@ -197,7 +197,7 @@ void PlatformAndroid::platformShutdown() {
         ImGui::SetCurrentContext(m_imguiContext); // Set the context as current before destroying
         ImGui::DestroyContext(m_imguiContext);
         m_imguiContext = nullptr;
-        LOG_INFO("ImGui context destroyed");
+        
     }
     
     // Clear the window pointer

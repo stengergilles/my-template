@@ -1,6 +1,7 @@
 #include "log_widget.h"
 #include "imgui.h"
 #include "../include/state_manager.h" // Include StateManager
+#include "../include/logger.h" // Include logger.h
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -72,6 +73,13 @@ void LogWidget::AddLogV(const char* fmt, va_list args) {
 
     if (written < 0) return; // Error
 
+    // Replace non-printable ASCII characters with space
+    for (int i = 0; i < written; ++i) {
+        if (Buf[BufOffset + i] < 32 || Buf[BufOffset + i] == 127) {
+            Buf[BufOffset + i] = ' ';
+        }
+    }
+
     // Null-terminate the message
     Buf[BufOffset + written] = '\0';
 
@@ -97,7 +105,7 @@ void LogWidget::AddLog(const char* fmt, ...) {
 }
 
 void LogWidget::Draw(const char* title, bool* p_open) {
-    AddLog("LogWidget::Draw called for instance: %p", this);
+    
     // Load position
     float x = 0.0f, y = 0.0f;
     bool loaded_pos = StateManager::getInstance().loadWindowPosition(title, x, y);
@@ -132,7 +140,7 @@ void LogWidget::Draw(const char* title, bool* p_open) {
         const char* buf_end = Buf + BufOffset;
         for (int i = 0; i < LineOffsets.size(); i++) {
             const char* item = buf_begin + LineOffsets[i];
-            ImGui::TextUnformatted(item, (i + 1 < LineOffsets.size()) ? (buf_begin + LineOffsets[i+1]) : buf_end);
+            ImGui::TextUnformatted(item);
         }
     }
 

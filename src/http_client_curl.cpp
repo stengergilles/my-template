@@ -51,7 +51,7 @@ HttpResponse HttpClientLibcurl::get(const std::string& url,
         }
     }
     std::string full_url = oss.str();
-    LOG_INFO("HTTP GET Request to: %s", full_url.c_str());
+    
 
     curl_easy_setopt(curl, CURLOPT_URL, full_url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);

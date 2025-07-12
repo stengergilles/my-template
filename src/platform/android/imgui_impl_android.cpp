@@ -189,8 +189,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     int32_t windowHeight = ANativeWindow_getHeight(window);
     ANativeWindow_release(window);
     
-    LOG_INFO( "ImGui_ImplAndroid_Init with window: %p, dimensions: %dx%d", 
-                       window, windowWidth, windowHeight);
+    
     
     if (windowWidth <= 0 || windowHeight <= 0)
     {
@@ -199,6 +198,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     }
     
     // Initialize EGL
+    LOG_INFO("ImGui_ImplAndroid_Init: Initializing EGL");
     g_EglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     if (g_EglDisplay == EGL_NO_DISPLAY)
     {
@@ -213,9 +213,9 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
         return false;
     }
     
-    LOG_INFO( "EGL initialized: version %d.%d", major, minor);
+    LOG_INFO("ImGui_ImplAndroid_Init: EGL initialized: version %d.%d", major, minor);
     
-    // Configure EGL
+    LOG_INFO("ImGui_ImplAndroid_Init: Choosing EGL config");
     EGLint attribs[] = {
         EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
         EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
@@ -237,6 +237,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     }
     
     // Create surface
+    LOG_INFO("ImGui_ImplAndroid_Init: Creating EGL surface");
     g_EglSurface = eglCreateWindowSurface(g_EglDisplay, config, g_Window, NULL);
     if (g_EglSurface == EGL_NO_SURFACE)
     {
@@ -244,7 +245,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
         return false;
     }
     
-    // Create context
+    LOG_INFO("ImGui_ImplAndroid_Init: Creating EGL context");
     EGLint contextAttribs[] = {
         EGL_CONTEXT_CLIENT_VERSION, 3,
         EGL_NONE
@@ -261,6 +262,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
         LOG_ERROR("Failed to make EGL context current");
         return false;
     }
+    LOG_INFO("ImGui_ImplAndroid_Init: EGL context made current");
     
     // Update ImGui context with the window dimensions
     io.DisplaySize = ImVec2((float)windowWidth, (float)windowHeight);
@@ -276,8 +278,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     ScalingManager& scalingManager = ScalingManager::getInstance();
     float displayScale = scalingManager.getScaleFactor(windowWidth, windowHeight);
     
-    LOG_INFO( "Initial UI scale set to: %f for screen size %dx%d", 
-                       displayScale, windowWidth, windowHeight);
+    
     
     // Set up style with proper scaling for touch
     ImGuiStyle& style = ImGui::GetStyle();
@@ -304,6 +305,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
             AAsset_close(fontAsset);
             io.Fonts->AddFontFromMemoryTTF(fontData, fontDataSize, 16.0f); // Default font
             LOG_INFO("Loaded DroidSans.ttf, size: %zu", fontDataSize);
+            
         }
     } else {
         LOG_ERROR("Failed to open DroidSans.ttf from assets. g_AssetManager: %p", g_AssetManager);
@@ -327,6 +329,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
             config.PixelSnapH = true;
             io.Fonts->AddFontFromMemoryTTF(fontAwesomeData, fontAwesomeDataSize, 16.0f, &config, icons_ranges);
             LOG_INFO("Loaded fa-solid-900.ttf, size: %zu", fontAwesomeDataSize);
+            
         }
     } else {
         LOG_ERROR("Failed to open fa-solid-900.ttf from assets. g_AssetManager: %p", g_AssetManager);
@@ -350,7 +353,7 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
 
 void ImGui_ImplAndroid_Shutdown()
 {
-    LOG_INFO( "ImGui_ImplAndroid_Shutdown called");
+    
     
     // Cleanup OpenGL objects
     if (g_VboHandle) glDeleteBuffers(1, &g_VboHandle);
@@ -378,7 +381,7 @@ void ImGui_ImplAndroid_Shutdown()
     // Cleanup EGL
     if (g_EglDisplay != EGL_NO_DISPLAY)
     {
-        LOG_INFO( "Destroying EGL resources");
+        
         eglMakeCurrent(g_EglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
         
         if (g_EglContext != EGL_NO_CONTEXT)
@@ -396,7 +399,7 @@ void ImGui_ImplAndroid_Shutdown()
     g_Window = NULL;
     g_Initialized = false;
     
-    LOG_INFO( "ImGui_ImplAndroid_Shutdown completed");
+    
 }
 
 void ImGui_ImplAndroid_NewFrame()
@@ -424,8 +427,7 @@ void ImGui_ImplAndroid_NewFrame()
     bool orientationChanged = (lastWidth != windowWidth || lastHeight != windowHeight);
     
     if (orientationChanged) {
-        LOG_INFO( "Orientation/size changed: %dx%d -> %dx%d", 
-                           lastWidth, lastHeight, windowWidth, windowHeight);
+        
     }
     
     lastWidth = windowWidth;
@@ -440,13 +442,7 @@ void ImGui_ImplAndroid_NewFrame()
     // Get system insets from ScalingManager
     const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
 
-    // Log the insets for debugging
-    LOG_INFO( 
-                       "System insets: top=%d, bottom=%d, left=%d, right=%d", 
-                       insets.top, 
-                       insets.bottom, 
-                       insets.left, 
-                       insets.right);
+    
     
     // Set display safe area (area not covered by navigation bar, status bar, etc.)
     // Note: DisplaySafeAreaPadding was removed in newer ImGui versions
@@ -477,9 +473,7 @@ void ImGui_ImplAndroid_NewFrame()
         // Update global font scale
         io.FontGlobalScale = displayScale;
         
-        LOG_INFO( 
-                           "Font scale set to: %f, base size: %f, scaled size: %f", 
-                           io.FontGlobalScale, 16.0f, 16.0f * displayScale);
+        
     }
     
     // Setup time step
@@ -681,8 +675,7 @@ bool ImGui_ImplAndroid_HandleInputEvent(const AInputEvent* event)
         float x = AMotionEvent_getX(event, pointerIndex);
         float y = AMotionEvent_getY(event, pointerIndex);
         
-        // Log touch events for debugging
-        LOG_INFO( "Touch event: action=%d, x=%f, y=%f", actionMasked, x, y);
+        
         
         // Process touch events
         switch (actionMasked)
