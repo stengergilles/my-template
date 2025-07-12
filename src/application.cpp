@@ -3,7 +3,7 @@
 #include "../include/scaling_manager.h"
 #include "../include/platform_http_client.hpp" // Added for PlatformHttpClient
 #include "../include/state_manager.h"
-
+#include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 #include "imgui.h"
 #include <iostream>
 
@@ -113,7 +113,7 @@ void Application::renderImGui()
         ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_Once);
     }
 
-    ImGui::Begin(windowName, nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin(windowName, nullptr, ImGuiWindowFlags_HorizontalScrollbar);
 
     // Save window position
     ImVec2 pos = ImGui::GetWindowPos();
@@ -143,6 +143,11 @@ void Application::renderImGui()
     }
     ImGui::SameLine();
     ImGui::Text("Button has been clicked %d times.", buttonClickCount);
+
+    // Font Awesome Icon Button
+    if (ImGui::Button(ICON_FA_STAR " Star Button")) {
+        LOG_INFO("Star button clicked!");
+    }
 
     ImGui::Separator();
 

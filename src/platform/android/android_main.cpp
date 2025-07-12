@@ -10,6 +10,7 @@
 
 // Forward declaration for ImGui Android functions
 extern bool ImGui_ImplAndroid_HandleInputEvent(const AInputEvent* event);
+extern void ImGui_ImplAndroid_SetAssetManager(AAssetManager* assetManager);
 
 // Global application instance
 static PlatformAndroid* g_app = nullptr;
@@ -27,6 +28,7 @@ static void handle_cmd(android_app* app, int32_t cmd) {
                 g_savedWindow = app->window;
                 if (g_app && !g_initialized) {
                     g_app->setAndroidApp(app);
+                    ImGui_ImplAndroid_SetAssetManager(app->activity->assetManager); // Moved here
                     if (g_app->initWithWindow(g_savedWindow)) {
                         g_initialized = true;
                     } else {
@@ -71,9 +73,14 @@ static int32_t handle_input(android_app* app, AInputEvent* event) {
 
 // Main entry point for Android applications using native_app_glue
 void android_main(struct android_app* app) {
+    // Pass the asset manager to ImGui_ImplAndroid
+    ImGui_ImplAndroid_SetAssetManager(app->activity->assetManager);
+
     // Initialize the logger
     g_logger = LoggerFactory::createLogger();
     LoggerFactory::set_android_logger_widget(&g_logWidget);
+
+    
 
     // Make sure glue isn't stripped
     app_dummy();
@@ -121,7 +128,7 @@ void android_main(struct android_app* app) {
     
     // Set a scale adjustment factor if needed (1.0 = use the exact density-based scale)
     // You can adjust this value based on your device preferences
-    scalingManager.setScaleAdjustment(1.5f);  // Increased to 1.5 for better visibility
+    scalingManager.setScaleAdjustment(1.0f);  // Adjusted for better visibility
     LOG_INFO("Scale adjustment set to 1.5 for better visibility");
     
     // Force initialization immediately

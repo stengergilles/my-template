@@ -5,11 +5,12 @@
 #include <EGL/egl.h>
 #include <math.h>
 #include <algorithm>
+#include <android/asset_manager.h> // For AAssetManager
+#include <android_native_app_glue.h> // For android_app
 #include "imgui.h"
 #include "../../../include/scaling_manager.h"
 #include "../../../include/logger.h" // Include logger.h
-
-// Based on the official ImGui OpenGL3 backend with Android-specific modifications
+#include "../../../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 
 // Data
 static EGLDisplay g_EglDisplay = EGL_NO_DISPLAY;
@@ -17,6 +18,12 @@ static EGLSurface g_EglSurface = EGL_NO_SURFACE;
 static EGLContext g_EglContext = EGL_NO_CONTEXT;
 static ANativeWindow* g_Window = NULL;
 static bool g_Initialized = false;
+static AAssetManager* g_AssetManager = NULL; // Global asset manager
+
+// Function to set the asset manager
+void ImGui_ImplAndroid_SetAssetManager(AAssetManager* assetManager) {
+    g_AssetManager = assetManager;
+}
 
 // Global variables for scaling
 static float g_LastAppliedScale = 0.0f;
@@ -282,10 +289,53 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     
     // Load DroidSans.ttf font with appropriate size for touch
     io.Fonts->Clear(); // Clear any existing fonts
-    io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 12.0f * displayScale);
-    io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 14.0f * displayScale);
-    io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 16.0f * displayScale);
-    LOG_INFO( "Loaded DroidSans.ttf with sizes 12, 14, 16");
+    
+    // Load DroidSans.ttf
+    AAsset* fontAsset = AAssetManager_open(g_AssetManager, "DroidSans.ttf", AASSET_MODE_BUFFER);
+    if (fontAsset) {
+        size_t fontDataSize = AAsset_getLength(fontAsset);
+        if (fontDataSize == 0) {
+            LOG_ERROR("DroidSans.ttf asset has 0 size.");
+            AAsset_close(fontAsset);
+            io.Fonts->AddFontDefault(); // Fallback to default font
+        } else {
+            unsigned char* fontData = new unsigned char[fontDataSize];
+            AAsset_read(fontAsset, fontData, fontDataSize);
+            AAsset_close(fontAsset);
+            io.Fonts->AddFontFromMemoryTTF(fontData, fontDataSize, 16.0f); // Default font
+            LOG_INFO("Loaded DroidSans.ttf, size: %zu", fontDataSize);
+        }
+    } else {
+        LOG_ERROR("Failed to open DroidSans.ttf from assets. g_AssetManager: %p", g_AssetManager);
+        io.Fonts->AddFontDefault(); // Fallback to default font
+    }
+
+    // Load Font Awesome
+    static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+    AAsset* fontAwesomeAsset = AAssetManager_open(g_AssetManager, "fa-solid-900.ttf", AASSET_MODE_BUFFER);
+    if (fontAwesomeAsset) {
+        size_t fontAwesomeDataSize = AAsset_getLength(fontAwesomeAsset);
+        if (fontAwesomeDataSize == 0) {
+            LOG_ERROR("fa-solid-900.ttf asset has 0 size.");
+            AAsset_close(fontAwesomeAsset);
+        } else {
+            unsigned char* fontAwesomeData = new unsigned char[fontAwesomeDataSize];
+            AAsset_read(fontAwesomeAsset, fontAwesomeData, fontAwesomeDataSize);
+            AAsset_close(fontAwesomeAsset);
+            ImFontConfig config;
+            config.MergeMode = true;
+            config.PixelSnapH = true;
+            io.Fonts->AddFontFromMemoryTTF(fontAwesomeData, fontAwesomeDataSize, 16.0f, &config, icons_ranges);
+            LOG_INFO("Loaded fa-solid-900.ttf, size: %zu", fontAwesomeDataSize);
+        }
+    } else {
+        LOG_ERROR("Failed to open fa-solid-900.ttf from assets. g_AssetManager: %p", g_AssetManager);
+    }
+    
+    io.Fonts->Build(); // Build font atlas after adding all fonts
+    CreateFontsTexture(); // Create font texture
+
+    io.FontGlobalScale = displayScale; // Apply global scale to fonts
     
     // Create OpenGL objects
     CreateDeviceObjects();
@@ -406,13 +456,9 @@ void ImGui_ImplAndroid_NewFrame()
     ScalingManager& scalingManager = ScalingManager::getInstance();
     float displayScale = scalingManager.getScaleFactor(windowWidth, windowHeight);
     
-    // Force scaling application on every frame for debugging
-    scalingManager.forceNextApplication();
-    
     // Only apply scaling when necessary to avoid rebuilding fonts every frame
     float lastAppliedScale = scalingManager.getLastAppliedScale();
-    bool forceScaling = scalingManager.getLastAppliedScale() < 0.1f || // First time
-                        scalingManager.m_forceNextApplication ||       // Forced
+    bool forceScaling = lastAppliedScale < 0.1f || // First time
                         std::abs(lastAppliedScale - displayScale) > 0.05f; // Significant change
     
     if (forceScaling) {
@@ -428,13 +474,8 @@ void ImGui_ImplAndroid_NewFrame()
         // Inform the scaling manager that we've applied this scale
         scalingManager.applyScaling(displayScale);
         
-        // Only rebuild font atlas when scale changes significantly
-        io.Fonts->Clear();
-        io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 12.0f * displayScale);
-        io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 14.0f * displayScale);
-        io.Fonts->AddFontFromFileTTF("/system/fonts/DroidSans.ttf", 16.0f * displayScale);
-        io.Fonts->Build();
-        CreateFontsTexture();
+        // Update global font scale
+        io.FontGlobalScale = displayScale;
         
         LOG_INFO( 
                            "Font scale set to: %f, base size: %f, scaled size: %f", 

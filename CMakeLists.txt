@@ -126,9 +126,10 @@ endif()
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include/app
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/platform
+    ${CMAKE_CURRENT_SOURCE_URCE}/include/platform
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/IconFontCppHeaders
     ${PROJECT_ROOT}/external/json/include
     ${PROJECT_ROOT}/external/curl/include
     ${GTEST_INCLUDE_DIR}
@@ -222,6 +223,7 @@ if(ANDROID)
     set(CURL_USE_LIBPSL OFF CACHE BOOL "Use PSL support" FORCE)
 
     add_subdirectory(external/curl)
+
 else()
     # For native platforms, always use project-controlled OpenSSL build
     if(NOT USE_SYSTEM_OPENSSL)
@@ -392,77 +394,28 @@ if(ANDROID AND NOT BUILD_TESTS)
     target_link_libraries(${PROJECT_NAME} PRIVATE ${FINAL_LIBS})
     add_dependencies(${PROJECT_NAME} gen_cacert_header)
 
-elseif(EMSCRIPTEN AND NOT BUILD_TESTS)
-    set(PLATFORM_SOURCES
-        src/platform/platform_wasm.cpp
-        external/imgui/backends/imgui_impl_sdl2.cpp
-        external/imgui/backends/imgui_impl_opengl3.cpp
+    # Custom target to copy Font Awesome font to Android assets
+    add_custom_target(copy_fontawesome_font ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${PROJECT_ROOT}/external/fontawesome/fontawesome-free-6.5.1-web/webfonts/fa-solid-900.ttf
+        ${CMAKE_CURRENT_SOURCE_DIR}/android/app/src/main/assets/fa-solid-900.ttf
+        COMMENT "Copying Font Awesome font to Android assets"
     )
-    set(CMAKE_EXECUTABLE_SUFFIX ".html")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL=2 -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s USE_WEBGL2=1")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shell-file ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/wasm/shell.html")
-    set(PLATFORM_LIBS
+    add_dependencies(${PROJECT_NAME} copy_fontawesome_font)
+
+    # Custom target to copy DroidSans.ttf to Android assets
+    add_custom_target(copy_droidsans_font ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        /system/fonts/DroidSans.ttf
+        ${CMAKE_CURRENT_SOURCE_DIR}/android/app/src/main/assets/DroidSans.ttf
+        COMMENT "Copying DroidSans.ttf to Android assets"
     )
-    add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${PLATFORM_LIBS})
-    if(TARGET appcode)
-        target_link_libraries(${PROJECT_NAME} PRIVATE appcode)
-    endif()
-    add_dependencies(${PROJECT_NAME} gen_cacert_header)
-else()
-    if(NOT BUILD_TESTS)
-      set(PLATFORM_SOURCES
-          src/platform/platform_glfw.cpp
-          external/imgui/backends/imgui_impl_glfw.cpp
-          external/imgui/backends/imgui_impl_opengl3.cpp
-      )
-      if(POLICY CMP0072)
-        cmake_policy(SET CMP0072 NEW)
-      endif()
-      find_package(OpenGL REQUIRED)
-      find_package(X11 REQUIRED)
-      
-      # Set up platform libraries
-      set(PLATFORM_LIBS
-        OpenGL::GL
-        CURL::libcurl
-        OpenSSL::SSL
-        OpenSSL::Crypto
-        ${X11_LIBRARIES}
-        ${X11_Xrandr_LIB}
-        ${X11_Xcursor_LIB}
-        ${X11_Xinerama_LIB}
-        ${X11_Xinput_LIB}
-        ${X11_Xkb_LIB}
-        ${X11_Xext_LIB}
-        ${X11_Xfixes_LIB}
-        X11
-        Xrandr
-        Xcursor
-        Xinerama
-        Xi
-        Xext
-        Xfixes
-        Xxf86vm
-      )
-      
-      # Add GLFW library
-      if(TARGET glfw)
-        list(APPEND PLATFORM_LIBS glfw)
-      elseif(TARGET glfw_objlib)
-        list(APPEND PLATFORM_LIBS glfw_objlib)
-      elseif(EXISTS "${PROJECT_ROOT}/external/glfw/build/src/libglfw3.a")
-        list(APPEND PLATFORM_LIBS "${PROJECT_ROOT}/external/glfw/build/src/libglfw3.a")
-      else()
-        list(APPEND PLATFORM_LIBS glfw3)
-      endif()
-      if(TARGET appcode)
-          list(APPEND PLATFORM_LIBS appcode)
-      endif()
-      add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
-      target_link_libraries(${PROJECT_NAME} PRIVATE ${PLATFORM_LIBS} platform_logger_lib)
-      add_dependencies(${PROJECT_NAME} gen_cacert_header)
-   endif()
+    add_dependencies(${PROJECT_NAME} copy_droidsans_font)
+
+    
+
+    
+    
 endif()
 
 
