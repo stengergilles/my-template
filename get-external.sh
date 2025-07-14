@@ -19,7 +19,7 @@ git clone https://github.com/openssl/openssl.git openssl-src
 # Create fonts directory and download DroidSans.ttf
 mkdir -p fonts
 echo "Downloading DroidSans.ttf..."
-curl -L "https://github.com/google/fonts/raw/main/apache/droidsans/DroidSans.ttf" -o "fonts/DroidSans.ttf"
+curl -L "http://fonts.gstatic.com/s/roboto/v15/zN7GBFwfMP4uA6AR0HCoLQ.ttf" -o "fonts/DroidSans.ttf"
 if [ -f "fonts/DroidSans.ttf" ]; then
     echo "DroidSans.ttf downloaded successfully to external/fonts/"
 else
