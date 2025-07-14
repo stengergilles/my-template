@@ -16,6 +16,16 @@ git clone https://github.com/nlohmann/json.git
 # Clone openssl
 git clone https://github.com/openssl/openssl.git openssl-src
 
+# Create fonts directory and download DroidSans.ttf
+mkdir -p fonts
+echo "Downloading DroidSans.ttf..."
+curl -L "https://github.com/google/fonts/raw/main/apache/droidsans/DroidSans.ttf" -o "fonts/DroidSans.ttf"
+if [ -f "fonts/DroidSans.ttf" ]; then
+    echo "DroidSans.ttf downloaded successfully to external/fonts/"
+else
+    echo "Failed to download DroidSans.ttf. Please check the URL or download manually."
+fi
+
 # Download and extract Font Awesome Free Web (using v6.5.1 as a placeholder)
 FA_VERSION="6.5.1"
 FA_ZIP="fontawesome-free-${FA_VERSION}-web.zip"
