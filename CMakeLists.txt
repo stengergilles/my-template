@@ -403,12 +403,12 @@ if(ANDROID AND NOT BUILD_TESTS)
     )
     add_dependencies(${PROJECT_NAME} copy_fontawesome_font)
 
-    # Custom target to copy DroidSans.ttf to Android assets
+    # Custom target to copy DroidSans.ttf to Android assets from external/fonts
     add_custom_target(copy_droidsans_font ALL
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        /system/fonts/DroidSans.ttf
+        ${PROJECT_ROOT}/external/fonts/DroidSans.ttf
         ${CMAKE_CURRENT_SOURCE_DIR}/android/app/src/main/assets/DroidSans.ttf
-        COMMENT "Copying DroidSans.ttf to Android assets"
+        COMMENT "Copying DroidSans.ttf from external/fonts to Android assets"
     )
     add_dependencies(${PROJECT_NAME} copy_droidsans_font)
 
