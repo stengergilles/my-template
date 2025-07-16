@@ -24,11 +24,12 @@ static ANativeWindow* g_savedWindow = nullptr;
 static void handle_cmd(android_app* app, int32_t cmd) {
     switch (cmd) {
         case APP_CMD_INIT_WINDOW:
+            // The window is being shown, get it ready.
             if (app->window != nullptr) {
                 g_savedWindow = app->window;
-                if (g_app && !g_initialized) {
+                if (g_app) {
                     g_app->setAndroidApp(app);
-                    ImGui_ImplAndroid_SetAssetManager(app->activity->assetManager); // Moved here
+                    ImGui_ImplAndroid_SetAssetManager(app->activity->assetManager);
                     if (g_app->initWithWindow(g_savedWindow)) {
                         g_initialized = true;
                     } else {
@@ -38,6 +39,7 @@ static void handle_cmd(android_app* app, int32_t cmd) {
             }
             break;
         case APP_CMD_TERM_WINDOW:
+            // The window is being hidden or closed, clean it up.
             if (g_app && g_initialized) {
                 g_app->platformShutdown();
                 g_initialized = false;
@@ -47,9 +49,11 @@ static void handle_cmd(android_app* app, int32_t cmd) {
         case APP_CMD_GAINED_FOCUS:
             break;
         case APP_CMD_CONFIG_CHANGED:
-            // Configuration changed (e.g., orientation)
-            // The window will be re-initialized by the system, so we don't need to do anything here.
-            // The APP_CMD_TERM_WINDOW and APP_CMD_INIT_WINDOW events will handle the shutdown and re-initialization.
+            // This is just a notification. The OS will follow up with
+            // TERM_WINDOW and INIT_WINDOW to actually recreate the surface.
+            if (g_app) {
+                ScalingManager::getInstance().setConfiguration(app->config);
+            }
             break;
         case APP_CMD_LOST_FOCUS:
             // Save state when app loses focus
@@ -63,12 +67,7 @@ static void handle_cmd(android_app* app, int32_t cmd) {
 // Process Android input events
 static int32_t handle_input(android_app* app, AInputEvent* event) {
     // Forward to ImGui
-    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-        // Handle touch events
-        bool handled = ImGui_ImplAndroid_HandleInputEvent(event);
-        return handled ? 1 : 0;
-    }
-    return 0; // Event was not handled
+    return ImGui_ImplAndroid_HandleInputEvent(event);
 }
 
 // Main entry point for Android applications using native_app_glue

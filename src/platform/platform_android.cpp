@@ -78,17 +78,13 @@ bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
     // Store the window pointer directly
     m_window = window;
     
-    
-    
-    // Don't create a new context if one already exists
+    // Always create a new context for a new window
+    m_imguiContext = ImGui::CreateContext();
     if (!m_imguiContext) {
-        m_imguiContext = ImGui::CreateContext();
-        if (!m_imguiContext) {
-            LOG_ERROR("Failed to create ImGui context");
-            return false;
-        }
-        ImGui::SetCurrentContext(m_imguiContext); // Set the newly created context as current
+        LOG_ERROR("Failed to create ImGui context");
+        return false;
     }
+    ImGui::SetCurrentContext(m_imguiContext);
     
     // Configure ImGui style
     ImGuiIO& io = ImGui::GetIO();
@@ -100,13 +96,10 @@ bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
         int32_t width = ANativeWindow_getWidth(m_window);
         int32_t height = ANativeWindow_getHeight(m_window);
         io.DisplaySize = ImVec2((float)width, (float)height);
-        
     }
     
     // Initialize ImGui for Android with the direct window pointer
-    
     bool success = ImGui_ImplAndroid_Init(m_window);
-    
     
     return success;
 }
@@ -187,8 +180,6 @@ bool PlatformAndroid::platformHandleEvents() {
 }
 
 void PlatformAndroid::platformShutdown() {
-    
-    
     // First shut down ImGui Android implementation
     ImGui_ImplAndroid_Shutdown();
     
@@ -197,7 +188,6 @@ void PlatformAndroid::platformShutdown() {
         ImGui::SetCurrentContext(m_imguiContext); // Set the context as current before destroying
         ImGui::DestroyContext(m_imguiContext);
         m_imguiContext = nullptr;
-        
     }
     
     // Clear the window pointer
@@ -242,4 +232,14 @@ static AInputEvent* createTouchEvent(int32_t action, int32_t pointer_id, float x
     // to create proper input events. This is complex and requires more code than shown here.
     // For now, we'll return nullptr to indicate this needs proper implementation
     return nullptr;
+}
+
+void PlatformAndroid::recreateSwapChain() {
+    ImGui_ImplAndroid_Shutdown();
+    if (m_androidApp) {
+        struct android_app* app = (struct android_app*)m_androidApp;
+        if (app->window) {
+            initWithWindow(app->window);
+        }
+    }
 }

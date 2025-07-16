@@ -29,6 +29,8 @@ public:
     // Override the getAndroidApp method from PlatformBase
     virtual void* getAndroidApp() override;
 
+    void recreateSwapChain();
+
 protected:
     // Changed from private to protected to allow access in derived classes
     void* m_androidApp;  // android_app* in actual implementation

@@ -1,5 +1,8 @@
 # Cross-Platform C++ Application Template
 
+> [!IMPORTANT]
+> This project is a fun/toy project and was largely AI-generated.
+
 > [!NOTE]
 > This repository provides a template for building C++ applications that can run on desktop (Windows, macOS, Linux), Android, and WebAssembly.
 
