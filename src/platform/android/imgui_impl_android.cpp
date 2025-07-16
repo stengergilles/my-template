@@ -507,12 +507,12 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
     if (fb_width <= 0 || fb_height <= 0)
         return;
 
-    LOG_INFO("RenderDrawData: DisplaySize=(%d, %d), fb_width=%d, fb_height=%d", (int)draw_data->DisplaySize.x, (int)draw_data->DisplaySize.y, fb_width, fb_height);
+    
 
     // Get system insets from ScalingManager
     const SystemInsets& insets_raw = ScalingManager::getInstance().getSystemInsets();
     SystemInsets insets = insets_raw;
-    LOG_INFO("RenderDrawData: Insets=(L:%d, T:%d, R:%d, B:%d)", insets.left, insets.top, insets.right, insets.bottom);
+    
 
     // Backup GL state
     GLint last_active_texture; glGetIntegerv(GL_ACTIVE_TEXTURE, &last_active_texture);
@@ -560,8 +560,8 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
         { 0.0f,         0.0f,        -1.0f,   0.0f },
         { (L+R)/(L-R),  (T+B)/(B-T),  0.0f,   1.0f },
     };
-    LOG_INFO("RenderDrawData: Projection Matrix: L=%.2f, R=%.2f, T=%.2f, B=%.2f", L, R, T, B);
-    LOG_INFO("RenderDrawData: Proj[0][0]=%.2f, Proj[1][1]=%.2f, Proj[3][0]=%.2f, Proj[3][1]=%.2f", ortho_projection[0][0], ortho_projection[1][1], ortho_projection[3][0], ortho_projection[3][1]);
+    
+    
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -611,14 +611,14 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
                 float gl_clip_y1 = fb_height - pcmd->ClipRect.w; // Bottom of ImGui clip rect in OpenGL Y-up
                 float gl_clip_x2 = pcmd->ClipRect.z;
                 float gl_clip_y2 = fb_height - pcmd->ClipRect.y; // Top of ImGui clip rect in OpenGL Y-up
-                LOG_INFO("RenderDrawData: ClipRect=(%.2f,%.2f,%.2f,%.2f) -> GL_Clip=(%.2f,%.2f,%.2f,%.2f)", pcmd->ClipRect.x, pcmd->ClipRect.y, pcmd->ClipRect.z, pcmd->ClipRect.w, gl_clip_x1, gl_clip_y1, gl_clip_x2, gl_clip_y2);
+                
 
                 // Define safe area in OpenGL Y-up, bottom-left origin
                 float safe_gl_x1 = (float)insets.left;
                 float safe_gl_y1 = (float)insets.bottom;
                 float safe_gl_x2 = (float)fb_width - (float)insets.right;
                 float safe_gl_y2 = (float)fb_height - (float)insets.top;
-                LOG_INFO("RenderDrawData: SafeGL=(%.2f,%.2f,%.2f,%.2f)", safe_gl_x1, safe_gl_y1, safe_gl_x2, safe_gl_y2);
+                
 
                 // Calculate intersection of ImGui clip rect and safe area
                 float final_gl_x1 = std::max(gl_clip_x1, safe_gl_x1);

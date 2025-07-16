@@ -226,14 +226,6 @@ void Application::renderImGui()
         m_log_widget->Draw("Application Log", &m_show_log_widget);
     }
     
-    // Close the SafeAreaConstraint child window if it was opened
-    #ifdef __ANDROID__
-    if (ImGui::GetIO().UserData) {
-        ImGui::End(); // End the SafeAreaViewport window
-        ImGui::GetIO().UserData = nullptr; // Reset the flag
-    }
-    #endif
-
     // Pop the font
     ImGui::PopFont();
 }

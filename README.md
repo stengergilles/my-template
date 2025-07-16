@@ -124,6 +124,65 @@ If fonts appear too large or blurry, consider adjusting the `scaleAdjustment` fa
 3.  **Run the application:**
     A web server is required to serve the generated `.html`, `.js`, and `.wasm` files.
 
+## How to Start Coding
+
+This template is designed to help you quickly get started with your cross-platform C++ application. Your custom application code should primarily reside in the `src/app/` and `include/app/` directories. These directories are automatically included in the build process.
+
+**Important:** You should **not** modify any files outside of the `src/app/` and `include/app/` directories, as these are part of the template's core structure and may be overwritten in future updates.
+
+The core of your application's user interface logic is implemented by overriding the `Application::renderImGui()` method. This method is called every frame to draw your application's UI using Dear ImGui.
+
+Here's how you can start adding your own UI elements:
+
+1.  **Create Your Application Files:**
+    Create your C++ source (`.cpp`) and header (`.h` or `.hpp`) files within the `src/app/` and `include/app/` directories, respectively.
+
+2.  **Implement `Application::renderImGui()`:**
+    In your `src/app/` directory, create a new C++ file (e.g., `src/app/app_main.cpp`) and implement your UI rendering logic by overriding the `Application::renderImGui()` method.
+
+    **Example (`src/app/app_main.cpp`):**
+
+    ```cpp
+    #include "application.h" // Include the base Application class
+    #include "imgui.h"
+
+    // Override the renderImGui method of the Application class
+    void Application::renderImGui()
+    {
+        // Call the base class's renderImGui if you want to keep the default template UI
+        // Application::renderImGui(); 
+
+        // --- Your Custom UI Section ---
+        ImGui::Separator(); // Add a separator for visual organization
+        ImGui::Text("My Custom Section");
+
+        static bool myCheckbox = false;
+        if (ImGui::Checkbox("Enable My Feature", &myCheckbox)) {
+            // Logic to run when the checkbox state changes
+            if (myCheckbox) {
+                // Feature enabled
+            } else {
+                // Feature disabled
+            }
+        }
+
+        static float myValue = 0.0f;
+        ImGui::SliderFloat("My Value", &myValue, 0.0f, 100.0f);
+        ImGui::Text("Current custom value: %.1f", myValue);
+
+        // You can also create new ImGui windows:
+        if (ImGui::Begin("Another Window")) {
+            ImGui::Text("This is a separate window!");
+            ImGui::End();
+        }
+    }
+    ```
+
+    **Note:** You do not need to create a separate header file for `app_main.cpp` if you are only overriding `Application::renderImGui()`. However, if you introduce new classes or functions in `src/app/`, you should create corresponding header files in `include/app/`.
+
+3.  **Rebuild and Run:**
+    After making changes, rebuild your project for the desired platform (Desktop, Android, or WebAssembly) and run it to see your UI changes.
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
