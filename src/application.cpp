@@ -228,5 +228,13 @@ void Application::renderImGui()
     
     // Pop the font
     ImGui::PopFont();
+
+    // New window for "test" label at (0,0)
+    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
+    ImGui::SetNextWindowPos(ImVec2(insets.left, insets.top));
+    ImGui::SetNextWindowSize(ImVec2(400, 400));
+    ImGui::Begin("Test Window", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
+    ImGui::Text("test");
+    ImGui::End();
 }
 #endif // USE_EXTERNAL_RENDER_IMGUI

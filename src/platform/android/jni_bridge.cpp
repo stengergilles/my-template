@@ -259,10 +259,10 @@ Java_com_my_app_ImGuiJNI_wantsTextInput(JNIEnv *env, jclass clazz) {
 
 // Function to update system insets from Java
 JNIEXPORT void JNICALL
-Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top, jint bottom, jint left, jint right, jboolean unused) {
+Java_com_my_app_ImGuiJNI_updateSystemInsets(JNIEnv *env, jclass clazz, jint top, jint bottom, jint left, jint right, jboolean isLandscape) {
     
-    // Update the insets in the ScalingManager (always portrait mode)
-    ScalingManager::getInstance().setSystemInsets(top, bottom, left, right, false);
+    // Update the insets in the ScalingManager
+    ScalingManager::getInstance().setSystemInsets(top, bottom, left, right, isLandscape);
 }
 
 // Function to set screen density from Java

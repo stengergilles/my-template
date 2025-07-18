@@ -60,8 +60,11 @@ public class MainActivity extends ImGuiKeyboardHelper {
             int right = Math.max(systemBars.right, displayCutout.right);
             int bottom = Math.max(systemBars.bottom, displayCutout.bottom);
 
-            // Pass insets to native code (always portrait mode)
-            ImGuiJNI.updateSystemInsets(top, bottom, left, right, false);
+            // Determine if in landscape mode
+            boolean isLandscape = v.getWidth() > v.getHeight();
+
+            // Pass insets and landscape status to native code
+            ImGuiJNI.updateSystemInsets(top, bottom, left, right, isLandscape);
             AppLogger.info(TAG, "System Insets: Left=" + left + ", Top=" + top + ", Right=" + right + ", Bottom=" + bottom);
 
 

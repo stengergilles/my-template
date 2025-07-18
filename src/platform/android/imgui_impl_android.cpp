@@ -433,14 +433,11 @@ void ImGui_ImplAndroid_NewFrame()
     lastWidth = windowWidth;
     lastHeight = windowHeight;
     
-    // Set the full display size
+    // Setup display size (every frame to accommodate for window resizing)
     io.DisplaySize = ImVec2((float)windowWidth, (float)windowHeight);
     
     // Set display scale
     io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
-    
-    // Get system insets from ScalingManager
-    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
 
     
     
@@ -611,14 +608,15 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
                 float gl_clip_y1 = fb_height - pcmd->ClipRect.w; // Bottom of ImGui clip rect in OpenGL Y-up
                 float gl_clip_x2 = pcmd->ClipRect.z;
                 float gl_clip_y2 = fb_height - pcmd->ClipRect.y; // Top of ImGui clip rect in OpenGL Y-up
-                
+
+                // Get system insets from ScalingManager
+                const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
 
                 // Define safe area in OpenGL Y-up, bottom-left origin
                 float safe_gl_x1 = (float)insets.left;
                 float safe_gl_y1 = (float)insets.bottom;
                 float safe_gl_x2 = (float)fb_width - (float)insets.right;
                 float safe_gl_y2 = (float)fb_height - (float)insets.top;
-                
 
                 // Calculate intersection of ImGui clip rect and safe area
                 float final_gl_x1 = std::max(gl_clip_x1, safe_gl_x1);
@@ -638,7 +636,28 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
                 
 
                 glScissor(scissor_x, scissor_y, scissor_w, scissor_h);
+
+                // Ensure valid dimensions
+                if (scissor_w < 0) scissor_w = 0;
+                if (scissor_h < 0) scissor_h = 0;
                 
+
+                glScissor(scissor_x, scissor_y, scissor_w, scissor_h);
+
+                // Ensure valid dimensions
+                if (scissor_w < 0) scissor_w = 0;
+                if (scissor_h < 0) scissor_h = 0;
+                
+
+                glScissor(scissor_x, scissor_y, scissor_w, scissor_h);
+                
+                LOG_INFO("RenderDrawData: fb_width=%d, fb_height=%d", fb_width, fb_height);
+                LOG_INFO("RenderDrawData: Insets: L=%d, T=%d, R=%d, B=%d", insets.left, insets.top, insets.right, insets.bottom);
+                LOG_INFO("RenderDrawData: gl_clip: x1=%.2f, y1=%.2f, x2=%.2f, y2=%.2f", gl_clip_x1, gl_clip_y1, gl_clip_x2, gl_clip_y2);
+                LOG_INFO("RenderDrawData: safe_gl: x1=%.2f, y1=%.2f, x2=%.2f, y2=%.2f", safe_gl_x1, safe_gl_y1, safe_gl_x2, safe_gl_y2);
+                LOG_INFO("RenderDrawData: final_gl: x1=%.2f, y1=%.2f, x2=%.2f, y2=%.2f", final_gl_x1, final_gl_y1, final_gl_x2, final_gl_y2);
+                LOG_INFO("RenderDrawData: Scissor: x=%d, y=%d, w=%d, h=%d", scissor_x, scissor_y, scissor_w, scissor_h);
+
                 // Bind texture, Draw
                 glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId);
                 glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, (void*)(intptr_t)(idx_offset * sizeof(ImDrawIdx)));

@@ -30,15 +30,17 @@ public:
     }
 
     // Set system insets (from navigation bar, status bar, etc.)
-    void setSystemInsets(int top, int bottom, int left, int right, bool unused) {
+    void setSystemInsets(int top, int bottom, int left, int right, bool isLandscape) {
         m_insets.top = top;
         m_insets.bottom = bottom;
         m_insets.left = left;
         m_insets.right = right;
+        m_isLandscape = isLandscape;
         std::cout << "ScalingManager: System insets set: top=" << top 
                   << ", bottom=" << bottom 
                   << ", left=" << left 
-                  << ", right=" << right << std::endl;
+                  << ", right=" << right 
+                  << ", isLandscape=" << isLandscape << std::endl;
     }
 
     // Get system insets
@@ -141,8 +143,14 @@ private:
     float m_scaleAdjustment; // Adjustment factor to fine-tune scaling
     float m_screenDensity;   // Screen density for Android
     SystemInsets m_insets;    // System insets (navigation bar, status bar, etc.)
+    bool m_isLandscape;       // True if the device is in landscape orientation
     
 public:
     // Make this public for direct access in imgui_impl_android.cpp
     bool m_forceNextApplication;
+
+    // Get the current landscape orientation status
+    bool isLandscape() const {
+        return m_isLandscape;
+    }
 };
