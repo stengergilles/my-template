@@ -2,12 +2,21 @@
 
 #include "platform_base.h"
 #include <string>
+#include <EGL/egl.h>
 
 // Forward declaration
 struct ANativeWindow;
 
 // Declare g_initialized as an external variable
 extern bool g_initialized;
+
+// Declare EGL globals as extern
+extern EGLDisplay g_EglDisplay;
+extern EGLSurface g_EglSurface;
+
+// Forward declaration for ImGui Android functions
+struct ImDrawData;
+extern void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data);
 
 class PlatformAndroid : public PlatformBase {
 public:
@@ -37,4 +46,10 @@ protected:
     ANativeWindow* m_window = nullptr;  // Store window pointer directly
     ImGuiContext* m_imguiContext = nullptr;  // Store ImGui context pointer
     bool m_keyboardVisible = false;  // Track keyboard visibility
+    int m_fbWidth = 0;
+    int m_fbHeight = 0;
+
+public:
+    int getFramebufferWidth() const override;
+    int getFramebufferHeight() const override;
 };

@@ -13,8 +13,8 @@
 #include "../../../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 
 // Data
-static EGLDisplay g_EglDisplay = EGL_NO_DISPLAY;
-static EGLSurface g_EglSurface = EGL_NO_SURFACE;
+EGLDisplay g_EglDisplay = EGL_NO_DISPLAY;
+EGLSurface g_EglSurface = EGL_NO_SURFACE;
 static EGLContext g_EglContext = EGL_NO_CONTEXT;
 static ANativeWindow* g_Window = NULL;
 static bool g_Initialized = false;
@@ -433,8 +433,15 @@ void ImGui_ImplAndroid_NewFrame()
     lastWidth = windowWidth;
     lastHeight = windowHeight;
     
-    // Setup display size (every frame to accommodate for window resizing)
-    io.DisplaySize = ImVec2((float)windowWidth, (float)windowHeight);
+    // Get system insets from ScalingManager
+    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
+    
+
+    // Calculate safe area dimensions
+    float safeWidth = (float)windowWidth - (float)insets.left - (float)insets.right;
+    float safeHeight = (float)windowHeight - (float)insets.top - (float)insets.bottom;
+
+    io.DisplaySize = ImVec2(safeWidth, safeHeight);
     
     // Set display scale
     io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
@@ -506,9 +513,9 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
 
     
 
+    
     // Get system insets from ScalingManager
-    const SystemInsets& insets_raw = ScalingManager::getInstance().getSystemInsets();
-    SystemInsets insets = insets_raw;
+    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
     
 
     // Backup GL state
@@ -540,16 +547,18 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_SCISSOR_TEST);
 
-    // Setup viewport to cover the entire framebuffer
-    glViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
+    // Calculate safe area dimensions
+    float safeWidth = (float)fb_width - (float)insets.left - (float)insets.right;
+    float safeHeight = (float)fb_height - (float)insets.top - (float)insets.bottom;
 
-    // Setup orthographic projection matrix
-    // The projection matrix maps ImGui's coordinates to the full framebuffer.
-    // The safe area is handled by the scissor rectangle.
+    // Setup viewport to cover the safe area
+    glViewport((GLsizei)insets.left, (GLsizei)insets.bottom, (GLsizei)safeWidth, (GLsizei)safeHeight);
+
+    // Setup orthographic projection matrix for the safe area
     float L = 0.0f;
-    float R = (float)fb_width;
+    float R = safeWidth;
     float T = 0.0f;
-    float B = (float)fb_height;
+    float B = safeHeight;
     const float ortho_projection[4][4] =
     {
         { 2.0f/(R-L),   0.0f,         0.0f,   0.0f },
@@ -600,17 +609,12 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
             else
             {
                 // Apply scissor/clipping rectangle
-                // pcmd->ClipRect is in ImGui screen coordinates (Y-down from top-left).
-                // glScissor is in OpenGL window coordinates (Y-up from bottom-left).
-
-                // Convert ImGui ClipRect to OpenGL Y-up coordinates (relative to window origin)
-                float gl_clip_x1 = pcmd->ClipRect.x;
-                float gl_clip_y1 = fb_height - pcmd->ClipRect.w; // Bottom of ImGui clip rect in OpenGL Y-up
-                float gl_clip_x2 = pcmd->ClipRect.z;
-                float gl_clip_y2 = fb_height - pcmd->ClipRect.y; // Top of ImGui clip rect in OpenGL Y-up
-
-                // Get system insets from ScalingManager
-                const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
+                // pcmd->ClipRect is now relative to the safe area's top-left.
+                // We need to convert it to absolute framebuffer coordinates.
+                float gl_clip_x1 = insets.left + pcmd->ClipRect.x;
+                float gl_clip_y1 = fb_height - (insets.top + pcmd->ClipRect.w); // Bottom of ImGui clip rect in OpenGL Y-up
+                float gl_clip_x2 = insets.left + pcmd->ClipRect.z;
+                float gl_clip_y2 = fb_height - (insets.top + pcmd->ClipRect.y); // Top of ImGui clip rect in OpenGL Y-up
 
                 // Define safe area in OpenGL Y-up, bottom-left origin
                 float safe_gl_x1 = (float)insets.left;

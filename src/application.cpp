@@ -231,10 +231,11 @@ void Application::renderImGui()
 
     // New window for "test" label at (0,0)
     const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
-    ImGui::SetNextWindowPos(ImVec2(insets.left, insets.top));
-    ImGui::SetNextWindowSize(ImVec2(400, 400));
-    ImGui::Begin("Test Window", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse);
-    ImGui::Text("test");
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::Begin("Test Window", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui::Text("Display Size: %.1f x %.1f", io.DisplaySize.x, io.DisplaySize.y);
+    ImGui::Text("Framebuffer Size: %d x %d", Application::getInstance()->getFramebufferWidth(), Application::getInstance()->getFramebufferHeight());
     ImGui::End();
 }
 #endif // USE_EXTERNAL_RENDER_IMGUI

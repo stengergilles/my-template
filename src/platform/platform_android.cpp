@@ -155,12 +155,6 @@ void PlatformAndroid::platformNewFrame() {
     // Note: Don't call ImGui::NewFrame() here, it's called in Application::renderFrame()
 }
 
-void PlatformAndroid::platformRender() {
-    // Render ImGui - don't call ImGui::NewFrame() here!
-    // Just render the data that was prepared in Application::renderFrame()
-    ImGui_ImplAndroid_RenderDrawData(ImGui::GetDrawData());
-}
-
 bool PlatformAndroid::platformHandleEvents() {
     struct android_app* app = (struct android_app*)m_androidApp;
     if (!app) return false;

@@ -43,6 +43,9 @@ protected:
     virtual void platformRender() = 0;
     virtual bool platformHandleEvents() = 0;
 
+    virtual int getFramebufferWidth() const = 0;
+    virtual int getFramebufferHeight() const = 0;
+
     std::string m_appName;
     ImGuiContext* m_imguiContext;
     bool m_running;

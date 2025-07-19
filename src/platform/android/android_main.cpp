@@ -2,6 +2,7 @@
 #include <unistd.h> // For chdir
 #include <sys/stat.h> // For mkdir
 #include "../../include/platform/platform_android.h"
+#include <EGL/egl.h>
 #include "../../include/application.h"
 #include "../../include/logger.h"
 #include "../../include/log_widget.h"
@@ -202,4 +203,24 @@ void android_main(struct android_app* app) {
             nanosleep(&ts, NULL);
         }
     }
+}
+
+void PlatformAndroid::platformRender()
+{
+    // Get the EGL surface dimensions directly to ensure correctness after rotation
+    EGLint fb_width, fb_height;
+    eglQuerySurface(g_EglDisplay, g_EglSurface, EGL_WIDTH, &fb_width);
+    eglQuerySurface(g_EglDisplay, g_EglSurface, EGL_HEIGHT, &fb_height);
+    m_fbWidth = fb_width;
+    m_fbHeight = fb_height;
+
+    ImGui_ImplAndroid_RenderDrawData(ImGui::GetDrawData());
+}
+
+int PlatformAndroid::getFramebufferWidth() const {
+    return m_fbWidth;
+}
+
+int PlatformAndroid::getFramebufferHeight() const {
+    return m_fbHeight;
 }
