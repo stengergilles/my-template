@@ -7,6 +7,7 @@
 #include "worker.hpp"
 #include "platform_http_client.hpp" // For createPlatformHttpClient()
 #include "log_widget.h"
+#include "layout/Layout.h"
 
 // Forward declarations
 struct ImGuiContext;

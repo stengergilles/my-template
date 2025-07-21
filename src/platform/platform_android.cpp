@@ -237,3 +237,17 @@ void PlatformAndroid::recreateSwapChain() {
         }
     }
 }
+
+int32_t PlatformAndroid::getScreenOrientation() const {
+    if (m_androidApp) {
+        struct android_app* app = (struct android_app*)m_androidApp;
+        if (app->config) {
+            return AConfiguration_getOrientation(app->config);
+        }
+    }
+    return 0; // Using 0 as a fallback for undefined orientation
+}
+
+
+
+    

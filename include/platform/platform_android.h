@@ -34,13 +34,11 @@ public:
     
     // Add a direct window initialization method
     bool initWithWindow(ANativeWindow* window);
-    
-    // Override the getAndroidApp method from PlatformBase
-    virtual void* getAndroidApp() override;
+    int32_t getScreenOrientation() const; // Added method to get screen orientation
+    void* getAndroidApp() override; // Added declaration
+    void recreateSwapChain(); // Added declaration
 
-    void recreateSwapChain();
-
-protected:
+private:
     // Changed from private to protected to allow access in derived classes
     void* m_androidApp;  // android_app* in actual implementation
     ANativeWindow* m_window = nullptr;  // Store window pointer directly

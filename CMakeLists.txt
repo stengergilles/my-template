@@ -125,8 +125,9 @@ endif()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/include/app
-    ${CMAKE_CURRENT_SOURCE_URCE}/include/platform
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/platform
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
     ${CMAKE_CURRENT_SOURCE_DIR}/external/IconFontCppHeaders
@@ -145,6 +146,7 @@ set(SOURCES
     src/logger.cpp
     src/log_widget.cpp
     src/state_manager.cpp
+    src/layout/Layout.cpp
 )
 
 # Define platform-specific logger sources

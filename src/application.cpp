@@ -5,6 +5,8 @@
 #include "../include/state_manager.h"
 #include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 #include "imgui.h"
+#include "layout/Layout.h"
+#include "platform/platform_android.h" // Include for PlatformAndroid
 #include <iostream>
 
 // Initialize static instance
@@ -91,6 +93,98 @@ void Application::renderFrame()
     // Start a new frame
     platformNewFrame();
     ImGui::NewFrame();
+
+    // Begin the custom card layout
+    Layout::BeginCardLayout();
+
+    // Define the cards
+    using namespace Layout;
+
+    // Top-left widget: 100% width, content height, toolbar aligned right
+    Layout::BeginCard(
+        "TopLeftToolbar",
+        {SizeMode::PERCENTAGE, 100.0f},
+        {SizeMode::CONTENT, 0.0f},
+        HAlignment::LEFT,
+        VAlignment::TOP,
+        []() {
+            ImGui::Text("My Application");
+            ImGui::SameLine(ImGui::GetWindowWidth() - (ImGui::GetFrameHeight() * 3 + ImGui::GetStyle().ItemSpacing.x * 2 + ImGui::GetStyle().WindowPadding.x)); // Align right with padding
+            if (ImGui::Button(ICON_FA_FOLDER_OPEN)) { /* Open */ }
+            ImGui::SameLine();
+            if (ImGui::Button(ICON_FA_FLOPPY_DISK)) { /* Save */ }
+            ImGui::SameLine();
+            if (ImGui::Button(ICON_FA_GEAR)) { /* Settings */ }
+        }
+    );
+    Layout::EndCard();
+
+    // Center-left widget: content width (or percentage in portrait), autofit height, options and buttons
+    Dimension centerLeftWidth = {SizeMode::CONTENT, 0.0f};
+#ifdef __ANDROID__
+    if (static_cast<PlatformAndroid*>(Application::getInstance())->getScreenOrientation() == 1) // 1 for ACONFIGURATION_ORIENTATION_PORT
+    {
+        centerLeftWidth = {SizeMode::PERCENTAGE, 30.0f};
+    }
+#endif
+    Layout::BeginCard(
+        "CenterLeftOptions",
+        centerLeftWidth,
+        {SizeMode::AUTOFIT, 0.0f},
+        HAlignment::LEFT,
+        VAlignment::CENTER,
+        []() {
+            static bool option1 = false;
+            static int radio = 0;
+            ImGui::Text("Options:");
+            ImGui::Checkbox("Option 1", &option1);
+            ImGui::RadioButton("Radio 1", &radio, 0);
+#ifdef __ANDROID__
+            if (static_cast<PlatformAndroid*>(Application::getInstance())->getScreenOrientation() != 1) // Not portrait
+#endif
+            ImGui::SameLine();
+            ImGui::RadioButton("Radio 2", &radio, 1);
+#ifdef __ANDROID__
+            if (static_cast<PlatformAndroid*>(Application::getInstance())->getScreenOrientation() != 1) // Not portrait
+#endif
+            ImGui::SameLine();
+            ImGui::RadioButton("Radio 3", &radio, 2);
+            ImGui::Separator();
+            if (ImGui::Button("Action 1")) { /* Do something */ }
+            if (ImGui::Button("Action 2")) { /* Do something else */ }
+        }
+    );
+    Layout::EndCard();
+
+    // Center widget: autofit width, autofit height
+    Layout::BeginCard(
+        "CenterContent",
+        {SizeMode::AUTOFIT, 0.0f},
+        {SizeMode::AUTOFIT, 0.0f},
+        HAlignment::CENTER,
+        VAlignment::CENTER,
+        []() {
+            ImGui::Text("Main content area.");
+            ImGui::Text("This widget should fill the remaining space.");
+        }
+    );
+    Layout::EndCard();
+
+    // Bottom widget: autofit width, content height, status bar aligned left
+    Layout::BeginCard(
+        "BottomStatusBar",
+        {SizeMode::AUTOFIT, 0.0f},
+        {SizeMode::CONTENT, 0.0f},
+        HAlignment::LEFT,
+        VAlignment::BOTTOM,
+        []() {
+            ImGui::Text("Status: Ready");
+        }
+    );
+    Layout::EndCard();
+
+    // End the custom card layout, triggering calculation and rendering
+    Layout::EndCardLayout(ImGui::GetIO().DisplaySize);
     
     // Render application frame
     renderImGui();
@@ -106,121 +200,6 @@ void Application::renderImGui()
     // Push the 12px font
     ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 
-    // Main window for the application template
-    const char* windowName = "C++ Application Template";
-    float x, y;
-    if (StateManager::getInstance().loadWindowPosition(windowName, x, y)) {
-        ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_Once);
-    }
-
-    ImGui::Begin(windowName, nullptr, ImGuiWindowFlags_HorizontalScrollbar);
-
-    // Save window position
-    ImVec2 pos = ImGui::GetWindowPos();
-    StateManager::getInstance().saveWindowPosition(windowName, pos.x, pos.y);
-
-    // General information and instructions
-    ImGui::Text("Welcome to your cross-platform application!");
-    ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "This is a template demonstrating ImGui features.");
-    ImGui::Separator();
-
-    // --- Basic Widgets Demonstration ---
-
-    // Text input field
-    static char textBuffer[256] = "Hello, world!";
-    ImGui::Text("Enter some text below:");
-    if (ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
-        // You can add logic here for when the user presses Enter
-    }
-    ImGui::Text("You entered: %s", textBuffer);
-
-    ImGui::Spacing();
-
-    // Button and counter
-    static int buttonClickCount = 0;
-    if (ImGui::Button("Click Me")) {
-        buttonClickCount++;
-    }
-    ImGui::SameLine();
-    ImGui::Text("Button has been clicked %d times.", buttonClickCount);
-
-    // Font Awesome Icon Button
-    if (ImGui::Button(ICON_FA_STAR " Star Button")) {
-        
-    }
-
-    ImGui::Separator();
-
-    // --- Advanced Widgets Demonstration ---
-
-    if (ImGui::CollapsingHeader("More Features")) {
-        // Checkbox for a boolean option
-        static bool showExtraInfo = false;
-        ImGui::Checkbox("Show Extra Information", &showExtraInfo);
-        if (showExtraInfo) {
-            ImGui::Text("Here is some extra information, just for you!");
-            ImGui::Text("You can hide this by unchecking the box.");
-        }
-
-        ImGui::Spacing();
-
-        // Slider for a floating-point value
-        static float sliderValue = 0.5f;
-        ImGui::SliderFloat("Value Slider", &sliderValue, 0.0f, 1.0f);
-        ImGui::Text("Current slider value: %.2f", sliderValue);
-
-        ImGui::Spacing();
-
-        // Color editor
-        static ImVec4 color = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
-        ImGui::ColorEdit3("Color Picker", (float*)&color);
-        ImGui::TextColored(color, "This text changes color!");
-    }
-
-    ImGui::Separator();
-
-    // --- HTTP GET Demonstration ---
-    if (ImGui::CollapsingHeader("HTTP GET Demo")) {
-        static char urlBuffer[256] = "https://www.google.com";
-        static std::string httpGetResponse = "No request made yet.";
-        static bool httpRequestRunning = false;
-
-        ImGui::InputText("URL", urlBuffer, IM_ARRAYSIZE(urlBuffer));
-
-        if (ImGui::Button("Send HTTP GET Request") && !httpRequestRunning) {
-            httpRequestRunning = true;
-            httpGetResponse = "Requesting...";
-            // Start the worker in a lambda
-            m_httpWorker.start([this, url = std::string(urlBuffer)]() {
-                return m_httpClient->get(url, {}, {});
-            });
-        }
-        ImGui::SameLine();
-        if (httpRequestRunning) {
-            ImGui::Text("Request in progress...");
-        } else {
-            ImGui::Text("Ready.");
-        }
-
-        // Check if the worker has finished
-        if (httpRequestRunning && !m_httpWorker.is_running()) {
-            HttpResponse response = m_httpWorker.get();
-            httpGetResponse = "Status: " + std::to_string(response.status_code) + "\nBody: " + response.text.substr(0, 500) + "..."; // Limit body to 500 chars
-            httpRequestRunning = false;
-        }
-
-        ImGui::TextWrapped("%s", httpGetResponse.c_str());
-    }
-
-    ImGui::Separator();
-
-    // Log Widget Button
-    if (ImGui::Button("Toggle Log Window")) {
-        m_show_log_widget = !m_show_log_widget;
-    }
-
-    ImGui::End();
-    
     // Render Log Widget if visible
     if (m_show_log_widget && m_log_widget) {
         m_log_widget->Draw("Application Log", &m_show_log_widget);
@@ -228,14 +207,5 @@ void Application::renderImGui()
     
     // Pop the font
     ImGui::PopFont();
-
-    // New window for "test" label at (0,0)
-    const SystemInsets& insets = ScalingManager::getInstance().getSystemInsets();
-    ImGui::SetNextWindowPos(ImVec2(0, 0));
-    ImGui::Begin("Test Window", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
-    ImGuiIO& io = ImGui::GetIO();
-    ImGui::Text("Display Size: %.1f x %.1f", io.DisplaySize.x, io.DisplaySize.y);
-    ImGui::Text("Framebuffer Size: %d x %d", Application::getInstance()->getFramebufferWidth(), Application::getInstance()->getFramebufferHeight());
-    ImGui::End();
 }
 #endif // USE_EXTERNAL_RENDER_IMGUI
