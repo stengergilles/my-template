@@ -3,6 +3,7 @@
 #include "../include/scaling_manager.h"
 #include "../include/platform_http_client.hpp" // Added for PlatformHttpClient
 #include "../include/state_manager.h"
+#include "../include/theme_manager.h" // Include ThemeManager
 #include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 #include "imgui.h"
 #include "layout/Layout.h"
@@ -18,6 +19,7 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
     , m_running(false)
     , m_show_log_widget(true) // Initialize to true for debugging
     , m_log_widget(logWidget) // Initialize with passed pointer
+    , m_themeManager() // Initialize ThemeManager
 {
     // Set singleton instance
     s_instance = this;
@@ -52,6 +54,12 @@ bool Application::initImGui()
 
     // Setup ImGui style
     ImGui::StyleColorsDark();
+
+    // Apply default theme
+    m_themeManager.applyTheme(m_themeManager.getAvailableThemes()[0]);
+
+    // Load fonts
+    m_themeManager.loadFonts();
     
     return true;
 }
@@ -93,6 +101,14 @@ void Application::renderFrame()
     // Start a new frame
     platformNewFrame();
     ImGui::NewFrame();
+
+    // Set clear color based on theme
+    ImVec4 clear_color = m_themeManager.getScreenBackground();
+    ImGui::GetBackgroundDrawList()->AddRectFilled(
+        ImVec2(0, 0),
+        ImGui::GetIO().DisplaySize,
+        IM_COL32(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255)
+    );
 
     // Begin the custom card layout
     Layout::BeginCardLayout();
@@ -205,6 +221,9 @@ void Application::renderImGui()
     if (m_log_widget) {
         m_log_widget->Draw("Application Log", NULL);
     }
+
+    // Show Theme Editor
+    m_themeManager.showThemeEditor();
     
     // Pop the font
     ImGui::PopFont();

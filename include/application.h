@@ -8,6 +8,7 @@
 #include "platform_http_client.hpp" // For createPlatformHttpClient()
 #include "log_widget.h"
 #include "layout/Layout.h"
+#include "theme_manager.h" // Include ThemeManager for full definition
 
 // Forward declarations
 struct ImGuiContext;
@@ -54,6 +55,7 @@ protected:
     LogWidget* m_log_widget; // Log widget instance
     std::unique_ptr<HttpClient> m_httpClient;
     Worker<HttpResponse> m_httpWorker;
+    class ThemeManager m_themeManager; // Add ThemeManager member
 
 private:
     // ImGui rendering code (platform-independent)
