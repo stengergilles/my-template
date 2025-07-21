@@ -22,6 +22,7 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
     , m_themeManager() // Initialize ThemeManager
     , m_currentPage(Page::Home) // Initialize current page to Home
     , m_httpGetResponse("") // Initialize HTTP GET response string
+    , m_statusBarMessage("Status: Ready") // Initialize status bar message
 {
     // Set singleton instance
     s_instance = this;
@@ -227,7 +228,10 @@ void Application::renderFrame()
         HAlignment::LEFT,
         VAlignment::BOTTOM,
         []() {
-            ImGui::Text("Status: Ready");
+            Application* app = Application::getInstance();
+            if (app) {
+                ImGui::Text("%s", app->m_statusBarMessage.c_str());
+            }
         }
     );
     Layout::EndCard();
@@ -261,14 +265,17 @@ void Application::renderHttpGetDemoPage()
     if (ImGui::Button("Send GET Request")) {
         Application* app = Application::getInstance();
         if (app) {
+            app->m_statusBarMessage = "Status: Sending request...";
             app->m_httpWorker.submit([app, url = std::string(urlBuffer)]() {
                 // Pass empty maps for params and headers as they are not used in this demo
                 return app->m_httpClient->get(url, {}, {});
             }, [app](const HttpResponse& response) {
                 if (response.status_code == 200) {
                     app->m_httpGetResponse = response.text;
+                    app->m_statusBarMessage = "Status: Request successful!";
                 } else {
                     app->m_httpGetResponse = "Error: " + std::to_string(response.status_code) + " - " + response.text;
+                    app->m_statusBarMessage = "Status: Request failed with error " + std::to_string(response.status_code);
                 }
             });
         }

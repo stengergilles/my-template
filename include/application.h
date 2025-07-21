@@ -65,6 +65,7 @@ protected:
 
     Page m_currentPage; // Current active page
     std::string m_httpGetResponse; // To store HTTP GET response
+    std::string m_statusBarMessage; // To store status bar messages
 
 private:
     void renderHomePage();
