@@ -156,5 +156,17 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
 }
 
+
+task copyFonts(type: Copy) {
+    from fileTree("../../external/imgui/misc/fonts") {
+        include "*.ttf"
+    }
+    into "src/main/assets"
+    println "Copying fonts from ../../external/imgui/misc/fonts to src/main/assets"
+}
+
+preBuild.dependsOn copyFonts
+
 apply from: 'openssl.gradle'
+
 

@@ -22,6 +22,9 @@ void ThemeManager::setupDefaultThemes()
     darkTheme.name = "Dark";
     darkTheme.screen_background = ImVec4(0.1f, 0.1f, 0.1f, 1.0f); // Dark grey
     darkTheme.widget_background = ImVec4(0.2f, 0.2f, 0.2f, 1.0f); // Slightly lighter grey
+    darkTheme.corner_roundness = 5.0f; // Default roundness for dark theme
+    darkTheme.font_name = "DroidSans.ttf"; // Default font
+    darkTheme.font_size = 12.0f; // Default font size
     m_availableThemes.push_back(darkTheme);
 
     // Light Theme
@@ -29,6 +32,9 @@ void ThemeManager::setupDefaultThemes()
     lightTheme.name = "Light";
     lightTheme.screen_background = ImVec4(0.9f, 0.9f, 0.9f, 1.0f); // Light grey
     lightTheme.widget_background = ImVec4(0.8f, 0.8f, 0.8f, 1.0f); // Slightly darker grey
+    lightTheme.corner_roundness = 0.0f; // No roundness for light theme
+    lightTheme.font_name = "DroidSans.ttf"; // Default font
+    lightTheme.font_size = 12.0f; // Default font size
     m_availableThemes.push_back(lightTheme);
 
     // Custom Theme (example)
@@ -36,6 +42,9 @@ void ThemeManager::setupDefaultThemes()
     customTheme.name = "Custom";
     customTheme.screen_background = ImVec4(0.15f, 0.05f, 0.2f, 1.0f); // Purple-ish dark
     customTheme.widget_background = ImVec4(0.3f, 0.1f, 0.4f, 1.0f); // Purple-ish light
+    customTheme.corner_roundness = 10.0f; // More roundness for custom theme
+    customTheme.font_name = "DroidSans.ttf"; // Default font
+    customTheme.font_size = 12.0f; // Default font size
     m_availableThemes.push_back(customTheme);
 }
 
@@ -43,6 +52,17 @@ void ThemeManager::applyTheme(const Theme& theme)
 {
     m_currentTheme = theme;
     applyImGuiStyle(theme);
+
+    // Apply selected font
+    std::string fontKey = m_currentTheme.font_name + "_" + std::to_string(static_cast<int>(m_currentTheme.font_size));
+    if (m_fonts.count(fontKey)) {
+        ImGui::GetIO().FontDefault = m_fonts[fontKey];
+        LOG_INFO("Applied font: %s at size %.1f", m_currentTheme.font_name.c_str(), m_currentTheme.font_size);
+    } else {
+        LOG_ERROR("Font not found: %s at size %.1f. Using default.", m_currentTheme.font_name.c_str(), m_currentTheme.font_size);
+        ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->Fonts[0]; // Fallback to first loaded font
+    }
+
     LOG_INFO("Applied theme: %s", theme.name.c_str());
 }
 
@@ -68,13 +88,13 @@ void ThemeManager::applyImGuiStyle(const Theme& theme)
     style.Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // White text
 
     // Styling
-    style.WindowRounding = 5.0f;
-    style.FrameRounding = 3.0f;
-    style.GrabRounding = 3.0f;
-    style.PopupRounding = 3.0f;
-    style.ScrollbarRounding = 3.0f;
-    style.TabRounding = 3.0f;
-    style.ChildRounding = 3.0f;
+    style.WindowRounding = theme.corner_roundness;
+    style.FrameRounding = theme.corner_roundness;
+    style.GrabRounding = theme.corner_roundness;
+    style.PopupRounding = theme.corner_roundness;
+    style.ScrollbarRounding = theme.corner_roundness;
+    style.TabRounding = theme.corner_roundness;
+    style.ChildRounding = theme.corner_roundness;
 
     // Spacing
     style.ItemSpacing = ImVec2(8, 4);
@@ -103,6 +123,36 @@ void ThemeManager::showThemeEditor()
         if (m_currentTheme.name == "Custom") {
             ImGui::ColorEdit3("Screen Background", (float*)&m_currentTheme.screen_background);
             ImGui::ColorEdit3("Widget Background", (float*)&m_currentTheme.widget_background);
+            ImGui::SliderFloat("Corner Roundness", &m_currentTheme.corner_roundness, 0.0f, 12.0f, "%.1f");
+
+            // Font selection
+            if (ImGui::BeginCombo("Font", m_currentTheme.font_name.c_str())) {
+                for (const auto& fontName : m_availableFontNames) {
+                    bool is_selected = (m_currentTheme.font_name == fontName);
+                    if (ImGui::Selectable(fontName.c_str(), is_selected)) {
+                        m_currentTheme.font_name = fontName;
+                    }
+                    if (is_selected) {
+                        ImGui::SetItemDefaultFocus();
+                    }
+                }
+                ImGui::EndCombo();
+            }
+
+            // Font size selection
+            if (ImGui::BeginCombo("Font Size", std::to_string(m_currentTheme.font_size).c_str())) {
+                for (float fontSize : m_availableFontSizes) {
+                    bool is_selected = (m_currentTheme.font_size == fontSize);
+                    if (ImGui::Selectable(std::to_string(fontSize).c_str(), is_selected)) {
+                        m_currentTheme.font_size = fontSize;
+                    }
+                    if (is_selected) {
+                        ImGui::SetItemDefaultFocus();
+                    }
+                }
+                ImGui::EndCombo();
+            }
+
             if (ImGui::Button("Apply Custom Theme")) {
                 applyTheme(m_currentTheme);
             }
@@ -112,38 +162,64 @@ void ThemeManager::showThemeEditor()
     }
 }
 
-void ThemeManager::loadFonts()
+void ThemeManager::loadFonts(AAssetManager* assetManager)
 {
     ImGuiIO& io = ImGui::GetIO();
     io.Fonts->Clear(); // Clear existing fonts
+    m_fontData.clear(); // Clear stored font data
 
-    // Load default font (DroidSans.ttf) - 12px
-    // This is already handled in platformInit() for Android, but we'll add it here for completeness
-    // and to ensure it's the first font in the atlas.
-    // The path should be relative to the assets folder for Android.
-    // For other platforms, it might be a direct file path.
+    // Populate available font names and sizes
+    m_availableFontNames.clear();
+    m_availableFontNames.push_back("DroidSans.ttf");
+    m_availableFontNames.push_back("Karla-Regular.ttf");
+    m_availableFontNames.push_back("Roboto-Medium.ttf");
+    LOG_INFO("Available font names populated. Count: %zu", m_availableFontNames.size());
+
+    m_availableFontSizes.clear();
+    m_availableFontSizes.push_back(12.0f);
+    m_availableFontSizes.push_back(16.0f);
+    m_availableFontSizes.push_back(18.0f);
+
+    // Load specified fonts and sizes
+    for (const auto& fontName : m_availableFontNames) {
+        for (float fontSize : m_availableFontSizes) {
+            std::string fontPath = "external/imgui/misc/fonts/" + fontName;
+            std::string fontKey = fontName + "_" + std::to_string(static_cast<int>(fontSize));
+
 #ifdef __ANDROID__
-    // For Android, fonts are loaded from assets. The platform layer handles this.
-    // We'll assume the default font is loaded by the platform.
-    // If we need to load custom fonts from assets, we'd need a mechanism to pass AssetManager here.
-    // For now, we'll rely on the platform's font loading for the default.
-    ImFont* defaultFont = io.Fonts->AddFontDefault();
-    if (defaultFont) {
-        m_fonts["Default"] = defaultFont;
-        LOG_INFO("Loaded default ImGui font.");
-    } else {
-        LOG_ERROR("Failed to load default ImGui font.");
-    }
+            if (assetManager) {
+                AAsset* asset = AAssetManager_open(assetManager, fontName.c_str(), AASSET_MODE_BUFFER);
+                if (asset) {
+                    size_t file_size = AAsset_getLength(asset);
+                    m_fontData[fontKey].resize(file_size);
+                    AAsset_read(asset, m_fontData[fontKey].data(), file_size);
+                    AAsset_close(asset);
+
+                    ImFont* font = io.Fonts->AddFontFromMemoryTTF(m_fontData[fontKey].data(), file_size, fontSize);
+                    if (font) {
+                        m_fonts[fontKey] = font;
+                        LOG_INFO("Loaded font: %s at size %.1f from assets.", fontName.c_str(), fontSize);
+                    } else {
+                        LOG_ERROR("Failed to load font: %s at size %.1f from assets.", fontName.c_str(), fontSize);
+                    }
+                    delete[] file_buffer; // Free the buffer after use
+                } else {
+                    LOG_ERROR("Failed to open font: %s from assets. Asset is null.", fontName.c_str());
+                }
+            } else {
+                LOG_ERROR("AssetManager is null. Cannot load fonts from assets.");
+            }
 #else
-    // For non-Android platforms, load from file system
-    ImFont* defaultFont = io.Fonts->AddFontFromFileTTF("../external/fonts/DroidSans.ttf", 12.0f);
-    if (defaultFont) {
-        m_fonts["Default"] = defaultFont;
-        LOG_INFO("Loaded default font: DroidSans.ttf");
-    } else {
-        LOG_ERROR("Failed to load default font: ../external/fonts/DroidSans.ttf");
-    }
+            ImFont* font = io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontSize);
+            if (font) {
+                m_fonts[fontKey] = font;
+                LOG_INFO("Loaded font: %s at size %.1f.", fontName.c_str(), fontSize);
+            } else {
+                LOG_ERROR("Failed to load font: %s at size %.1f.", fontName.c_str(), fontSize);
+            }
 #endif
+        }
+    }
 
     // Load FontAwesome font (fa-solid-900.ttf) - 12px
     // This is typically loaded with a merge to the default font for icons.
@@ -154,18 +230,26 @@ void ThemeManager::loadFonts()
     static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
 
 #ifdef __ANDROID__
-    // For Android, FontAwesome is also loaded from assets. The platform layer handles this.
-    // We'll assume it's merged with the default font by the platform.
-    // If not, you'd need to adjust your platform's font loading.
-    // For now, we'll rely on the platform's font loading for FontAwesome.
-    // If you need to explicitly load it here, you'd need access to the Android AssetManager.
-    // As a fallback, we'll try to add it directly if the platform doesn't.
-    ImFont* fontAwesome = io.Fonts->AddFontFromFileTTF("fa-solid-900.ttf", 12.0f, &config, icon_ranges);
-    if (fontAwesome) {
-        m_fonts["FontAwesome"] = fontAwesome;
-        LOG_INFO("Loaded FontAwesome font.");
+    if (assetManager) {
+        AAsset* asset = AAssetManager_open(assetManager, "fa-solid-900.ttf", AASSET_MODE_BUFFER);
+        if (asset) {
+            size_t file_size = AAsset_getLength(asset);
+            m_fontData["FontAwesome"].resize(file_size);
+            AAsset_read(asset, m_fontData["FontAwesome"].data(), file_size);
+            AAsset_close(asset);
+
+            ImFont* fontAwesome = io.Fonts->AddFontFromMemoryTTF(m_fontData["FontAwesome"].data(), file_size, 12.0f, &config, icon_ranges);
+            if (fontAwesome) {
+                m_fonts["FontAwesome"] = fontAwesome;
+                LOG_INFO("Loaded FontAwesome font: fa-solid-900.ttf from assets.");
+            } else {
+                LOG_ERROR("Failed to load FontAwesome font: fa-solid-900.ttf from assets.");
+            }
+        } else {
+            LOG_ERROR("Failed to open fa-solid-900.ttf from assets.");
+        }
     } else {
-        LOG_ERROR("Failed to load FontAwesome font: fa-solid-900.ttf");
+        LOG_ERROR("AssetManager is null. Cannot load FontAwesome font from assets.");
     }
 #else
     ImFont* fontAwesome = io.Fonts->AddFontFromFileTTF("../external/fontawesome/fa-solid-900.ttf", 12.0f, &config, icon_ranges);

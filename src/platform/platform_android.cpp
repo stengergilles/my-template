@@ -30,6 +30,7 @@ struct android_app {
     struct ANativeActivity* activity;
     struct AConfiguration* config;
     ANativeWindow* window;  // Added window member
+    AAssetManager* assetManager; // Added assetManager member
     // ... other fields not needed for this example
 };
 
@@ -111,8 +112,8 @@ bool PlatformAndroid::platformInit() {
         return false;
     }
     
-    
-    
+    m_assetManager = app->activity->assetManager;
+
     // If we already have a stored window pointer, use that
     if (m_window) {
         

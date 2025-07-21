@@ -59,7 +59,11 @@ bool Application::initImGui()
     m_themeManager.applyTheme(m_themeManager.getAvailableThemes()[0]);
 
     // Load fonts
+#ifdef __ANDROID__
+    m_themeManager.loadFonts(static_cast<PlatformAndroid*>(this)->getAssetManager());
+#else
     m_themeManager.loadFonts();
+#endif
     
     return true;
 }
