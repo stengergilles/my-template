@@ -12,6 +12,11 @@ The user interface is built with [Dear ImGui](https://github.com/ocornut/imgui),
 
 ## Features
 
+*   **Card Layout Manager:**
+    *   A flexible `CardLayoutManager` is included for organizing UI elements into responsive cards.
+    *   Cards can be configured to be hideable, allowing users to collapse them to a small, overlapping grip on double-tap (or single-tap on the grip to unhide).
+    *   Hidden cards take up no layout space, ensuring efficient use of screen real estate.
+
 *   **Cross-Platform by Design:**
     *   **Desktop:** Builds on Windows, macOS, and Linux using GLFW.
     *   **Android:** A pre-configured Android Studio project integrates the C++ core.
@@ -182,6 +187,64 @@ Here's how you can start adding your own UI elements:
 
 3.  **Rebuild and Run:**
     After making changes, rebuild your project for the desired platform (Desktop, Android, or WebAssembly) and run it to see your UI changes.
+
+## Card Layout Manager Usage
+
+The `CardLayoutManager` simplifies the arrangement of UI elements into responsive cards. You can define cards with specific dimensions, alignment, and content. Cards can also be made hideable, allowing them to collapse into a small grip.
+
+Here's an example of how to define cards using the `Layout::BeginCard` function:
+
+```cpp
+#include "layout/Layout.h" // Include the Layout manager header
+#include "imgui.h"
+
+void Application::renderFrame()
+{
+    // ... (existing ImGui setup)
+
+    // Begin the custom card layout
+    Layout::BeginCardLayout();
+
+    // Define a hideable card (e.g., the CenterLeftOptions card)
+    Layout::BeginCard(
+        "CenterLeftOptions",
+        {Layout::SizeMode::AUTOFIT, 0.0f}, // Example: Autofit width
+        {Layout::SizeMode::AUTOFIT, 0.0f}, // Example: Autofit height
+        Layout::HAlignment::LEFT,
+        Layout::VAlignment::CENTER,
+        []() {
+            ImGui::Text("This is a hideable card.");
+            ImGui::Text("Double-tap on this card to hide it.");
+            ImGui::Text("Single-tap on the grip to unhide.");
+            // ... your card content
+        },
+        true // Set to true to make this card hideable
+    );
+    Layout::EndCard();
+
+    // Define a non-hideable card
+    Layout::BeginCard(
+        "MyNonHideableCard",
+        {Layout::SizeMode::PERCENTAGE, 50.0f}, // Example: 50% width
+        {Layout::SizeMode::CONTENT, 0.0f},    // Example: Content height
+        Layout::HAlignment::CENTER,
+        Layout::VAlignment::TOP,
+        []() {
+            ImGui::Text("This card cannot be hidden.");
+            // ... your card content
+        },
+        false // Set to false (or omit, as it's the default)
+    );
+    Layout::EndCard();
+
+    // End the custom card layout
+    Layout::EndCardLayout(ImGui::GetIO().DisplaySize);
+
+    // ... (rest of your rendering logic)
+}
+```
+
+Remember to include `layout/Layout.h` in your application files where you use the `Layout::BeginCard` and `Layout::EndCard` functions.
 
 ## License
 
