@@ -268,8 +268,9 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     io.DisplaySize = ImVec2((float)windowWidth, (float)windowHeight);
     
     // Configure ImGui for Android
-    io.ConfigFlags |= ImGuiConfigFlags_IsTouchScreen;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.MouseDoubleClickTime = 0.60f; // Increase double-click time threshold
+    io.MouseDoubleClickMaxDist = 15.0f; // Increase double-click max distance threshold
     
     // Let ImGui handle WantTextInput naturally
     // Do not manually set io.WantTextInput
@@ -640,27 +641,6 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
                 
 
                 glScissor(scissor_x, scissor_y, scissor_w, scissor_h);
-
-                // Ensure valid dimensions
-                if (scissor_w < 0) scissor_w = 0;
-                if (scissor_h < 0) scissor_h = 0;
-                
-
-                glScissor(scissor_x, scissor_y, scissor_w, scissor_h);
-
-                // Ensure valid dimensions
-                if (scissor_w < 0) scissor_w = 0;
-                if (scissor_h < 0) scissor_h = 0;
-                
-
-                glScissor(scissor_x, scissor_y, scissor_w, scissor_h);
-                
-                LOG_INFO("RenderDrawData: fb_width=%d, fb_height=%d", fb_width, fb_height);
-                LOG_INFO("RenderDrawData: Insets: L=%d, T=%d, R=%d, B=%d", insets.left, insets.top, insets.right, insets.bottom);
-                LOG_INFO("RenderDrawData: gl_clip: x1=%.2f, y1=%.2f, x2=%.2f, y2=%.2f", gl_clip_x1, gl_clip_y1, gl_clip_x2, gl_clip_y2);
-                LOG_INFO("RenderDrawData: safe_gl: x1=%.2f, y1=%.2f, x2=%.2f, y2=%.2f", safe_gl_x1, safe_gl_y1, safe_gl_x2, safe_gl_y2);
-                LOG_INFO("RenderDrawData: final_gl: x1=%.2f, y1=%.2f, x2=%.2f, y2=%.2f", final_gl_x1, final_gl_y1, final_gl_x2, final_gl_y2);
-                LOG_INFO("RenderDrawData: Scissor: x=%d, y=%d, w=%d, h=%d", scissor_x, scissor_y, scissor_w, scissor_h);
 
                 // Bind texture, Draw
                 glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId);

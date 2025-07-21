@@ -6,6 +6,7 @@
 #include <vector>
 #include <functional>
 #include <memory>
+#include <map>
 
 namespace Layout {
 
@@ -38,8 +39,8 @@ class CardLayoutManager;
 // Represents a single card to be rendered
 class Card {
 public:
-    Card(std::string id, Dimension width, Dimension height, HAlignment hAlign, VAlignment vAlign, std::function<void()> content);
-    void render(const ImVec2& pos, const ImVec2& size);
+    Card(std::string id, Dimension width, Dimension height, HAlignment hAlign, VAlignment vAlign, std::function<void()> content, bool hideable = false);
+    void render(const ImVec2& pos, const ImVec2& size, std::function<void(const std::string&, bool)> onVisibilityChange);
 
 private:
     friend class CardLayoutManager;
@@ -54,12 +55,14 @@ private:
     // Calculated values
     ImVec2 m_calculatedSize;
     ImVec2 m_calculatedPos;
+    bool m_isHidden;
+    bool m_isHideable;
 };
 
 // Manages the layout process
 class CardLayoutManager {
 public:
-    void beginCard(const std::string& id, Dimension width, Dimension height, HAlignment hAlign, VAlignment vAlign, std::function<void()> content);
+    void beginCard(const std::string& id, Dimension width, Dimension height, HAlignment hAlign, VAlignment vAlign, std::function<void()> content, bool hideable = false);
     void endCardLayout(const ImVec2& displaySize);
 
 private:
@@ -68,6 +71,7 @@ private:
 
     std::vector<std::unique_ptr<Card>> m_cards;
     bool m_layoutCalculated = false;
+    std::map<std::string, bool> m_cardVisibilityState;
 };
 
 // Global layout manager instance
@@ -75,7 +79,7 @@ extern CardLayoutManager g_cardLayoutManager;
 
 // Public API functions
 void BeginCardLayout();
-void BeginCard(const std::string& id, Dimension width, Dimension height, HAlignment hAlign, VAlignment vAlign, const std::function<void()>& content);
+void BeginCard(const std::string& id, Dimension width, Dimension height, HAlignment hAlign, VAlignment vAlign, const std::function<void()>& content, bool hideable = false);
 void EndCard(); // This is now a placeholder, but good for API consistency
 void EndCardLayout(const ImVec2& displaySize);
 

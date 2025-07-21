@@ -152,7 +152,8 @@ void Application::renderFrame()
             ImGui::Separator();
             if (ImGui::Button("Action 1")) { /* Do something */ }
             if (ImGui::Button("Action 2")) { /* Do something else */ }
-        }
+        },
+        true // Make this card hideable
     );
     Layout::EndCard();
 
@@ -201,8 +202,8 @@ void Application::renderImGui()
     ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 
     // Render Log Widget if visible
-    if (m_show_log_widget && m_log_widget) {
-        m_log_widget->Draw("Application Log", &m_show_log_widget);
+    if (m_log_widget) {
+        m_log_widget->Draw("Application Log", NULL);
     }
     
     // Pop the font
