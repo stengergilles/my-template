@@ -20,6 +20,8 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
     , m_show_log_widget(true) // Initialize to true for debugging
     , m_log_widget(logWidget) // Initialize with passed pointer
     , m_themeManager() // Initialize ThemeManager
+    , m_currentPage(Page::Home) // Initialize current page to Home
+    , m_httpGetResponse("") // Initialize HTTP GET response string
 {
     // Set singleton instance
     s_instance = this;
@@ -154,6 +156,17 @@ void Application::renderFrame()
         HAlignment::LEFT,
         VAlignment::CENTER,
         []() {
+            ImGui::Text("Navigation:");
+            if (ImGui::Button("Home")) {
+                Application::getInstance()->m_currentPage = Application::Page::Home;
+            }
+            if (ImGui::Button("Theme Editor")) {
+                Application::getInstance()->m_currentPage = Application::Page::ThemeEditor;
+            }
+            if (ImGui::Button("HTTP GET Demo")) {
+                Application::getInstance()->m_currentPage = Application::Page::HttpGetDemo;
+            }
+            ImGui::Separator();
             static bool option1 = false;
             static int radio = 0;
             ImGui::Text("Options:");
@@ -184,9 +197,24 @@ void Application::renderFrame()
         {SizeMode::AUTOFIT, 0.0f},
         HAlignment::CENTER,
         VAlignment::CENTER,
-        []() {
-            ImGui::Text("Main content area.");
-            ImGui::Text("This widget should fill the remaining space.");
+        [this]() {
+            // Render Log Widget if visible
+            if (m_log_widget) {
+                m_log_widget->Draw("Application Log", NULL);
+            }
+
+            // Render the current page
+            switch (m_currentPage) {
+                case Page::Home:
+                    renderHomePage();
+                    break;
+                case Page::ThemeEditor:
+                    m_themeManager.showThemeEditor();
+                    break;
+                case Page::HttpGetDemo:
+                    renderHttpGetDemoPage();
+                    break;
+            }
         }
     );
     Layout::EndCard();
@@ -208,7 +236,7 @@ void Application::renderFrame()
     Layout::EndCardLayout(ImGui::GetIO().DisplaySize);
     
     // Render application frame
-    renderImGui();
+    // renderImGui(); // Removed as content is now in CenterContent card
     
     // Render and present
     ImGui::Render();
@@ -216,20 +244,39 @@ void Application::renderFrame()
 }
 
 #ifndef USE_EXTERNAL_RENDER_IMGUI
-void Application::renderImGui()
+// Removed renderImGui function as its content is now part of renderFrame
+
+void Application::renderHomePage()
 {
-    // Push the 12px font
-    ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
+    ImGui::Text("Welcome to the Home Page!");
+    ImGui::Text("Use the navigation on the left to explore.");
+}
 
-    // Render Log Widget if visible
-    if (m_log_widget) {
-        m_log_widget->Draw("Application Log", NULL);
+void Application::renderHttpGetDemoPage()
+{
+    ImGui::Text("HTTP GET Demo Page");
+    ImGui::Separator();
+    static char urlBuffer[256] = "https://www.google.com";
+    ImGui::InputText("URL", urlBuffer, sizeof(urlBuffer));
+    if (ImGui::Button("Send GET Request")) {
+        Application* app = Application::getInstance();
+        if (app) {
+            app->m_httpWorker.submit([app, url = std::string(urlBuffer)]() {
+                // Pass empty maps for params and headers as they are not used in this demo
+                return app->m_httpClient->get(url, {}, {});
+            }, [app](const HttpResponse& response) {
+                if (response.status_code == 200) {
+                    app->m_httpGetResponse = response.text;
+                } else {
+                    app->m_httpGetResponse = "Error: " + std::to_string(response.status_code) + " - " + response.text;
+                }
+            });
+        }
+        LOG_INFO("Sending GET request to: %s", urlBuffer);
     }
-
-    // Show Theme Editor
-    m_themeManager.showThemeEditor();
-    
-    // Pop the font
-    ImGui::PopFont();
+    ImGui::Text("Response:");
+    ImGui::BeginChild("##http_response", ImVec2(0, 0), true);
+    ImGui::TextWrapped("%s", m_httpGetResponse.c_str());
+    ImGui::EndChild();
 }
 #endif // USE_EXTERNAL_RENDER_IMGUI

@@ -34,6 +34,9 @@ The user interface is built with [Dear ImGui](https://github.com/ocornut/imgui),
 *   **Logging:**
     *   A simple logging utility is provided for easy debugging.
 
+*   **Theme Manager:**
+    *   A `ThemeManager` class is included for managing application themes, allowing for easy customization of UI colors and styles.
+
 ## Project Structure
 
 A brief overview of the main directories:

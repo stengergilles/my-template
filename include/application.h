@@ -57,9 +57,18 @@ protected:
     Worker<HttpResponse> m_httpWorker;
     class ThemeManager m_themeManager; // Add ThemeManager member
 
+    enum class Page {
+        Home,
+        ThemeEditor,
+        HttpGetDemo
+    };
+
+    Page m_currentPage; // Current active page
+    std::string m_httpGetResponse; // To store HTTP GET response
+
 private:
-    // ImGui rendering code (platform-independent)
-    void renderImGui();
+    void renderHomePage();
+    void renderHttpGetDemoPage();
 
     static Application* s_instance; // Singleton instance
 };

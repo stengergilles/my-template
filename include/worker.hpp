@@ -3,37 +3,36 @@
 
 #include <future>
 #include <functional>
+#include <thread>
+#include <utility> // For std::forward
 
 template<typename R>
 class Worker {
 public:
     Worker() : m_running(false) {}
 
-    template<typename F, typename... Args>
-    void start(F&& f, Args&&... args) {
+    template<typename Func, typename Callback>
+    void submit(Func&& func, Callback&& callback) {
         if (m_running) {
-            return; // Already running
+            // Optionally, handle this case (e.g., queue the task, log a warning)
+            return;
         }
         m_running = true;
-        auto task = std::bind(std::forward<F>(f), std::forward<Args>(args)...);
-        m_future = std::async(std::launch::async, task);
+        m_future = std::async(std::launch::async, [this, f = std::forward<Func>(func), cb = std::forward<Callback>(callback)]() mutable {
+            R result = f();
+            // Execute callback on the main thread or handle synchronization if needed
+            // For simplicity, we'll execute it directly here. In a real GUI app,
+            // you might post this to the main thread's event queue.
+            cb(result);
+            m_running = false;
+        });
     }
 
-    bool is_running() {
-        if (!m_running) {
-            return false;
-        }
-        if (m_future.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
-            m_running = false;
-        }
+    bool is_running() const {
         return m_running;
     }
 
-    R get() {
-        return m_future.get();
-    }
-
 private:
-    std::future<R> m_future;
+    std::future<void> m_future; // Changed to void as result is handled by callback
     bool m_running;
 };

@@ -104,13 +104,32 @@ void ThemeManager::applyImGuiStyle(const Theme& theme)
 
 void ThemeManager::showThemeEditor()
 {
-    if (ImGui::Begin("Theme Editor")) {
-        // Theme selection dropdown
-        if (ImGui::BeginCombo("Select Theme", m_currentTheme.name.c_str())) {
-            for (const auto& theme : m_availableThemes) {
-                bool is_selected = (m_currentTheme.name == theme.name);
-                if (ImGui::Selectable(theme.name.c_str(), is_selected)) {
-                    applyTheme(theme);
+    // Theme selection dropdown
+    if (ImGui::BeginCombo("Select Theme", m_currentTheme.name.c_str())) {
+        for (const auto& theme : m_availableThemes) {
+            bool is_selected = (m_currentTheme.name == theme.name);
+            if (ImGui::Selectable(theme.name.c_str(), is_selected)) {
+                applyTheme(theme);
+            }
+            if (is_selected) {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+
+    // Color pickers for current theme (if it's 'Custom' or editable)
+    if (m_currentTheme.name == "Custom") {
+        ImGui::ColorEdit3("Screen Background", (float*)&m_currentTheme.screen_background);
+        ImGui::ColorEdit3("Widget Background", (float*)&m_currentTheme.widget_background);
+        ImGui::SliderFloat("Corner Roundness", &m_currentTheme.corner_roundness, 0.0f, 12.0f, "%.1f");
+
+        // Font selection
+        if (ImGui::BeginCombo("Font", m_currentTheme.font_name.c_str())) {
+            for (const auto& fontName : m_availableFontNames) {
+                bool is_selected = (m_currentTheme.font_name == fontName);
+                if (ImGui::Selectable(fontName.c_str(), is_selected)) {
+                    m_currentTheme.font_name = fontName;
                 }
                 if (is_selected) {
                     ImGui::SetItemDefaultFocus();
@@ -119,46 +138,23 @@ void ThemeManager::showThemeEditor()
             ImGui::EndCombo();
         }
 
-        // Color pickers for current theme (if it's 'Custom' or editable)
-        if (m_currentTheme.name == "Custom") {
-            ImGui::ColorEdit3("Screen Background", (float*)&m_currentTheme.screen_background);
-            ImGui::ColorEdit3("Widget Background", (float*)&m_currentTheme.widget_background);
-            ImGui::SliderFloat("Corner Roundness", &m_currentTheme.corner_roundness, 0.0f, 12.0f, "%.1f");
-
-            // Font selection
-            if (ImGui::BeginCombo("Font", m_currentTheme.font_name.c_str())) {
-                for (const auto& fontName : m_availableFontNames) {
-                    bool is_selected = (m_currentTheme.font_name == fontName);
-                    if (ImGui::Selectable(fontName.c_str(), is_selected)) {
-                        m_currentTheme.font_name = fontName;
-                    }
-                    if (is_selected) {
-                        ImGui::SetItemDefaultFocus();
-                    }
+        // Font size selection
+        if (ImGui::BeginCombo("Font Size", std::to_string(m_currentTheme.font_size).c_str())) {
+            for (float fontSize : m_availableFontSizes) {
+                bool is_selected = (m_currentTheme.font_size == fontSize);
+                if (ImGui::Selectable(std::to_string(fontSize).c_str(), is_selected)) {
+                    m_currentTheme.font_size = fontSize;
                 }
-                ImGui::EndCombo();
-            }
-
-            // Font size selection
-            if (ImGui::BeginCombo("Font Size", std::to_string(m_currentTheme.font_size).c_str())) {
-                for (float fontSize : m_availableFontSizes) {
-                    bool is_selected = (m_currentTheme.font_size == fontSize);
-                    if (ImGui::Selectable(std::to_string(fontSize).c_str(), is_selected)) {
-                        m_currentTheme.font_size = fontSize;
-                    }
-                    if (is_selected) {
-                        ImGui::SetItemDefaultFocus();
-                    }
+                if (is_selected) {
+                    ImGui::SetItemDefaultFocus();
                 }
-                ImGui::EndCombo();
             }
-
-            if (ImGui::Button("Apply Custom Theme")) {
-                applyTheme(m_currentTheme);
-            }
+            ImGui::EndCombo();
         }
 
-        ImGui::End();
+        if (ImGui::Button("Apply Custom Theme")) {
+            applyTheme(m_currentTheme);
+        }
     }
 }
 
@@ -202,7 +198,7 @@ void ThemeManager::loadFonts(AAssetManager* assetManager)
                     } else {
                         LOG_ERROR("Failed to load font: %s at size %.1f from assets.", fontName.c_str(), fontSize);
                     }
-                    delete[] file_buffer; // Free the buffer after use
+                    
                 } else {
                     LOG_ERROR("Failed to open font: %s from assets. Asset is null.", fontName.c_str());
                 }
