@@ -300,13 +300,25 @@ void CardLayoutManager::calculateLayout(const ImVec2& displaySize) {
 
 void CardLayoutManager::renderCards() {
     if (!m_layoutCalculated) return;
+
+    // First pass: Render all visible cards
     for (const auto& card : m_cards) {
-        // Pass the persistent visibility state to the card for rendering
-        // Create a lambda to update the visibility state in the map
-        auto onVisibilityChange = [&](const std::string& cardId, bool newIsHidden) {
-            m_cardVisibilityState[cardId] = newIsHidden;
-        };
-        card->render(card->m_calculatedPos, card->m_calculatedSize, onVisibilityChange);
+        if (!card->m_isHidden) {
+            auto onVisibilityChange = [&](const std::string& cardId, bool newIsHidden) {
+                m_cardVisibilityState[cardId] = newIsHidden;
+            };
+            card->render(card->m_calculatedPos, card->m_calculatedSize, onVisibilityChange);
+        }
+    }
+
+    // Second pass: Render all hidden card grips (on top)
+    for (const auto& card : m_cards) {
+        if (card->m_isHidden) {
+            auto onVisibilityChange = [&](const std::string& cardId, bool newIsHidden) {
+                m_cardVisibilityState[cardId] = newIsHidden;
+            };
+            card->render(card->m_calculatedPos, card->m_calculatedSize, onVisibilityChange);
+        }
     }
 }
 
