@@ -33,10 +33,37 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
 
     // Load application state
     StateManager::getInstance().loadState();
+
+    // Load current page from state
+    std::string pageStr;
+    if (StateManager::getInstance().loadString("current_page", pageStr)) {
+        if (pageStr == "Home") {
+            m_currentPage = Page::Home;
+        } else if (pageStr == "ThemeEditor") {
+            m_currentPage = Page::ThemeEditor;
+        } else if (pageStr == "HttpGetDemo") {
+            m_currentPage = Page::HttpGetDemo;
+        }
+    }
 }
 
 Application::~Application()
 {
+    // Save current page to state
+    std::string pageStr;
+    switch (m_currentPage) {
+        case Page::Home:
+            pageStr = "Home";
+            break;
+        case Page::ThemeEditor:
+            pageStr = "ThemeEditor";
+            break;
+        case Page::HttpGetDemo:
+            pageStr = "HttpGetDemo";
+            break;
+    }
+    StateManager::getInstance().saveString("current_page", pageStr);
+
     // Save application state
     StateManager::getInstance().saveState();
 
@@ -168,12 +195,15 @@ void Application::renderFrame()
             ImGui::Text("Navigation:");
             if (ImGui::Button("Home")) {
                 Application::getInstance()->m_currentPage = Application::Page::Home;
+                StateManager::getInstance().saveString("current_page", "Home");
             }
             if (ImGui::Button("Theme Editor")) {
                 Application::getInstance()->m_currentPage = Application::Page::ThemeEditor;
+                StateManager::getInstance().saveString("current_page", "ThemeEditor");
             }
             if (ImGui::Button("HTTP GET Demo")) {
                 Application::getInstance()->m_currentPage = Application::Page::HttpGetDemo;
+                StateManager::getInstance().saveString("current_page", "HttpGetDemo");
             }
             ImGui::Separator();
             static bool option1 = false;

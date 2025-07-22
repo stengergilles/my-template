@@ -17,7 +17,7 @@ Card::Card(std::string id, Dimension width, Dimension height, HAlignment hAlign,
     : m_id(std::move(id)), m_width(width), m_height(height), m_hAlign(hAlign), m_vAlign(vAlign), m_content(std::move(content)), m_isHideable(hideable) {}
 
 void Card::render(const ImVec2& pos, const ImVec2& size, std::function<void(const std::string&, bool)> onVisibilityChange) {
-    LOG_INFO("Card::render - ID: %s, isHidden: %d", m_id.c_str(), m_isHidden); // Use m_isHidden from Card object
+    
     // Constants for grip size and overlap
     const float GRIP_SIZE = ImGui::GetTextLineHeight() * 9.0f; // Made even larger
     const float GRIP_OVERLAP = ImGui::GetTextLineHeight() * 3.0f; // Adjusted overlap
@@ -111,11 +111,9 @@ void Card::render(const ImVec2& pos, const ImVec2& size, std::function<void(cons
 
 // --- CardLayoutManager Implementation ---
 void CardLayoutManager::beginCard(const std::string& id, Dimension width, Dimension height, HAlignment hAlign, VAlignment vAlign, std::function<void()> content, bool hideable) {
-    LOG_INFO("CardLayoutManager::beginCard - ID: %s", id.c_str());
     // Check if the card's visibility state already exists
     if (m_cardVisibilityState.find(id) == m_cardVisibilityState.end()) {
         m_cardVisibilityState[id] = false; // Default to visible
-        LOG_INFO("CardLayoutManager::beginCard - Initializing visibility for %s to false", id.c_str());
     }
     std::unique_ptr<Card> newCard = std::make_unique<Card>(id, width, height, hAlign, vAlign, content, hideable);
     newCard->m_isHidden = m_cardVisibilityState[id];
@@ -288,13 +286,6 @@ void CardLayoutManager::calculateLayout(const ImVec2& displaySize) {
     }
 
     m_layoutCalculated = true;
-
-    // Debugging: Log calculated positions and sizes
-    for (auto& card : m_cards) {
-        LOG_INFO("calculateLayout - Card: %s, Pos: (%.2f, %.2f), Size: (%.2f, %.2f), isHidden: %d",
-                 card->m_id.c_str(), card->m_calculatedPos.x, card->m_calculatedPos.y,
-                 card->m_calculatedSize.x, card->m_calculatedSize.y, card->m_isHidden);
-    }
 
     }
 
