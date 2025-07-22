@@ -1,5 +1,6 @@
 #include "../include/theme_manager.h"
 #include "../include/logger.h"
+#include "../include/state_manager.h"
 #include "imgui.h"
 #include "imgui_internal.h" // For ImGui::GetStyle()
 #include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // For ICON_MIN_FA, ICON_MAX_FA
@@ -7,7 +8,6 @@
 ThemeManager::ThemeManager()
 {
     setupDefaultThemes();
-    // Do not apply a default theme here, it will be applied after ImGui context is created
 }
 
 ThemeManager::~ThemeManager()
@@ -30,7 +30,7 @@ void ThemeManager::setupDefaultThemes()
     // Light Theme
     Theme lightTheme;
     lightTheme.name = "Light";
-    lightTheme.screen_background = ImVec4(0.9f, 0.9f, 0.9f, 1.0f); // Light grey
+    lightTheme.screen_background = ImVec4(0.6f, 0.7f, 1.0f, 1.0f); // Light blue
     lightTheme.widget_background = ImVec4(0.8f, 0.8f, 0.8f, 1.0f); // Slightly darker grey
     lightTheme.corner_roundness = 0.0f; // No roundness for light theme
     lightTheme.font_name = "DroidSans.ttf"; // Default font
@@ -64,6 +64,49 @@ void ThemeManager::applyTheme(const Theme& theme)
     }
 
     LOG_INFO("Applied theme: %s", theme.name.c_str());
+
+    // Save theme to state manager
+    StateManager::getInstance().saveString("theme_name", m_currentTheme.name);
+    StateManager::getInstance().saveString("theme_screen_background_x", std::to_string(m_currentTheme.screen_background.x));
+    StateManager::getInstance().saveString("theme_screen_background_y", std::to_string(m_currentTheme.screen_background.y));
+    StateManager::getInstance().saveString("theme_screen_background_z", std::to_string(m_currentTheme.screen_background.z));
+    StateManager::getInstance().saveString("theme_screen_background_w", std::to_string(m_currentTheme.screen_background.w));
+    StateManager::getInstance().saveString("theme_widget_background_x", std::to_string(m_currentTheme.widget_background.x));
+    StateManager::getInstance().saveString("theme_widget_background_y", std::to_string(m_currentTheme.widget_background.y));
+    StateManager::getInstance().saveString("theme_widget_background_z", std::to_string(m_currentTheme.widget_background.z));
+    StateManager::getInstance().saveString("theme_widget_background_w", std::to_string(m_currentTheme.widget_background.w));
+    StateManager::getInstance().saveString("theme_corner_roundness", std::to_string(m_currentTheme.corner_roundness));
+    StateManager::getInstance().saveString("theme_font_name", m_currentTheme.font_name);
+    StateManager::getInstance().saveString("theme_font_size", std::to_string(m_currentTheme.font_size));
+}
+
+bool ThemeManager::loadThemeFromState()
+{
+    std::string themeName;
+    if (StateManager::getInstance().loadString("theme_name", themeName)) {
+        Theme loadedTheme;
+        loadedTheme.name = themeName;
+
+        std::string val;
+        if (StateManager::getInstance().loadString("theme_screen_background_x", val)) loadedTheme.screen_background.x = std::stof(val);
+        if (StateManager::getInstance().loadString("theme_screen_background_y", val)) loadedTheme.screen_background.y = std::stof(val);
+        if (StateManager::getInstance().loadString("theme_screen_background_z", val)) loadedTheme.screen_background.z = std::stof(val);
+        if (StateManager::getInstance().loadString("theme_screen_background_w", val)) loadedTheme.screen_background.w = std::stof(val);
+
+        if (StateManager::getInstance().loadString("theme_widget_background_x", val)) loadedTheme.widget_background.x = std::stof(val);
+        if (StateManager::getInstance().loadString("theme_widget_background_y", val)) loadedTheme.widget_background.y = std::stof(val);
+        if (StateManager::getInstance().loadString("theme_widget_background_z", val)) loadedTheme.widget_background.z = std::stof(val);
+        if (StateManager::getInstance().loadString("theme_widget_background_w", val)) loadedTheme.widget_background.w = std::stof(val);
+
+        if (StateManager::getInstance().loadString("theme_corner_roundness", val)) loadedTheme.corner_roundness = std::stof(val);
+        if (StateManager::getInstance().loadString("theme_font_name", val)) loadedTheme.font_name = val;
+        if (StateManager::getInstance().loadString("theme_font_size", val)) loadedTheme.font_size = std::stof(val);
+
+        applyTheme(loadedTheme);
+        LOG_INFO("Loaded theme from state: %s", themeName.c_str());
+        return true;
+    }
+    return false;
 }
 
 void ThemeManager::applyImGuiStyle(const Theme& theme)

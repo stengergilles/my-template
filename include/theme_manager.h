@@ -27,6 +27,7 @@ public:
     void applyTheme(const Theme& theme);
     void showThemeEditor();
     void loadFonts(AAssetManager* assetManager = nullptr);
+    bool loadThemeFromState(); // New public method
 
     // Getters for theme properties
     ImVec4 getScreenBackground() const { return m_currentTheme.screen_background; }

@@ -58,8 +58,16 @@ bool Application::initImGui()
     // Setup ImGui style
     ImGui::StyleColorsDark();
 
-    // Apply default theme
-    m_themeManager.applyTheme(m_themeManager.getAvailableThemes()[0]);
+    // Apply default theme or load from state
+    if (!m_themeManager.loadThemeFromState()) {
+        // If no theme is loaded from state, apply the default Light theme
+        for (const auto& theme : m_themeManager.getAvailableThemes()) {
+            if (theme.name == "Light") {
+                m_themeManager.applyTheme(theme);
+                break;
+            }
+        }
+    }
 
     // Load fonts
 #ifdef __ANDROID__
