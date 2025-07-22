@@ -1,6 +1,7 @@
 #include "../include/settings_manager.h"
 #include "../include/logger.h"
 #include "../include/state_manager.h"
+#include "../include/scaling_manager.h"
 #include "imgui.h"
 #include "imgui_internal.h" // For ImGui::GetStyle()
 #include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // For ICON_MIN_FA, ICON_MAX_FA
@@ -25,6 +26,7 @@ void SettingsManager::setupDefaultSettings()
     darkSettings.corner_roundness = 5.0f; // Default roundness for dark settings
     darkSettings.font_name = "DroidSans.ttf"; // Default font
     darkSettings.font_size = 12.0f; // Default font size
+    darkSettings.scale = 1.0f; // Default scale
     m_availableSettings.push_back(darkSettings);
 
     // Light Settings
@@ -35,6 +37,7 @@ void SettingsManager::setupDefaultSettings()
     lightSettings.corner_roundness = 0.0f; // No roundness for light settings
     lightSettings.font_name = "DroidSans.ttf"; // Default font
     lightSettings.font_size = 12.0f; // Default font size
+    lightSettings.scale = 1.0f; // Default scale
     m_availableSettings.push_back(lightSettings);
 
     // Custom Settings (example)
@@ -45,6 +48,7 @@ void SettingsManager::setupDefaultSettings()
     customSettings.corner_roundness = 10.0f; // More roundness for custom settings
     customSettings.font_name = "DroidSans.ttf"; // Default font
     customSettings.font_size = 12.0f; // Default font size
+    customSettings.scale = 1.0f; // Default scale
     m_availableSettings.push_back(customSettings);
 }
 
@@ -78,6 +82,8 @@ void SettingsManager::applySettings(const Settings& settings)
     StateManager::getInstance().saveString("settings_corner_roundness", std::to_string(m_currentSettings.corner_roundness));
     StateManager::getInstance().saveString("settings_font_name", m_currentSettings.font_name);
     StateManager::getInstance().saveString("settings_font_size", std::to_string(m_currentSettings.font_size));
+    StateManager::getInstance().saveString("settings_scale", std::to_string(m_currentSettings.scale));
+    ScalingManager::getInstance().setScaleAdjustment(m_currentSettings.scale);
 }
 
 bool SettingsManager::loadSettingsFromState()
@@ -101,8 +107,10 @@ bool SettingsManager::loadSettingsFromState()
         if (StateManager::getInstance().loadString("settings_corner_roundness", val)) loadedSettings.corner_roundness = std::stof(val);
         if (StateManager::getInstance().loadString("settings_font_name", val)) loadedSettings.font_name = val;
         if (StateManager::getInstance().loadString("settings_font_size", val)) loadedSettings.font_size = std::stof(val);
+        if (StateManager::getInstance().loadString("settings_scale", val)) loadedSettings.scale = std::stof(val);
 
         applySettings(loadedSettings);
+        ScalingManager::getInstance().setScaleAdjustment(loadedSettings.scale);
         LOG_INFO("Loaded settings from state: %s", settingsName.c_str());
         return true;
     }
@@ -198,6 +206,8 @@ void SettingsManager::showSettingsEditor()
         if (ImGui::Button("Apply Custom Settings")) {
             applySettings(m_currentSettings);
         }
+
+        ImGui::SliderFloat("UI Scale", &m_currentSettings.scale, 0.5f, 2.0f, "%.1f");
     }
 }
 

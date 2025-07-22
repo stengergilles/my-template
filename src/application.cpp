@@ -95,6 +95,7 @@ bool Application::initImGui()
             }
         }
     }
+    ScalingManager::getInstance().setScaleAdjustment(m_settingsManager.getScale());
     
 
     // Load fonts

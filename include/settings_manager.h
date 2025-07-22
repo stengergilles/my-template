@@ -15,6 +15,7 @@ struct Settings
     float corner_roundness; // New member for corner roundness
     std::string font_name; // New member for selected font name
     float font_size;       // New member for selected font size
+    float scale;           // New member for UI scale adjustment
     // Add more settings properties as needed
 };
 
@@ -34,6 +35,7 @@ public:
     const std::vector<Settings>& getAvailableSettings() const { return m_availableSettings; }
     const std::vector<std::string>& getAvailableFontNames() const { return m_availableFontNames; }
     const std::vector<float>& getAvailableFontSizes() const { return m_availableFontSizes; }
+    float getScale() const { return m_currentSettings.scale; }
 
 private:
     Settings m_currentSettings;
