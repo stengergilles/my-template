@@ -3,7 +3,7 @@
 #include "../include/scaling_manager.h"
 #include "../include/platform_http_client.hpp" // Added for PlatformHttpClient
 #include "../include/state_manager.h"
-#include "../include/theme_manager.h" // Include ThemeManager
+#include "../include/settings_manager.h" // Include SettingsManager
 #include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 #include "imgui.h"
 #include "layout/Layout.h"
@@ -19,7 +19,7 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
     , m_running(false)
     , m_show_log_widget(true) // Initialize to true for debugging
     , m_log_widget(logWidget) // Initialize with passed pointer
-    , m_themeManager() // Initialize ThemeManager
+    , m_settingsManager() // Initialize SettingsManager
     , m_currentPage(Page::Home) // Initialize current page to Home
     , m_httpGetResponse("") // Initialize HTTP GET response string
     , m_statusBarMessage("Status: Ready") // Initialize status bar message
@@ -39,8 +39,8 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
     if (StateManager::getInstance().loadString("current_page", pageStr)) {
         if (pageStr == "Home") {
             m_currentPage = Page::Home;
-        } else if (pageStr == "ThemeEditor") {
-            m_currentPage = Page::ThemeEditor;
+        } else if (pageStr == "SettingsEditor") {
+            m_currentPage = Page::SettingsEditor;
         } else if (pageStr == "HttpGetDemo") {
             m_currentPage = Page::HttpGetDemo;
         }
@@ -55,8 +55,8 @@ Application::~Application()
         case Page::Home:
             pageStr = "Home";
             break;
-        case Page::ThemeEditor:
-            pageStr = "ThemeEditor";
+        case Page::SettingsEditor:
+            pageStr = "SettingsEditor";
             break;
         case Page::HttpGetDemo:
             pageStr = "HttpGetDemo";
@@ -85,22 +85,23 @@ bool Application::initImGui()
     // Setup ImGui style
     ImGui::StyleColorsDark();
 
-    // Apply default theme or load from state
-    if (!m_themeManager.loadThemeFromState()) {
-        // If no theme is loaded from state, apply the default Light theme
-        for (const auto& theme : m_themeManager.getAvailableThemes()) {
-            if (theme.name == "Light") {
-                m_themeManager.applyTheme(theme);
+    // Apply default settings or load from state
+    if (!m_settingsManager.loadSettingsFromState()) {
+        // If no settings are loaded from state, apply the default Light settings
+        for (const auto& settings : m_settingsManager.getAvailableSettings()) {
+            if (settings.name == "Light") {
+                m_settingsManager.applySettings(settings);
                 break;
             }
         }
     }
+    
 
     // Load fonts
 #ifdef __ANDROID__
-    m_themeManager.loadFonts(static_cast<PlatformAndroid*>(this)->getAssetManager());
+    m_settingsManager.loadFonts(static_cast<PlatformAndroid*>(this)->getAssetManager());
 #else
-    m_themeManager.loadFonts();
+    m_settingsManager.loadFonts();
 #endif
     
     return true;
@@ -144,8 +145,8 @@ void Application::renderFrame()
     platformNewFrame();
     ImGui::NewFrame();
 
-    // Set clear color based on theme
-    ImVec4 clear_color = m_themeManager.getScreenBackground();
+    // Set clear color based on settings
+    ImVec4 clear_color = m_settingsManager.getScreenBackground();
     ImGui::GetBackgroundDrawList()->AddRectFilled(
         ImVec2(0, 0),
         ImGui::GetIO().DisplaySize,
@@ -197,9 +198,9 @@ void Application::renderFrame()
                 Application::getInstance()->m_currentPage = Application::Page::Home;
                 StateManager::getInstance().saveString("current_page", "Home");
             }
-            if (ImGui::Button("Theme Editor")) {
-                Application::getInstance()->m_currentPage = Application::Page::ThemeEditor;
-                StateManager::getInstance().saveString("current_page", "ThemeEditor");
+            if (ImGui::Button("Settings Editor")) {
+                Application::getInstance()->m_currentPage = Application::Page::SettingsEditor;
+                StateManager::getInstance().saveString("current_page", "SettingsEditor");
             }
             if (ImGui::Button("HTTP GET Demo")) {
                 Application::getInstance()->m_currentPage = Application::Page::HttpGetDemo;
@@ -247,8 +248,8 @@ void Application::renderFrame()
                 case Page::Home:
                     renderHomePage();
                     break;
-                case Page::ThemeEditor:
-                    m_themeManager.showThemeEditor();
+                case Page::SettingsEditor:
+                    m_settingsManager.showSettingsEditor();
                     break;
                 case Page::HttpGetDemo:
                     renderHttpGetDemoPage();

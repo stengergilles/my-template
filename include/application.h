@@ -8,7 +8,7 @@
 #include "platform_http_client.hpp" // For createPlatformHttpClient()
 #include "log_widget.h"
 #include "layout/Layout.h"
-#include "theme_manager.h" // Include ThemeManager for full definition
+#include "settings_manager.h" // Include SettingsManager for full definition
 
 // Forward declarations
 struct ImGuiContext;
@@ -55,11 +55,11 @@ protected:
     LogWidget* m_log_widget; // Log widget instance
     std::unique_ptr<HttpClient> m_httpClient;
     Worker<HttpResponse> m_httpWorker;
-    class ThemeManager m_themeManager; // Add ThemeManager member
+        class SettingsManager m_settingsManager; // Add SettingsManager member
 
     enum class Page {
         Home,
-        ThemeEditor,
+        SettingsEditor,
         HttpGetDemo
     };
 

@@ -147,7 +147,7 @@ set(SOURCES
     src/log_widget.cpp
     src/state_manager.cpp
     src/layout/Layout.cpp
-    src/theme_manager.cpp
+    src/settings_manager.cpp
 )
 
 # Define platform-specific logger sources
