@@ -6,6 +6,10 @@
 #include "imgui_internal.h" // For ImGui::GetStyle()
 #include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // For ICON_MIN_FA, ICON_MAX_FA
 
+#ifndef __ANDROID__
+#include "../include/platform/linux/asset_manager.h"
+#endif
+
 SettingsManager::SettingsManager()
 {
     setupDefaultSettings();
@@ -211,104 +215,145 @@ void SettingsManager::showSettingsEditor()
     }
 }
 
+#ifdef __ANDROID__
 void SettingsManager::loadFonts(AAssetManager* assetManager)
 {
     ImGuiIO& io = ImGui::GetIO();
     io.Fonts->Clear(); // Clear existing fonts
-    m_fontData.clear(); // Clear stored font data
 
-    // Populate available font names and sizes
-    m_availableFontNames.clear();
-    m_availableFontNames.push_back("DroidSans.ttf");
-    m_availableFontNames.push_back("Karla-Regular.ttf");
-    m_availableFontNames.push_back("Roboto-Medium.ttf");
-    LOG_INFO("Available font names populated. Count: %zu", m_availableFontNames.size());
+    m_availableFontNames = {
+        "Cousine-Regular.ttf",
+        "DroidSans.ttf",
+        "fa-solid-900.ttf",
+        "Karla-Regular.ttf",
+        "ProggyClean.ttf",
+        "ProggyTiny.ttf",
+        "Roboto-Medium.ttf"
+    };
 
-    m_availableFontSizes.clear();
-    m_availableFontSizes.push_back(12.0f);
-    m_availableFontSizes.push_back(16.0f);
-    m_availableFontSizes.push_back(18.0f);
+    m_availableFontSizes = {12.0f, 14.0f, 16.0f, 18.0f, 20.0f, 22.0f, 24.0f};
 
-    // Load specified fonts and sizes
+    // Load fonts from assets
     for (const auto& fontName : m_availableFontNames) {
-        for (float fontSize : m_availableFontSizes) {
-            std::string fontPath = "external/imgui/misc/fonts/" + fontName;
-            std::string fontKey = fontName + "_" + std::to_string(static_cast<int>(fontSize));
+        AAsset* asset = AAssetManager_open(assetManager, fontName.c_str(), AASSET_MODE_BUFFER);
+        if (asset) {
+            size_t file_size = AAsset_getLength(asset);
+            std::vector<char> font_data(file_size);
+            AAsset_read(asset, font_data.data(), file_size);
+            AAsset_close(asset);
 
-#ifdef __ANDROID__
-            if (assetManager) {
-                AAsset* asset = AAssetManager_open(assetManager, fontName.c_str(), AASSET_MODE_BUFFER);
-                if (asset) {
-                    size_t file_size = AAsset_getLength(asset);
-                    m_fontData[fontKey].resize(file_size);
-                    AAsset_read(asset, m_fontData[fontKey].data(), file_size);
-                    AAsset_close(asset);
+            // Store font data to ensure it stays in memory
+            m_fontData[fontName] = font_data;
 
-                    ImFont* font = io.Fonts->AddFontFromMemoryTTF(m_fontData[fontKey].data(), file_size, fontSize);
-                    if (font) {
-                        m_fonts[fontKey] = font;
-                        LOG_INFO("Loaded font: %s at size %.1f from assets.", fontName.c_str(), fontSize);
-                    } else {
-                        LOG_ERROR("Failed to load font: %s at size %.1f from assets.", fontName.c_str(), fontSize);
-                    }
-                    
+            for (float fontSize : m_availableFontSizes) {
+                ImFontConfig font_cfg;
+                font_cfg.FontDataOwnedByAtlas = false; // We own the data
+                ImFont* font = io.Fonts->AddFontFromMemoryTTF(m_fontData[fontName].data(), m_fontData[fontName].size(), fontSize, &font_cfg);
+                if (font) {
+                    m_fonts[fontName + "_" + std::to_string(static_cast<int>(fontSize))] = font;
+                    LOG_INFO("Loaded font: %s at size %.1f", fontName.c_str(), fontSize);
                 } else {
-                    LOG_ERROR("Failed to open font: %s from assets. Asset is null.", fontName.c_str());
+                    LOG_ERROR("Failed to load font: %s at size %.1f", fontName.c_str(), fontSize);
                 }
-            } else {
-                LOG_ERROR("AssetManager is null. Cannot load fonts from assets.");
             }
-#else
-            ImFont* font = io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontSize);
-            if (font) {
-                m_fonts[fontKey] = font;
-                LOG_INFO("Loaded font: %s at size %.1f.", fontName.c_str(), fontSize);
-            } else {
-                LOG_ERROR("Failed to load font: %s at size %.1f.", fontName.c_str(), fontSize);
-            }
-#endif
+        } else {
+            LOG_ERROR("Failed to open font asset: %s", fontName.c_str());
         }
     }
 
-    // Load FontAwesome font (fa-solid-900.ttf) - 12px
-    // This is typically loaded with a merge to the default font for icons.
-    // Ensure the path is correct for your setup.
+    // Merge icon font into default font
     ImFontConfig config;
     config.MergeMode = true;
     config.PixelSnapH = true;
     static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
-
-#ifdef __ANDROID__
-    if (assetManager) {
-        AAsset* asset = AAssetManager_open(assetManager, "fa-solid-900.ttf", AASSET_MODE_BUFFER);
-        if (asset) {
-            size_t file_size = AAsset_getLength(asset);
-            m_fontData["FontAwesome"].resize(file_size);
-            AAsset_read(asset, m_fontData["FontAwesome"].data(), file_size);
-            AAsset_close(asset);
-
-            ImFont* fontAwesome = io.Fonts->AddFontFromMemoryTTF(m_fontData["FontAwesome"].data(), file_size, 12.0f, &config, icon_ranges);
-            if (fontAwesome) {
-                m_fonts["FontAwesome"] = fontAwesome;
-                LOG_INFO("Loaded FontAwesome font: fa-solid-900.ttf from assets.");
-            } else {
-                LOG_ERROR("Failed to load FontAwesome font: fa-solid-900.ttf from assets.");
-            }
-        } else {
-            LOG_ERROR("Failed to open fa-solid-900.ttf from assets.");
-        }
+    AAsset* icon_asset = AAssetManager_open(assetManager, "fa-solid-900.ttf", AASSET_MODE_BUFFER);
+    if (icon_asset) {
+        size_t file_size = AAsset_getLength(icon_asset);
+        std::vector<char> icon_font_data(file_size);
+        AAsset_read(icon_asset, icon_font_data.data(), file_size);
+        AAsset_close(icon_asset);
+        m_fontData["fa-solid-900.ttf"] = icon_font_data; // Store icon font data
+        io.Fonts->AddFontFromMemoryTTF(m_fontData["fa-solid-900.ttf"].data(), m_fontData["fa-solid-900.ttf"].size(), 12.0f, &config, icon_ranges);
     } else {
-        LOG_ERROR("AssetManager is null. Cannot load FontAwesome font from assets.");
+        LOG_ERROR("Failed to open icon font asset: fa-solid-900.ttf");
     }
-#else
-    ImFont* fontAwesome = io.Fonts->AddFontFromFileTTF("../external/fontawesome/fa-solid-900.ttf", 12.0f, &config, icon_ranges);
-    if (fontAwesome) {
-        m_fonts["FontAwesome"] = fontAwesome;
-        LOG_INFO("Loaded FontAwesome font: fa-solid-900.ttf");
-    } else {
-        LOG_ERROR("Failed to load FontAwesome font: ../external/fontawesome/fa-solid-900.ttf");
-    }
-#endif
 
     io.Fonts->Build();
 }
+#else
+#include <libgen.h> // For dirname
+#include <limits.h> // For PATH_MAX
+#include <unistd.h> // For readlink
+
+void SettingsManager::loadFonts()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->Clear(); // Clear existing fonts
+
+    m_availableFontNames = {
+        "Cousine-Regular.ttf",
+        "DroidSans.ttf",
+        "fa-solid-900.ttf",
+        "Karla-Regular.ttf",
+        "ProggyClean.ttf",
+        "ProggyTiny.ttf",
+        "Roboto-Medium.ttf"
+    };
+
+    m_availableFontSizes = {12.0f, 14.0f, 16.0f, 18.0f, 20.0f, 22.0f, 24.0f};
+
+    // Determine executable path and construct assets/fonts path
+    char path[PATH_MAX];
+    ssize_t count = readlink("/proc/self/exe", path, PATH_MAX);
+    std::string executablePath;
+    if (count != -1) {
+        executablePath = std::string(path, (size_t)count);
+    } else {
+        LOG_ERROR("Failed to get executable path.");
+        return;
+    }
+
+    std::string executableDir = dirname(const_cast<char*>(executablePath.c_str()));
+    std::string fontBasePath = executableDir + "/assets/fonts";
+
+    LinuxAssetManager assetManager(fontBasePath);
+
+    // Load fonts using LinuxAssetManager
+    for (const auto& fontName : m_availableFontNames) {
+        std::shared_ptr<LinuxAsset> asset = assetManager.open(fontName);
+        if (asset && asset->getBuffer()) {
+            // Store font data to ensure it stays in memory
+            m_fontData[fontName] = asset;
+
+            for (float fontSize : m_availableFontSizes) {
+                ImFontConfig font_cfg;
+                font_cfg.FontDataOwnedByAtlas = false; // We own the data
+                ImFont* font = io.Fonts->AddFontFromMemoryTTF(const_cast<void*>(asset->getBuffer()), asset->getLength(), fontSize, &font_cfg);
+                if (font) {
+                    m_fonts[fontName + "_" + std::to_string(static_cast<int>(fontSize))] = font;
+                    LOG_INFO("Loaded font: %s at size %.1f", fontName.c_str(), fontSize);
+                } else {
+                    LOG_ERROR("Failed to load font: %s at size %.1f", fontName.c_str(), fontSize);
+                }
+            }
+        } else {
+            LOG_ERROR("Failed to open font asset: %s", fontName.c_str());
+        }
+    }
+
+    // Merge icon font into default font
+    ImFontConfig config;
+    config.MergeMode = true;
+    config.PixelSnapH = true;
+    static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+    std::shared_ptr<LinuxAsset> icon_asset = assetManager.open("fa-solid-900.ttf");
+    if (icon_asset && icon_asset->getBuffer()) {
+        m_fontData["fa-solid-900.ttf"] = icon_asset; // Store icon font data
+        io.Fonts->AddFontFromMemoryTTF(const_cast<void*>(icon_asset->getBuffer()), icon_asset->getLength(), 12.0f, &config, icon_ranges);
+    } else {
+        LOG_ERROR("Failed to open icon font asset: fa-solid-900.ttf");
+    }
+
+    io.Fonts->Build();
+}
+#endif

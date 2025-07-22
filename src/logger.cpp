@@ -88,6 +88,7 @@ std::unique_ptr<ILogger> LoggerFactory::createLogger() {
 #endif
 }
 
+#if defined(__ANDROID__)
 void LoggerFactory::set_android_logger_widget(LogWidget* widget) {
 #if defined(__ANDROID__)
     if (g_logger) {
@@ -98,3 +99,4 @@ void LoggerFactory::set_android_logger_widget(LogWidget* widget) {
     }
 #endif
 }
+#endif

@@ -18,6 +18,8 @@ protected:
     virtual void platformNewFrame() override;
     virtual void platformRender() override;
     virtual bool platformHandleEvents() override;
+    virtual int getFramebufferWidth() const override;
+    virtual int getFramebufferHeight() const override;
 
 private:
     GLFWwindow* m_window;

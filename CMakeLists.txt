@@ -424,5 +424,40 @@ endif()
 
 
 if(NOT ANDROID)
+    
+
+    
+
+    set(PLATFORM_SOURCES
+        src/platform/platform_glfw.cpp
+        src/platform/platform_base.cpp
+        src/platform/linux/asset_manager.cpp
+        external/imgui/backends/imgui_impl_glfw.cpp
+        external/imgui/backends/imgui_impl_opengl3.cpp
+    )
+
+    include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/platform/linux
+    )
+
+    add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        glfw
+        CURL::libcurl
+        OpenSSL::SSL
+        OpenSSL::Crypto
+        nlohmann_json::nlohmann_json
+        platform_logger_lib
+        GL
+        X11
+    )
+
+    if(TARGET appcode)
+        target_link_libraries(${PROJECT_NAME} PRIVATE appcode)
+    endif()
+
+    add_dependencies(${PROJECT_NAME} gen_cacert_header)
+
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 endif()

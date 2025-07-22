@@ -4,7 +4,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#ifdef __ANDROID__
 #include <android/asset_manager.h> // Required for AAssetManager and AAsset
+#else
+#include <memory>
+#include "../include/platform/linux/asset_manager.h"
+#endif
 
 // Structure to hold settings
 struct Settings
@@ -27,7 +32,11 @@ public:
 
     void applySettings(const Settings& settings);
     void showSettingsEditor();
+    #ifdef __ANDROID__
     void loadFonts(AAssetManager* assetManager = nullptr);
+#else
+    void loadFonts();
+#endif
     bool loadSettingsFromState(); // New public method
 
     // Getters for settings properties
@@ -43,7 +52,11 @@ private:
     std::map<std::string, ImFont*> m_fonts;
     std::vector<std::string> m_availableFontNames;
     std::vector<float> m_availableFontSizes;
+    #ifndef __ANDROID__
+    std::map<std::string, std::shared_ptr<LinuxAsset>> m_fontData;
+#else
     std::map<std::string, std::vector<char>> m_fontData; // New member to store font data
+#endif
 
     void setupDefaultSettings();
     void applyImGuiStyle(const Settings& settings);

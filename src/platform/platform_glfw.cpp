@@ -91,3 +91,11 @@ bool PlatformGLFW::platformHandleEvents()
     glfwPollEvents();
     return !glfwWindowShouldClose(m_window);
 }
+
+int PlatformGLFW::getFramebufferWidth() const {
+    return m_width;
+}
+
+int PlatformGLFW::getFramebufferHeight() const {
+    return m_height;
+}

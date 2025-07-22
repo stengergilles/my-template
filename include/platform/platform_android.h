@@ -37,7 +37,9 @@ public:
     int32_t getScreenOrientation() const; // Added method to get screen orientation
     void* getAndroidApp() override; // Added declaration
     void recreateSwapChain(); // Added declaration
+    #ifdef __ANDROID__
     AAssetManager* getAssetManager() const { return m_assetManager; } // New getter for AssetManager
+#endif
 
 private:
     // Changed from private to protected to allow access in derived classes
@@ -47,7 +49,9 @@ private:
     bool m_keyboardVisible = false;  // Track keyboard visibility
     int m_fbWidth = 0;
     int m_fbHeight = 0;
+    #ifdef __ANDROID__
     AAssetManager* m_assetManager = nullptr; // New member for AssetManager
+#endif
 
 public:
     int getFramebufferWidth() const override;
