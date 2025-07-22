@@ -50,4 +50,14 @@ fi
 
 git clone https://github.com/juliettef/IconFontCppHeaders.git
 
+# Check if GLFW is already downloaded   
+if [ ! -d "glfw" ]; then 
+	echo "Downloading GLFW..."  
+	git clone https://github.com/glfw/glfw.git glfw   
+	cd glfw 
+	git checkout 3.3.8 
+	cd ..  
+else       
+	echo "GLFW already downloaded."   
+fi
 cd ..
