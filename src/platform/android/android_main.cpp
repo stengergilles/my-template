@@ -8,6 +8,7 @@
 #include "../../include/log_widget.h"
 #include "../../include/scaling_manager.h"
 #include "../../include/state_manager.h" // Include StateManager
+#include <string> // For std::string
 
 // Forward declaration for ImGui Android functions
 extern bool ImGui_ImplAndroid_HandleInputEvent(const AInputEvent* event);
@@ -77,7 +78,18 @@ void android_main(struct android_app* app) {
     g_logger = LoggerFactory::createLogger().release(); // Initialize global logger
     LoggerFactory::set_android_logger_widget(&g_logWidget);
 
-    
+    // Get the package name from ANativeActivity and set it in the LoggerFactory
+    JNIEnv* env;
+    app->activity->vm->AttachCurrentThread(&env, nullptr);
+    jclass activityClass = env->GetObjectClass(app->activity->clazz);
+    jmethodID getPackageNameMethod = env->GetMethodID(activityClass, "getPackageName", "()Ljava/lang/String;");
+    jstring jPackageName = (jstring)env->CallObjectMethod(app->activity->clazz, getPackageNameMethod);
+    const char* packageNameCStr = env->GetStringUTFChars(jPackageName, nullptr);
+    if (packageNameCStr != nullptr) {
+        LoggerFactory::setPackageName(packageNameCStr);
+        env->ReleaseStringUTFChars(jPackageName, packageNameCStr);
+    }
+    app->activity->vm->DetachCurrentThread();
 
     // Make sure glue isn't stripped
     app_dummy();

@@ -10,6 +10,9 @@
 // Global logger instance
 ILogger* g_logger = nullptr;
 
+// Initialize static member
+std::string LoggerFactory::s_packageName = "";
+
 // Standard output/error logger
 class StdLogger : public ILogger {
 public:
@@ -64,7 +67,7 @@ public:
         va_start(args_android, fmt);
         va_copy(args_widget, args_android);
 
-        __android_log_vprint(android_level, "ImGuiApp", fmt, args_android);
+        __android_log_vprint(android_level, LoggerFactory::getPackageName().c_str(), fmt, args_android);
         
         if (m_log_widget) {
             m_log_widget->AddLogV(fmt, args_widget);
@@ -86,6 +89,14 @@ std::unique_ptr<ILogger> LoggerFactory::createLogger() {
 #else
     return std::make_unique<StdLogger>();
 #endif
+}
+
+void LoggerFactory::setPackageName(const std::string& packageName) {
+    s_packageName = packageName;
+}
+
+const std::string& LoggerFactory::getPackageName() {
+    return s_packageName;
 }
 
 #if defined(__ANDROID__)

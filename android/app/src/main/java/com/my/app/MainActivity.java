@@ -44,9 +44,6 @@ public class MainActivity extends ImGuiKeyboardHelper {
         
         AppLogger.info(TAG, "MainActivity created");
         
-        // Pass package name to native code
-        ImGuiJNI.setPackageName(getPackageName());
-        
         // Set up edge-to-edge display
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 

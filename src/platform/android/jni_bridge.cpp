@@ -26,6 +26,22 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
         return JNI_ERR;
     }
     
+    // Get the Application context
+    jclass activityThreadClass = env->FindClass("android/app/ActivityThread");
+    jmethodID currentApplicationMethod = env->GetStaticMethodID(activityThreadClass, "currentApplication", "()Landroid/app/Application;");
+    jobject application = env->CallStaticObjectMethod(activityThreadClass, currentApplicationMethod);
+
+    // Get the package name from the Application context
+    jclass applicationClass = env->GetObjectClass(application);
+    jmethodID getPackageNameMethod = env->GetMethodID(applicationClass, "getPackageName", "()Ljava/lang/String;");
+    jstring packageName = (jstring)env->CallObjectMethod(application, getPackageNameMethod);
+
+    const char* packageNameCStr = env->GetStringUTFChars(packageName, nullptr);
+    if (packageNameCStr != nullptr) {
+        g_PackageName = packageNameCStr;
+        env->ReleaseStringUTFChars(packageName, packageNameCStr);
+    }
+
     // Find and cache the MainActivity class and keyboard methods
     jclass mainActivityClass = env->FindClass("com/my/app/MainActivity");
     if (mainActivityClass == nullptr) {

@@ -29,7 +29,7 @@ public:
 
         va_list args;
         va_start(args, fmt);
-        __android_log_vprint(android_log_level, g_PackageName.empty() ? "ImGuiApp" : g_PackageName.c_str(), fmt, args);
+        __android_log_vprint(android_log_level, g_PackageName.c_str(), fmt, args);
         va_end(args);
     }
 };
