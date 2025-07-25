@@ -104,6 +104,17 @@ bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
 
     // Update SettingsManager with available fonts after ImGui is initialized
     SettingsManager::getInstance().updateAvailableFonts();
+
+    // Now that fonts are loaded, load and apply settings from the state
+    if (!SettingsManager::getInstance().loadSettingsFromState()) {
+        // If no settings are loaded from state, apply the default Light settings
+        for (const auto& settings : SettingsManager::getInstance().getAvailableSettings()) {
+            if (settings.name == "Light") {
+                SettingsManager::getInstance().applySettings(settings);
+                break;
+            }
+        }
+    }
     
     return success;
 }

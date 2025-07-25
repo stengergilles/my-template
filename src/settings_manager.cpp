@@ -87,6 +87,8 @@ void SettingsManager::applySettings(const Settings& settings)
     StateManager::getInstance().saveString("settings_widget_background_z", std::to_string(m_currentSettings.widget_background.z));
     StateManager::getInstance().saveString("settings_widget_background_w", std::to_string(m_currentSettings.widget_background.w));
     StateManager::getInstance().saveString("settings_corner_roundness", std::to_string(m_currentSettings.corner_roundness));
+    StateManager::getInstance().saveString("settings_font_name", m_currentSettings.font_name);
+    StateManager::getInstance().saveString("settings_font_size", std::to_string(m_currentSettings.font_size));
     StateManager::getInstance().saveString("settings_scale", std::to_string(m_currentSettings.scale));
     ScalingManager::getInstance().setScaleAdjustment(m_currentSettings.scale);
     FontManager::SetDefaultFont(m_currentSettings.font_name, m_currentSettings.font_size);
@@ -161,12 +163,15 @@ void SettingsManager::applyImGuiStyle(const Settings& settings)
 
 void SettingsManager::showSettingsEditor()
 {
+    bool settings_changed = false;
+
     // Settings selection dropdown
     if (ImGui::BeginCombo("Select Settings", m_currentSettings.name.c_str())) {
         for (const auto& settings : m_availableSettings) {
             bool is_selected = (m_currentSettings.name == settings.name);
             if (ImGui::Selectable(settings.name.c_str(), is_selected)) {
                 applySettings(settings);
+                settings_changed = true;
             }
             if (is_selected) {
                 ImGui::SetItemDefaultFocus();
@@ -177,9 +182,9 @@ void SettingsManager::showSettingsEditor()
 
     // Color pickers for current settings (if it's 'Custom' or editable)
     if (m_currentSettings.name == "Custom") {
-        ImGui::ColorEdit3("Screen Background", (float*)&m_currentSettings.screen_background);
-        ImGui::ColorEdit3("Widget Background", (float*)&m_currentSettings.widget_background);
-        ImGui::SliderFloat("Corner Roundness", &m_currentSettings.corner_roundness, 0.0f, 12.0f, "%.1f");
+        if (ImGui::ColorEdit3("Screen Background", (float*)&m_currentSettings.screen_background)) settings_changed = true;
+        if (ImGui::ColorEdit3("Widget Background", (float*)&m_currentSettings.widget_background)) settings_changed = true;
+        if (ImGui::SliderFloat("Corner Roundness", &m_currentSettings.corner_roundness, 0.0f, 12.0f, "%.1f")) settings_changed = true;
 
         // Font selection
         if (ImGui::BeginCombo("Font", m_currentSettings.font_name.c_str())) {
@@ -187,6 +192,7 @@ void SettingsManager::showSettingsEditor()
                 bool is_selected = (m_currentSettings.font_name == fontName);
                 if (ImGui::Selectable(fontName.c_str(), is_selected)) {
                     m_currentSettings.font_name = fontName;
+                    settings_changed = true;
                 }
                 if (is_selected) {
                     ImGui::SetItemDefaultFocus();
@@ -201,6 +207,7 @@ void SettingsManager::showSettingsEditor()
                 bool is_selected = (m_currentSettings.font_size == fontSize);
                 if (ImGui::Selectable(std::to_string(fontSize).c_str(), is_selected)) {
                     m_currentSettings.font_size = fontSize;
+                    settings_changed = true;
                 }
                 if (is_selected) {
                     ImGui::SetItemDefaultFocus();
@@ -209,11 +216,11 @@ void SettingsManager::showSettingsEditor()
             ImGui::EndCombo();
         }
 
-        if (ImGui::Button("Apply Custom Settings")) {
-            applySettings(m_currentSettings);
-        }
+        if (ImGui::SliderFloat("UI Scale", &m_currentSettings.scale, 0.5f, 2.0f, "%.1f")) settings_changed = true;
+    }
 
-        ImGui::SliderFloat("UI Scale", &m_currentSettings.scale, 0.5f, 2.0f, "%.1f");
+    if (settings_changed) {
+        applySettings(m_currentSettings);
     }
 }
 

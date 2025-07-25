@@ -85,17 +85,10 @@ bool Application::initImGui()
     // Setup ImGui style
     ImGui::StyleColorsDark();
 
-    // Apply default settings or load from state
-    if (!SettingsManager::getInstance().loadSettingsFromState()) {
-        // If no settings are loaded from state, apply the default Light settings
-        for (const auto& settings : SettingsManager::getInstance().getAvailableSettings()) {
-            if (settings.name == "Light") {
-                SettingsManager::getInstance().applySettings(settings);
-                break;
-            }
-        }
-    }
-    ScalingManager::getInstance().setScaleAdjustment(SettingsManager::getInstance().getScale());
+    // A default style is applied here.
+    // Saved settings will be loaded and applied in the platform-specific init function
+    // after platform-dependent resources (like fonts) are loaded.
+    ScalingManager::getInstance().setScaleAdjustment(1.0f);
     
 
     

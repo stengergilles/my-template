@@ -111,15 +111,15 @@ void android_main(struct android_app* app) {
         LOG_ERROR("Internal data path is null, cannot change directory.");
     }
     
-    // Load state at startup
-    StateManager::getInstance().loadState();
-    
     // Set callbacks
     app->onAppCmd = handle_cmd;
     app->onInputEvent = handle_input;
     
     // Create application instance
     g_app = new PlatformAndroid("ImGui Hello World", &g_logWidget);
+
+    // Load state at startup
+    StateManager::getInstance().loadState();
     
     // Reset the scaling manager to force scaling application
     ScalingManager& scalingManager = ScalingManager::getInstance();

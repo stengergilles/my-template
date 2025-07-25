@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <mutex>
+#include <condition_variable>
 
 class StateManager {
 public:
@@ -24,7 +25,7 @@ public:
     // Set the internal data path for file storage (Android specific)
     void setInternalDataPath(const std::string& path);
 
-private:
+    private:
     StateManager();
     ~StateManager();
     StateManager(const StateManager&) = delete;

@@ -8,7 +8,6 @@
 
 StateManager::StateManager() : m_internalDataPath(".") {
     updateStateFilePath();
-    loadState();
 }
 
 StateManager::~StateManager() {
