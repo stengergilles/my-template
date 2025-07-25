@@ -19,7 +19,7 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
     , m_running(false)
     , m_show_log_widget(true) // Initialize to true for debugging
     , m_log_widget(logWidget) // Initialize with passed pointer
-    , m_settingsManager() // Initialize SettingsManager
+    
     , m_currentPage(Page::Home) // Initialize current page to Home
     , m_httpGetResponse("") // Initialize HTTP GET response string
     , m_statusBarMessage("Status: Ready") // Initialize status bar message
@@ -86,24 +86,19 @@ bool Application::initImGui()
     ImGui::StyleColorsDark();
 
     // Apply default settings or load from state
-    if (!m_settingsManager.loadSettingsFromState()) {
+    if (!SettingsManager::getInstance().loadSettingsFromState()) {
         // If no settings are loaded from state, apply the default Light settings
-        for (const auto& settings : m_settingsManager.getAvailableSettings()) {
+        for (const auto& settings : SettingsManager::getInstance().getAvailableSettings()) {
             if (settings.name == "Light") {
-                m_settingsManager.applySettings(settings);
+                SettingsManager::getInstance().applySettings(settings);
                 break;
             }
         }
     }
-    ScalingManager::getInstance().setScaleAdjustment(m_settingsManager.getScale());
+    ScalingManager::getInstance().setScaleAdjustment(SettingsManager::getInstance().getScale());
     
 
-    // Load fonts
-#ifdef __ANDROID__
-    m_settingsManager.loadFonts(static_cast<PlatformAndroid*>(this)->getAssetManager());
-#else
-    m_settingsManager.loadFonts();
-#endif
+    
     
     return true;
 }
@@ -147,7 +142,7 @@ void Application::renderFrame()
     ImGui::NewFrame();
 
     // Set clear color based on settings
-    ImVec4 clear_color = m_settingsManager.getScreenBackground();
+    ImVec4 clear_color = SettingsManager::getInstance().getScreenBackground();
     ImGui::GetBackgroundDrawList()->AddRectFilled(
         ImVec2(0, 0),
         ImGui::GetIO().DisplaySize,
@@ -250,7 +245,7 @@ void Application::renderFrame()
                     renderHomePage();
                     break;
                 case Page::SettingsEditor:
-                    m_settingsManager.showSettingsEditor();
+                    SettingsManager::getInstance().showSettingsEditor();
                     break;
                 case Page::HttpGetDemo:
                     renderHttpGetDemoPage();

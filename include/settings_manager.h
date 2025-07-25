@@ -27,17 +27,22 @@ struct Settings
 class SettingsManager
 {
 public:
-    SettingsManager();
+    static SettingsManager& getInstance();
+
+    // Delete copy constructor and assignment operator
+    SettingsManager(const SettingsManager&) = delete;
+    SettingsManager& operator=(const SettingsManager&) = delete;
+
     ~SettingsManager();
 
+private:
+    SettingsManager();
+
+public:
     void applySettings(const Settings& settings);
     void showSettingsEditor();
-    #ifdef __ANDROID__
-    void loadFonts(AAssetManager* assetManager = nullptr);
-#else
-    void loadFonts();
-#endif
-    bool loadSettingsFromState(); // New public method
+    void updateAvailableFonts();
+    bool loadSettingsFromState();
 
     // Getters for settings properties
     ImVec4 getScreenBackground() const { return m_currentSettings.screen_background; }
@@ -49,14 +54,8 @@ public:
 private:
     Settings m_currentSettings;
     std::vector<Settings> m_availableSettings;
-    std::map<std::string, ImFont*> m_fonts;
     std::vector<std::string> m_availableFontNames;
     std::vector<float> m_availableFontSizes;
-    #ifndef __ANDROID__
-    std::map<std::string, std::shared_ptr<LinuxAsset>> m_fontData;
-#else
-    std::map<std::string, std::vector<char>> m_fontData; // New member to store font data
-#endif
 
     void setupDefaultSettings();
     void applyImGuiStyle(const Settings& settings);

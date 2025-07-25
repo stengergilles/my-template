@@ -148,6 +148,7 @@ set(SOURCES
     src/state_manager.cpp
     src/layout/Layout.cpp
     src/settings_manager.cpp
+    src/font_manager.cpp
 )
 
 # Define platform-specific logger sources

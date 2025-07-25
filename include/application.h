@@ -55,7 +55,7 @@ protected:
     LogWidget* m_log_widget; // Log widget instance
     std::unique_ptr<HttpClient> m_httpClient;
     Worker<HttpResponse> m_httpWorker;
-        class SettingsManager m_settingsManager; // Add SettingsManager member
+         // Add SettingsManager member
 
     enum class Page {
         Home,

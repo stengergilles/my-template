@@ -101,6 +101,9 @@ bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
     
     // Initialize ImGui for Android with the direct window pointer
     bool success = ImGui_ImplAndroid_Init(m_window);
+
+    // Update SettingsManager with available fonts after ImGui is initialized
+    SettingsManager::getInstance().updateAvailableFonts();
     
     return success;
 }

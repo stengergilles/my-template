@@ -11,6 +11,9 @@
 #include "../../../include/scaling_manager.h"
 #include "../../../include/logger.h" // Include logger.h
 #include "../../../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
+#include <vector> // For std::vector
+#include <string> // For std::string
+#include <map> // For std::map
 
 // Data
 EGLDisplay g_EglDisplay = EGL_NO_DISPLAY;
@@ -20,10 +23,28 @@ static ANativeWindow* g_Window = NULL;
 static bool g_Initialized = false;
 static AAssetManager* g_AssetManager = NULL; // Global asset manager
 
+// Static vectors to store available font names and sizes
+static std::vector<std::string> s_availableFontNames;
+static std::vector<float> s_availableFontSizes;
+static std::map<std::string, ImFont*> s_loadedFonts; // Map to store loaded fonts
+
 // Function to set the asset manager
 void ImGui_ImplAndroid_SetAssetManager(AAssetManager* assetManager) {
     g_AssetManager = assetManager;
 }
+
+// Functions to get available font names and sizes
+const std::vector<std::string>& ImGui_ImplAndroid_GetAvailableFontNames() {
+    return s_availableFontNames;
+}
+
+const std::vector<float>& ImGui_ImplAndroid_GetAvailableFontSizes() {
+    return s_availableFontSizes;
+}
+
+
+
+
 
 // Global variables for scaling
 static float g_LastAppliedScale = 0.0f;
@@ -289,51 +310,99 @@ bool ImGui_ImplAndroid_Init(ANativeWindow* window)
     // Inform the scaling manager that we've applied this scale
     scalingManager.applyScaling(displayScale);
     
-    // Load DroidSans.ttf font with appropriate size for touch
+    // Load fonts
     io.Fonts->Clear(); // Clear any existing fonts
-    
-    // Load DroidSans.ttf
-    AAsset* fontAsset = AAssetManager_open(g_AssetManager, "DroidSans.ttf", AASSET_MODE_BUFFER);
-    if (fontAsset) {
-        size_t fontDataSize = AAsset_getLength(fontAsset);
-        if (fontDataSize == 0) {
-            LOG_ERROR("DroidSans.ttf asset has 0 size.");
-            AAsset_close(fontAsset);
-            io.Fonts->AddFontDefault(); // Fallback to default font
-        } else {
-            unsigned char* fontData = new unsigned char[fontDataSize];
-            AAsset_read(fontAsset, fontData, fontDataSize);
-            AAsset_close(fontAsset);
-            io.Fonts->AddFontFromMemoryTTF(fontData, fontDataSize, 16.0f); // Default font
-            LOG_INFO("Loaded DroidSans.ttf, size: %zu", fontDataSize);
-            
-        }
-    } else {
-        LOG_ERROR("Failed to open DroidSans.ttf from assets. g_AssetManager: %p", g_AssetManager);
-        io.Fonts->AddFontDefault(); // Fallback to default font
-    }
 
-    // Load Font Awesome
-    static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+    // First, load the icon font data into memory so we can merge it repeatedly.
+    unsigned char* fontAwesomeData = nullptr;
+    size_t fontAwesomeDataSize = 0;
     AAsset* fontAwesomeAsset = AAssetManager_open(g_AssetManager, "fa-solid-900.ttf", AASSET_MODE_BUFFER);
     if (fontAwesomeAsset) {
-        size_t fontAwesomeDataSize = AAsset_getLength(fontAwesomeAsset);
-        if (fontAwesomeDataSize == 0) {
-            LOG_ERROR("fa-solid-900.ttf asset has 0 size.");
-            AAsset_close(fontAwesomeAsset);
-        } else {
-            unsigned char* fontAwesomeData = new unsigned char[fontAwesomeDataSize];
+        fontAwesomeDataSize = AAsset_getLength(fontAwesomeAsset);
+        if (fontAwesomeDataSize > 0) {
+            fontAwesomeData = new unsigned char[fontAwesomeDataSize];
             AAsset_read(fontAwesomeAsset, fontAwesomeData, fontAwesomeDataSize);
-            AAsset_close(fontAwesomeAsset);
-            ImFontConfig config;
-            config.MergeMode = true;
-            config.PixelSnapH = true;
-            io.Fonts->AddFontFromMemoryTTF(fontAwesomeData, fontAwesomeDataSize, 16.0f, &config, icons_ranges);
-            LOG_INFO("Loaded fa-solid-900.ttf, size: %zu", fontAwesomeDataSize);
-            
+        } else {
+            LOG_ERROR("fa-solid-900.ttf asset has 0 size.");
         }
+        AAsset_close(fontAwesomeAsset);
     } else {
-        LOG_ERROR("Failed to open fa-solid-900.ttf from assets. g_AssetManager: %p", g_AssetManager);
+        LOG_ERROR("Failed to open fa-solid-900.ttf from assets.");
+    }
+
+    // List of regular fonts to load
+    const char* fontNames[] = {
+        "DroidSans.ttf",
+        "Cousine-Regular.ttf",
+        "Karla-Regular.ttf",
+        "ProggyClean.ttf",
+        "ProggyTiny.ttf",
+        "Roboto-Medium.ttf"
+    };
+
+    // Populate static font name vector
+    s_availableFontNames.clear();
+    for (const char* fontName : fontNames) {
+        s_availableFontNames.push_back(fontName);
+    }
+    LOG_INFO("Available fonts after population:");
+    for (const std::string& name : s_availableFontNames) {
+        LOG_INFO("- %s", name.c_str());
+    }
+
+    // Populate static font size vector
+    s_availableFontSizes.clear();
+    s_availableFontSizes = {12.0f, 14.0f, 16.0f, 18.0f, 20.0f, 22.0f, 24.0f};
+
+    // Load each regular font and merge the icon font into it for each available size
+    for (const char* fontName : fontNames) {
+        for (float fontSize : s_availableFontSizes) {
+            AAsset* fontAsset = AAssetManager_open(g_AssetManager, fontName, AASSET_MODE_BUFFER);
+            if (fontAsset) {
+                size_t fontDataSize = AAsset_getLength(fontAsset);
+                if (fontDataSize > 0) {
+                    unsigned char* fontData = new unsigned char[fontDataSize];
+                    AAsset_read(fontAsset, fontData, fontDataSize);
+                    
+                    ImFontConfig font_cfg;
+                    font_cfg.FontDataOwnedByAtlas = true;
+                    ImFont* loadedFont = io.Fonts->AddFontFromMemoryTTF(fontData, fontDataSize, fontSize, &font_cfg);
+                    if (loadedFont) {
+                        s_loadedFonts[std::string(fontName) + "_" + std::to_string(static_cast<int>(fontSize))] = loadedFont;
+                        LOG_INFO("Loaded %s at size %.1f", fontName, fontSize);
+                    } else {
+                        LOG_ERROR("Failed to load %s at size %.1f", fontName, fontSize);
+                    }
+
+                    if (fontAwesomeData) {
+                        ImFontConfig config;
+                        config.MergeMode = true;
+                        config.PixelSnapH = true;
+                        unsigned char* iconDataCopy = new unsigned char[fontAwesomeDataSize];
+                        memcpy(iconDataCopy, fontAwesomeData, fontAwesomeDataSize);
+                        config.FontDataOwnedByAtlas = true;
+                        static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+                        io.Fonts->AddFontFromMemoryTTF(iconDataCopy, fontAwesomeDataSize, fontSize, &config, icons_ranges);
+                    }
+
+                } else {
+                    LOG_ERROR("%s asset has 0 size.", fontName);
+                }
+                AAsset_close(fontAsset);
+            } else {
+                LOG_ERROR("Failed to open %s from assets.", fontName);
+            }
+        }
+    }
+
+    // If DroidSans couldn't be loaded for some reason, add the default font as a fallback.
+    if (io.Fonts->Fonts.empty()) {
+        io.Fonts->AddFontDefault();
+    }
+
+    // Clean up the original icon font data buffer
+    if (fontAwesomeData) {
+        delete[] fontAwesomeData;
     }
     
     io.Fonts->Build(); // Build font atlas after adding all fonts
@@ -714,4 +783,18 @@ bool ImGui_ImplAndroid_HandleInputEvent(const AInputEvent* event)
     }
     
     return false;
+}
+
+void SetDefaultImGuiFont(const std::string& fontName, float fontSize) {
+    ImGuiIO& io = ImGui::GetIO();
+    std::string fontKey = fontName + "_" + std::to_string(static_cast<int>(fontSize));
+    if (s_loadedFonts.count(fontKey)) {
+        io.FontDefault = s_loadedFonts[fontKey];
+        LOG_INFO("Switched ImGui font to: %s at size %.1f", fontName.c_str(), fontSize);
+    } else {
+        LOG_ERROR("Requested font not found: %s at size %.1f. Using default.", fontName.c_str(), fontSize);
+        if (!io.Fonts->Fonts.empty()) {
+            io.FontDefault = io.Fonts->Fonts[0]; // Fallback to first loaded font
+        }
+    }
 }
