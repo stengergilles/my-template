@@ -14,6 +14,8 @@
 #endif
 
 #include "../include/font_manager.h" // Include FontManager
+#include "../include/worker.hpp"
+#include "../include/platform/platform_base.h"
 
 SettingsManager& SettingsManager::getInstance()
 {
@@ -94,11 +96,10 @@ void SettingsManager::applySettings(const Settings& settings)
     FontManager::SetDefaultFont(m_currentSettings.font_name, m_currentSettings.font_size);
 }
 
-bool SettingsManager::loadSettingsFromState()
+bool SettingsManager::loadSettingsFromState(Settings& loadedSettings)
 {
     std::string settingsName;
     if (StateManager::getInstance().loadString("settings_name", settingsName)) {
-        Settings loadedSettings;
         loadedSettings.name = settingsName;
 
         std::string val;
@@ -117,13 +118,20 @@ bool SettingsManager::loadSettingsFromState()
         if (StateManager::getInstance().loadString("settings_font_size", val)) loadedSettings.font_size = std::stof(val);
         if (StateManager::getInstance().loadString("settings_scale", val)) loadedSettings.scale = std::stof(val);
 
-        applySettings(loadedSettings);
-        ScalingManager::getInstance().setScaleAdjustment(loadedSettings.scale);
-        LOG_INFO("Loaded settings from state: %s", settingsName.c_str());
         return true;
     }
     return false;
 }
+
+void SettingsManager::applyLoadedSettings(const Settings& settings)
+{
+    m_currentSettings = settings;
+    applyImGuiStyle(settings);
+    ScalingManager::getInstance().setScaleAdjustment(settings.scale);
+    FontManager::SetDefaultFont(settings.font_name, settings.font_size);
+    LOG_INFO("Applied loaded settings: %s", settings.name.c_str());
+}
+
 
 void SettingsManager::applyImGuiStyle(const Settings& settings)
 {
@@ -230,6 +238,18 @@ void SettingsManager::updateAvailableFonts()
     m_availableFontNames = ImGui_ImplAndroid_GetAvailableFontNames();
     m_availableFontSizes = ImGui_ImplAndroid_GetAvailableFontSizes();
 #endif
+}
+
+void SettingsManager::loadSettingsAsync()
+{
+    Worker::getInstance().postTask([this]() {
+        Settings loadedSettings;
+        if (loadSettingsFromState(loadedSettings)) {
+            Application::getInstance()->runOnMainThread([this, loadedSettings]() {
+                applyLoadedSettings(loadedSettings);
+            });
+        }
+    });
 }
 
 

@@ -96,6 +96,27 @@ bool Application::initImGui()
     return true;
 }
 
+void Application::runOnMainThread(std::function<void()> task)
+{
+    std::unique_lock<std::mutex> lock(m_mainThreadMutex);
+    m_mainThreadTasks.push(std::move(task));
+}
+
+void Application::processMainThreadTasks()
+{
+    std::function<void()> task;
+    while (true) {
+        std::unique_lock<std::mutex> lock(m_mainThreadMutex);
+        if (m_mainThreadTasks.empty()) {
+            break;
+        }
+        task = m_mainThreadTasks.front();
+        m_mainThreadTasks.pop();
+        lock.unlock();
+        task();
+    }
+}
+
 void Application::run()
 {
     // For Android, we don't run the main loop here
@@ -119,6 +140,9 @@ void Application::run()
         // Handle platform events (may set m_running to false)
         m_running = platformHandleEvents();
         
+        // Process tasks queued for the main thread
+        processMainThreadTasks();
+
         // Render a frame
         renderFrame();
     }
@@ -294,17 +318,17 @@ void Application::renderHttpGetDemoPage()
         Application* app = Application::getInstance();
         if (app) {
             app->m_statusBarMessage = "Status: Sending request...";
-            app->m_httpWorker.submit([app, url = std::string(urlBuffer)]() {
-                // Pass empty maps for params and headers as they are not used in this demo
-                return app->m_httpClient->get(url, {}, {});
-            }, [app](const HttpResponse& response) {
-                if (response.status_code == 200) {
-                    app->m_httpGetResponse = response.text;
-                    app->m_statusBarMessage = "Status: Request successful!";
-                } else {
-                    app->m_httpGetResponse = "Error: " + std::to_string(response.status_code) + " - " + response.text;
-                    app->m_statusBarMessage = "Status: Request failed with error " + std::to_string(response.status_code);
-                }
+            Worker::getInstance().postTask([app, url = std::string(urlBuffer)]() {
+                HttpResponse response = app->m_httpClient->get(url, {}, {});
+                app->runOnMainThread([app, response]() {
+                    if (response.status_code == 200) {
+                        app->m_httpGetResponse = response.text;
+                        app->m_statusBarMessage = "Status: Request successful!";
+                    } else {
+                        app->m_httpGetResponse = "Error: " + std::to_string(response.status_code) + " - " + response.text;
+                        app->m_statusBarMessage = "Status: Request failed with error " + std::to_string(response.status_code);
+                    }
+                });
             });
         }
         LOG_INFO("Sending GET request to: %s", urlBuffer);

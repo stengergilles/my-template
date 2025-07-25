@@ -205,6 +205,9 @@ void android_main(struct android_app* app) {
         
         // If initialized, run the application frame
         if (g_initialized) {
+            // Process tasks queued for the main thread
+            Application::getInstance()->processMainThreadTasks();
+
             // Run a single frame of the application
             Application::getInstance()->renderFrame();
             

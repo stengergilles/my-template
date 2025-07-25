@@ -37,6 +37,8 @@ public:
     // Singleton access
     static Application* getInstance() { return s_instance; }
 
+    void runOnMainThread(std::function<void()> task);
+
 protected:
     // Platform-specific implementations (to be overridden by platform classes)
     virtual bool platformInit() = 0;
@@ -54,7 +56,7 @@ protected:
     bool m_show_log_widget; // Moved from Application.cpp
     LogWidget* m_log_widget; // Log widget instance
     std::unique_ptr<HttpClient> m_httpClient;
-    Worker<HttpResponse> m_httpWorker;
+    
          // Add SettingsManager member
 
     enum class Page {
@@ -67,7 +69,12 @@ protected:
     std::string m_httpGetResponse; // To store HTTP GET response
     std::string m_statusBarMessage; // To store status bar messages
 
-private:
+protected:
+    std::queue<std::function<void()>> m_mainThreadTasks;
+    std::mutex m_mainThreadMutex;
+public:
+    void processMainThreadTasks();
+
     void renderHomePage();
     void renderHttpGetDemoPage();
 

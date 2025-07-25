@@ -42,9 +42,14 @@ public:
     void applySettings(const Settings& settings);
     void showSettingsEditor();
     void updateAvailableFonts();
-    bool loadSettingsFromState();
+    void loadSettingsAsync();
+
+private:
+    bool loadSettingsFromState(Settings& loadedSettings);
+    void applyLoadedSettings(const Settings& settings);
 
     // Getters for settings properties
+public:
     ImVec4 getScreenBackground() const { return m_currentSettings.screen_background; }
     const std::vector<Settings>& getAvailableSettings() const { return m_availableSettings; }
     const std::vector<std::string>& getAvailableFontNames() const { return m_availableFontNames; }

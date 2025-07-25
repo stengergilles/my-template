@@ -1,38 +1,31 @@
 
 #pragma once
 
-#include <future>
 #include <functional>
+#include <queue>
 #include <thread>
-#include <utility> // For std::forward
+#include <mutex>
+#include <condition_variable>
 
-template<typename R>
 class Worker {
 public:
-    Worker() : m_running(false) {}
+    static Worker& getInstance();
 
-    template<typename Func, typename Callback>
-    void submit(Func&& func, Callback&& callback) {
-        if (m_running) {
-            // Optionally, handle this case (e.g., queue the task, log a warning)
-            return;
-        }
-        m_running = true;
-        m_future = std::async(std::launch::async, [this, f = std::forward<Func>(func), cb = std::forward<Callback>(callback)]() mutable {
-            R result = f();
-            // Execute callback on the main thread or handle synchronization if needed
-            // For simplicity, we'll execute it directly here. In a real GUI app,
-            // you might post this to the main thread's event queue.
-            cb(result);
-            m_running = false;
-        });
-    }
+    // Delete copy constructor and assignment operator
+    Worker(const Worker&) = delete;
+    Worker& operator=(const Worker&) = delete;
 
-    bool is_running() const {
-        return m_running;
-    }
+    ~Worker();
+
+    void postTask(std::function<void()> task);
 
 private:
-    std::future<void> m_future; // Changed to void as result is handled by callback
+    Worker();
+    void threadLoop();
+
+    std::queue<std::function<void()>> m_tasks;
+    std::mutex m_mutex;
+    std::condition_variable m_condition;
+    std::thread m_workerThread;
     bool m_running;
 };
