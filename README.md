@@ -32,7 +32,13 @@ The user interface is built with [Dear ImGui](https://github.com/ocornut/imgui),
 *   **HTTP Client:**
     *   A basic HTTP client is included, with an abstraction that can be extended to support different backends. The default implementation uses cURL.
 *   **Logging:**
-    *   A simple logging utility is provided for easy debugging.
+    *   A simple logging utility is provided for easy debugging, with recent improvements for Android.
+
+*   **Font Switching:**
+    *   The application now supports dynamic font switching, allowing users to change the UI font at runtime.
+
+*   **Settings Management:**
+    *   Improved settings management for better application configuration and persistence.
 
 *   **Theme Manager:**
     *   A `ThemeManager` class is included for managing application themes, allowing for easy customization of UI colors and styles.
