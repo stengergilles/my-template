@@ -10,6 +10,7 @@
 #include "imgui.h"
 #include "../../../include/scaling_manager.h"
 #include "../../../include/logger.h" // Include logger.h
+#include "../../../include/settings_manager.h" // Include SettingsManager
 #include "../../../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 #include <vector> // For std::vector
 #include <string> // For std::string
@@ -484,6 +485,11 @@ void ImGui_ImplAndroid_NewFrame()
         LOG_ERROR("Failed to make EGL context current in NewFrame");
         return;
     }
+
+    // Clear the screen at the beginning of each frame using the color from SettingsManager
+    ImVec4 clear_color = SettingsManager::getInstance().getScreenBackground();
+    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
     
     ImGuiIO& io = ImGui::GetIO();
     
@@ -639,8 +645,7 @@ void ImGui_ImplAndroid_RenderDrawData(ImDrawData* draw_data)
     
     
 
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    
     
     glUseProgram(g_ShaderHandle);
     glUniform1i(g_AttribLocationTex, 0);

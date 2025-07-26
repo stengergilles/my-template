@@ -26,6 +26,8 @@ SettingsManager& SettingsManager::getInstance()
 SettingsManager::SettingsManager()
 {
     setupDefaultSettings();
+    // Apply a default setting immediately so the screen isn't black
+    applyImGuiStyle(m_availableSettings[0]); // Apply Dark settings by default
 
 #ifndef __ANDROID__
     // For non-Android platforms, provide a default list or load from elsewhere
@@ -44,7 +46,7 @@ void SettingsManager::setupDefaultSettings()
     // Dark Settings
     Settings darkSettings;
     darkSettings.name = "Dark";
-    darkSettings.screen_background = ImVec4(0.1f, 0.1f, 0.1f, 1.0f); // Dark grey
+    darkSettings.screen_background = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // White
     darkSettings.widget_background = ImVec4(0.2f, 0.2f, 0.2f, 1.0f); // Slightly lighter grey
     darkSettings.corner_roundness = 5.0f; // Default roundness for dark settings
     darkSettings.scale = 1.0f; // Default scale

@@ -9,6 +9,7 @@
 #include "layout/Layout.h"
 #include "platform/platform_android.h" // Include for PlatformAndroid
 #include <iostream>
+#include <GLES3/gl3.h> // Required for glClearColor and glClear
 
 // Initialize static instance
 Application* Application::s_instance = nullptr;
@@ -154,10 +155,6 @@ void Application::run()
 
 void Application::renderFrame()
 {
-    // Start a new frame
-    platformNewFrame();
-    ImGui::NewFrame();
-
     // Set clear color based on settings
     ImVec4 clear_color = SettingsManager::getInstance().getScreenBackground();
     ImGui::GetBackgroundDrawList()->AddRectFilled(
@@ -165,6 +162,10 @@ void Application::renderFrame()
         ImGui::GetIO().DisplaySize,
         IM_COL32(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255)
     );
+
+    // Start a new frame
+    platformNewFrame();
+    ImGui::NewFrame();
 
     // Begin the custom card layout
     Layout::BeginCardLayout();
