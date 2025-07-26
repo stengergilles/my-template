@@ -26,9 +26,6 @@ public:
     static std::unique_ptr<ILogger> createLogger();
     static void setPackageName(const std::string& packageName);
     static const std::string& getPackageName();
-#if defined(__ANDROID__)
-    static void set_android_logger_widget(LogWidget* widget);
-#endif
 
 private:
     static std::string s_packageName;

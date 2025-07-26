@@ -1,8 +1,23 @@
-#pragma once
+#ifndef PLATFORM_LOGGER_H
+#define PLATFORM_LOGGER_H
 
+#include <memory>
 #include <string>
+#include "../../include/logger.h" // For LogLevel and ILogger
 
-namespace platform_logger {
-    void log_info(const std::string& tag, const std::string& message);
-    void log_error(const std::string& tag, const std::string& message);
-}
+class LogWidget;
+
+// Abstract base class for platform-specific logger implementations
+class IPlatformLogger : public ILogger {
+public:
+    virtual ~IPlatformLogger() = default;
+    // Inherits log method from ILogger
+};
+
+// Factory to create the appropriate platform-specific logger
+class PlatformLoggerFactory {
+public:
+    static std::unique_ptr<IPlatformLogger> createPlatformLogger();
+};
+
+#endif // PLATFORM_LOGGER_H

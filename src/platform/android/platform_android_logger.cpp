@@ -1,53 +1,40 @@
-#include "platform/platform_logger.h"
+#include "../../../../include/platform/android/platform_android_logger.h"
+#include "../../../../include/logger.h"
 #include <android/log.h>
-#include <string>
-#include <cstdarg> // For va_list
-#include "../../include/logger.h" // For ILogger and LogLevel
+#include <cstdarg>
 
-extern std::string g_PackageName;
+AndroidPlatformLogger::AndroidPlatformLogger() : m_log_widget(nullptr) {}
 
-namespace platform_logger {
+void AndroidPlatformLogger::set_log_widget(LogWidget* widget) {
+    m_log_widget = widget;
+}
 
-class AndroidLogger : public ILogger {
-public:
-    void log(LogLevel level, const char* fmt, ...) override {
-        int android_log_level;
-        switch (level) {
-            case LogLevel::Info:
-                android_log_level = ANDROID_LOG_INFO;
-                break;
-            case LogLevel::Warning:
-                android_log_level = ANDROID_LOG_WARN;
-                break;
-            case LogLevel::Error:
-                android_log_level = ANDROID_LOG_ERROR;
-                break;
-            default:
-                android_log_level = ANDROID_LOG_DEFAULT;
-                break;
-        }
-
-        va_list args;
-        va_start(args, fmt);
-        __android_log_vprint(android_log_level, g_PackageName.c_str(), fmt, args);
-        va_end(args);
+void AndroidPlatformLogger::log(LogLevel level, const char* fmt, ...) {
+    int android_level;
+    switch (level) {
+        case LogLevel::Info:
+            android_level = ANDROID_LOG_INFO;
+            break;
+        case LogLevel::Warning:
+            android_level = ANDROID_LOG_WARN;
+            break;
+        case LogLevel::Error:
+            android_level = ANDROID_LOG_ERROR;
+            break;
     }
-};
 
-} // namespace platform_logger
+    va_list args_android;
+    va_list args_widget;
 
-std::unique_ptr<ILogger> LoggerFactory::createLogger() {
-    return std::make_unique<platform_logger::AndroidLogger>();
+    va_start(args_android, fmt);
+    va_copy(args_widget, args_android);
+
+    __android_log_vprint(android_level, LoggerFactory::getPackageName().c_str(), fmt, args_android);
+    
+    if (m_log_widget) {
+        m_log_widget->AddLogV(fmt, args_widget);
+    }
+
+    va_end(args_android);
+    va_end(args_widget);
 }
-
-#if defined(__ANDROID__)
-void LoggerFactory::set_android_logger_widget(LogWidget* widget) {
-    // This function is called to set the LogWidget for Android.
-    // The AndroidLogger class above directly uses __android_log_print,
-    // so we don't need to pass the widget to it.
-    // However, if you want to also display logs in the ImGui LogWidget,
-    // you would need to modify the AndroidLogger to also call widget->AddLog.
-    // For now, we'll leave this empty as the primary goal is to unify
-    // the logging interface.
-}
-#endif

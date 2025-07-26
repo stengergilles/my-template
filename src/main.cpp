@@ -5,6 +5,7 @@
 
 #if defined(__ANDROID__)
     #include "../include/platform/platform_android.h"
+    #include "../include/platform/android/platform_android_logger.h"
     typedef PlatformAndroid PlatformType;
 #elif defined(__EMSCRIPTEN__)
     #include "../include/platform/platform_wasm.h"
@@ -31,7 +32,10 @@ int main(int argc, char** argv)
     }
 #else
     static LogWidget main_log_widget;
-    LoggerFactory::set_android_logger_widget(&main_log_widget);
+    AndroidPlatformLogger* android_logger = dynamic_cast<AndroidPlatformLogger*>(g_logger);
+    if (android_logger) {
+        android_logger->set_log_widget(&main_log_widget);
+    }
 #endif
 
     try {

@@ -1,12 +1,33 @@
-#include "platform/platform_logger.h"
+#include "../../../include/platform/platform_logger.h"
+#include "../../../include/logger.h"
 #include <iostream>
+#include <cstdarg>
 
-namespace platform_logger {
-    void log_info(const std::string& tag, const std::string& message) {
-        std::cout << "INFO [" << tag << "]: " << message << std::endl;
-    }
+// Standard output/error logger (default for non-Android platforms)
+class StdPlatformLogger : public IPlatformLogger {
+public:
+    void log(LogLevel level, const char* fmt, ...) override {
+        va_list args;
+        va_start(args, fmt);
+        char buffer[256];
+        vsnprintf(buffer, sizeof(buffer), fmt, args);
+        va_end(args);
 
-    void log_error(const std::string& tag, const std::string& message) {
-        std::cerr << "ERROR [" << tag << "]: " << message << std::endl;
+        switch (level) {
+            case LogLevel::Info:
+                std::cout << "[INFO] " << buffer << std::endl;
+                break;
+            case LogLevel::Warning:
+                std::cerr << "[WARNING] " << buffer << std::endl;
+                break;
+            case LogLevel::Error:
+                std::cerr << "[ERROR] " << buffer << std::endl;
+                break;
+        }
     }
+};
+
+// Factory implementation
+std::unique_ptr<IPlatformLogger> PlatformLoggerFactory::createPlatformLogger() {
+    return std::make_unique<StdPlatformLogger>();
 }

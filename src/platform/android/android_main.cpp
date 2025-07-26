@@ -5,6 +5,7 @@
 #include <EGL/egl.h>
 #include "../../include/application.h"
 #include "../../include/logger.h"
+#include "../../include/platform/android/platform_android_logger.h"
 #include "../../include/log_widget.h"
 #include "../../include/scaling_manager.h"
 #include "../../include/state_manager.h" // Include StateManager
@@ -74,9 +75,15 @@ static int32_t handle_input(android_app* app, AInputEvent* event) {
 
 // Main entry point for Android applications using native_app_glue
 void android_main(struct android_app* app) {
+    // Global LogWidget instance
+    static LogWidget g_logWidget;
+
     // Initialize the logger
     g_logger = LoggerFactory::createLogger().release(); // Initialize global logger
-    LoggerFactory::set_android_logger_widget(&g_logWidget);
+    AndroidPlatformLogger* android_logger = dynamic_cast<AndroidPlatformLogger*>(g_logger);
+    if (android_logger) {
+        android_logger->set_log_widget(&g_logWidget);
+    }
 
     // Get the package name from ANativeActivity and set it in the LoggerFactory
     JNIEnv* env;
