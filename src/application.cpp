@@ -35,6 +35,9 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
     // Load application state
     StateManager::getInstance().loadState();
 
+    // Load settings asynchronously
+    SettingsManager::getInstance().loadSettingsAsync();
+
     // Load current page from state
     std::string pageStr;
     if (StateManager::getInstance().loadString("current_page", pageStr)) {

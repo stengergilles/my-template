@@ -192,45 +192,56 @@ void SettingsManager::showSettingsEditor()
 
     // Color pickers for current settings (if it's 'Custom' or editable)
     if (m_currentSettings.name == "Custom") {
-        if (ImGui::ColorEdit3("Screen Background", (float*)&m_currentSettings.screen_background)) settings_changed = true;
-        if (ImGui::ColorEdit3("Widget Background", (float*)&m_currentSettings.widget_background)) settings_changed = true;
-        if (ImGui::SliderFloat("Corner Roundness", &m_currentSettings.corner_roundness, 0.0f, 12.0f, "%.1f")) settings_changed = true;
-
-        // Font selection
-        if (ImGui::BeginCombo("Font", m_currentSettings.font_name.c_str())) {
-            for (const auto& fontName : m_availableFontNames) {
-                bool is_selected = (m_currentSettings.font_name == fontName);
-                if (ImGui::Selectable(fontName.c_str(), is_selected)) {
-                    m_currentSettings.font_name = fontName;
-                    settings_changed = true;
-                }
-                if (is_selected) {
-                    ImGui::SetItemDefaultFocus();
-                }
+        // Find the "Custom" settings in the available settings list
+        Settings* customSettings = nullptr;
+        for (auto& settings : m_availableSettings) {
+            if (settings.name == "Custom") {
+                customSettings = &settings;
+                break;
             }
-            ImGui::EndCombo();
         }
 
-        // Font size selection
-        if (ImGui::BeginCombo("Font Size", std::to_string(m_currentSettings.font_size).c_str())) {
-            for (float fontSize : m_availableFontSizes) {
-                bool is_selected = (m_currentSettings.font_size == fontSize);
-                if (ImGui::Selectable(std::to_string(fontSize).c_str(), is_selected)) {
-                    m_currentSettings.font_size = fontSize;
-                    settings_changed = true;
+        if (customSettings) {
+            if (ImGui::ColorEdit3("Screen Background", (float*)&customSettings->screen_background)) settings_changed = true;
+            if (ImGui::ColorEdit3("Widget Background", (float*)&customSettings->widget_background)) settings_changed = true;
+            if (ImGui::SliderFloat("Corner Roundness", &customSettings->corner_roundness, 0.0f, 12.0f, "%.1f")) settings_changed = true;
+
+            // Font selection
+            if (ImGui::BeginCombo("Font", customSettings->font_name.c_str())) {
+                for (const auto& fontName : m_availableFontNames) {
+                    bool is_selected = (customSettings->font_name == fontName);
+                    if (ImGui::Selectable(fontName.c_str(), is_selected)) {
+                        customSettings->font_name = fontName;
+                        settings_changed = true;
+                    }
+                    if (is_selected) {
+                        ImGui::SetItemDefaultFocus();
+                    }
                 }
-                if (is_selected) {
-                    ImGui::SetItemDefaultFocus();
-                }
+                ImGui::EndCombo();
             }
-            ImGui::EndCombo();
+
+            // Font size selection
+            if (ImGui::BeginCombo("Font Size", std::to_string(customSettings->font_size).c_str())) {
+                for (float fontSize : m_availableFontSizes) {
+                    bool is_selected = (customSettings->font_size == fontSize);
+                    if (ImGui::Selectable(std::to_string(fontSize).c_str(), is_selected)) {
+                        customSettings->font_size = fontSize;
+                        settings_changed = true;
+                    }
+                    if (is_selected) {
+                        ImGui::SetItemDefaultFocus();
+                    }
+                }
+                ImGui::EndCombo();
+            }
+
+            if (ImGui::SliderFloat("UI Scale", &customSettings->scale, 0.5f, 2.0f, "%.1f")) settings_changed = true;
+
+            if (settings_changed) {
+                applySettings(*customSettings);
+            }
         }
-
-        if (ImGui::SliderFloat("UI Scale", &m_currentSettings.scale, 0.5f, 2.0f, "%.1f")) settings_changed = true;
-    }
-
-    if (settings_changed) {
-        applySettings(m_currentSettings);
     }
 }
 
