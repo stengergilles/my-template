@@ -35,9 +35,6 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
     // Load application state
     StateManager::getInstance().loadState();
 
-    // Load settings asynchronously
-    SettingsManager::getInstance().loadSettingsAsync();
-
     // Load current page from state
     std::string pageStr;
     if (StateManager::getInstance().loadString("current_page", pageStr)) {
@@ -88,6 +85,9 @@ bool Application::initImGui()
 
     // Setup ImGui style
     ImGui::StyleColorsDark();
+
+    // Initialize the SettingsManager
+    SettingsManager::getInstance().initialize();
 
     // A default style is applied here.
     // Saved settings will be loaded and applied in the platform-specific init function

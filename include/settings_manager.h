@@ -39,6 +39,7 @@ private:
     SettingsManager();
 
 public:
+    void initialize();
     void applySettings(const Settings& settings);
     void showSettingsEditor();
     void updateAvailableFonts();

@@ -26,14 +26,19 @@ SettingsManager& SettingsManager::getInstance()
 SettingsManager::SettingsManager()
 {
     setupDefaultSettings();
-    // Apply a default setting immediately so the screen isn't black
-    applyImGuiStyle(m_availableSettings[0]); // Apply Dark settings by default
 
 #ifndef __ANDROID__
     // For non-Android platforms, provide a default list or load from elsewhere
     m_availableFontNames = {"DroidSans.ttf", "Cousine-Regular.ttf", "Karla-Regular.ttf"};
     m_availableFontSizes = {12.0f, 14.0f, 16.0f};
 #endif
+}
+
+void SettingsManager::initialize()
+{
+    // Apply a default setting immediately so the screen isn't black
+    applyImGuiStyle(m_availableSettings[0]); // Apply Dark settings by default
+    loadSettingsAsync();
 }
 
 SettingsManager::~SettingsManager()
@@ -145,9 +150,9 @@ void SettingsManager::applyImGuiStyle(const Settings& settings)
     style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(settings.widget_background.x + 0.1f, settings.widget_background.y + 0.1f, settings.widget_background.z + 0.1f, 1.0f);
     style.Colors[ImGuiCol_FrameBgActive] = ImVec4(settings.widget_background.x + 0.2f, settings.widget_background.y + 0.2f, settings.widget_background.z + 0.2f, 1.0f);
     style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
-    style.Colors[ImGuiCol_Button] = ImVec4(0.3f, 0.3f, 0.3f, 1.0f);
-    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.4f, 0.4f, 0.4f, 1.0f);
-    style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
+    style.Colors[ImGuiCol_Button] = settings.widget_background;
+    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(settings.widget_background.x + 0.1f, settings.widget_background.y + 0.1f, settings.widget_background.z + 0.1f, 1.0f);
+    style.Colors[ImGuiCol_ButtonActive] = ImVec4(settings.widget_background.x + 0.2f, settings.widget_background.y + 0.2f, settings.widget_background.z + 0.2f, 1.0f);
     style.Colors[ImGuiCol_Header] = ImVec4(0.3f, 0.3f, 0.3f, 1.0f);
     style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.4f, 0.4f, 0.4f, 1.0f);
     style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
