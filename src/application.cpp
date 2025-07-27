@@ -1,7 +1,7 @@
 #include "../include/application.h"
 #include "../include/platform/logger.h"
 #include "../include/scaling_manager.h"
-#include "../include/platform_http_client.hpp" // Added for PlatformHttpClient
+#include "../include/platform/platform_http_client.hpp" // Added for PlatformHttpClient
 #include "../include/state_manager.h"
 #include "../include/settings_manager.h" // Include SettingsManager
 #include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
