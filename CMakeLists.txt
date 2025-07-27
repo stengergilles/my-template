@@ -141,14 +141,14 @@ set(SOURCES
     src/platform/platform_base.cpp
     src/main.cpp
     src/platform/http_client.cpp
-    src/write_cacert.cpp
-    src/tempfile.cpp
+    src/platform/write_cacert.cpp
+    src/platform/tempfile.cpp
     src/log_widget.cpp
     src/state_manager.cpp
     src/layout/Layout.cpp
     src/settings_manager.cpp
     src/platform/font_manager.cpp
-    src/worker.cpp
+    src/platform/worker.cpp
     src/platform/logger.cpp
 )
 
@@ -339,7 +339,7 @@ if(BUILD_TESTS)
 endif()
 set(CACERT_PEM_URL "https://curl.se/ca/cacert.pem")
 set(CACERT_PEM "${CMAKE_BINARY_DIR}/cacert.pem")
-set(CACERT_HEADER "${CMAKE_SOURCE_DIR}/include/cacert_pem_data.hpp")
+set(CACERT_HEADER "${CMAKE_SOURCE_DIR}/include/platform/cacert_pem_data.hpp")
 
 add_custom_command(
     OUTPUT ${CACERT_PEM}

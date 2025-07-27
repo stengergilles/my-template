@@ -14,7 +14,7 @@
 #endif
 
 #include "../include/platform/font_manager.h" // Include FontManager
-#include "../include/worker.hpp"
+#include "../include/platform/worker.hpp"
 #include "../include/platform/platform_base.h"
 
 SettingsManager& SettingsManager::getInstance()

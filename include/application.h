@@ -4,7 +4,7 @@
 #include <memory> // For std::unique_ptr
 
 #include "http_client.hpp"
-#include "worker.hpp"
+#include "platform/worker.hpp"
 #include "platform_http_client.hpp" // For createPlatformHttpClient()
 #include "log_widget.h"
 #include "layout/Layout.h"

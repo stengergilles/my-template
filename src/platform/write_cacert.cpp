@@ -1,5 +1,5 @@
-#include "write_cacert.hpp"
-#include "cacert_pem_data.hpp"
+#include "../include/platform/write_cacert.hpp"
+#include "platform/cacert_pem_data.hpp"
 
 #include <fstream>
 #include <stdexcept>
