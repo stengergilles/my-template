@@ -1,4 +1,4 @@
-#include "http_client_curl.hpp"
+#include "platform/http_client.hpp"
 #include "write_cacert.hpp"
 #include "platform/logger.h" // Include logger.h
 #include <curl/curl.h>
@@ -13,17 +13,16 @@ static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* use
     return total_size;
 }
 
-HttpClientLibcurl::HttpClientLibcurl() {
-    m_caBundlePath = write_cacert_pem_to_tempfile();
+HttpClient::HttpClient() {
+    write_cacert_pem_if_not_exists();
+    m_caBundlePath = get_cacert_path();
 }
 
-HttpClientLibcurl::~HttpClientLibcurl() {
-    if (!m_caBundlePath.empty()) {
-        std::remove(m_caBundlePath.c_str());
-    }
+HttpClient::~HttpClient() {
+    // The cacert.pem file is no longer a temporary file, so we don't remove it here.
 }
 
-HttpResponse HttpClientLibcurl::get(const std::string& url,
+HttpResponse HttpClient::get(const std::string& url,
                                     const std::map<std::string, std::string>& params,
                                     const std::map<std::string, std::string>& headers) {
     CURL* curl = curl_easy_init();

@@ -132,7 +132,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
     ${CMAKE_CURRENT_SOURCE_DIR}/external/IconFontCppHeaders
     ${PROJECT_ROOT}/external/json/include
-    ${PROJECT_ROOT}/external/curl/include
+    
     ${GTEST_INCLUDE_DIR}
 )
 
@@ -140,7 +140,7 @@ set(SOURCES
     src/application.cpp
     src/platform/platform_base.cpp
     src/main.cpp
-    src/http_client_curl.cpp
+    src/platform/http_client.cpp
     src/write_cacert.cpp
     src/tempfile.cpp
     src/log_widget.cpp
