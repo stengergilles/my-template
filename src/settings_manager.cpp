@@ -13,7 +13,7 @@
 #include "../include/platform/linux/asset_manager.h"
 #endif
 
-#include "../include/font_manager.h" // Include FontManager
+#include "../include/platform/font_manager.h" // Include FontManager
 #include "../include/worker.hpp"
 #include "../include/platform/platform_base.h"
 

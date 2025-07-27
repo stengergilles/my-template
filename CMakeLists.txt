@@ -147,7 +147,7 @@ set(SOURCES
     src/state_manager.cpp
     src/layout/Layout.cpp
     src/settings_manager.cpp
-    src/font_manager.cpp
+    src/platform/font_manager.cpp
     src/worker.cpp
     src/platform/logger.cpp
 )
