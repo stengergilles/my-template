@@ -1,8 +1,8 @@
-#include "../include/logger.h"
-#include "../include/log_widget.h"
-#include "../include/platform/platform_logger.h"
+#include "../../include/platform/logger.h"
+#include "../../include/log_widget.h"
+#include "../../include/platform/platform_logger.h"
 #if defined(__ANDROID__)
-#include "../include/platform/android/platform_android_logger.h"
+#include "../../include/platform/android/platform_android_logger.h"
 #endif
 #include <iostream>
 #include <cstdarg>

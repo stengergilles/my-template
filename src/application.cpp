@@ -1,5 +1,5 @@
 #include "../include/application.h"
-#include "../include/logger.h"
+#include "../include/platform/logger.h"
 #include "../include/scaling_manager.h"
 #include "../include/platform_http_client.hpp" // Added for PlatformHttpClient
 #include "../include/state_manager.h"

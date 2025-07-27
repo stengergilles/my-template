@@ -7,7 +7,7 @@
 #include <android/asset_manager_jni.h>
 #include "imgui.h"
 #include "../include/platform/platform_android.h"
-#include "../../include/logger.h"
+#include "../../include/platform/logger.h"
 
 // Include keyboard helper
 #include "android/keyboard_helper.h"

@@ -3,7 +3,7 @@
 #include <android/input.h>
 #include <string>
 #include "imgui.h"
-#include "../../../include/logger.h"
+#include "../../../include/platform/logger.h"
 #include "../../../include/scaling_manager.h"
 
 extern bool g_initialized;

@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <string>
-#include "../../include/logger.h" // For LogLevel and ILogger
+#include "../../include/platform/logger.h" // For LogLevel and ILogger
 
 class LogWidget;
 

@@ -1,6 +1,6 @@
 #include "../include/font_manager.h"
 #include "imgui.h"
-#include "../include/logger.h"
+#include "../include/platform/logger.h"
 
 #ifdef __ANDROID__
 #include "platform/android/imgui_impl_android.h"

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../include/logger.h"
+#include "../include/platform/logger.h"
 #include "../include/log_widget.h" // Include log_widget.h
 #include <unistd.h> // For chdir
 

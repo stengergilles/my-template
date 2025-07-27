@@ -4,7 +4,7 @@
 #include <algorithm> // For std::sort, std::max
 #include <map>       // For std::map
 #include <array>     // For std::array
-#include "../include/logger.h" // For LOG_INFO
+#include "../include/platform/logger.h" // For LOG_INFO
 #include "../../external/IconFontCppHeaders/IconsFontAwesome6.h" // For Font Awesome icons
 
 namespace Layout {

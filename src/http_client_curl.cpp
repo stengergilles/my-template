@@ -1,6 +1,6 @@
 #include "http_client_curl.hpp"
 #include "write_cacert.hpp"
-#include "logger.h" // Include logger.h
+#include "platform/logger.h" // Include logger.h
 #include <curl/curl.h>
 #include <sstream>
 #include <stdexcept>

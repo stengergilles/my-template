@@ -143,13 +143,13 @@ set(SOURCES
     src/http_client_curl.cpp
     src/write_cacert.cpp
     src/tempfile.cpp
-    src/logger.cpp
     src/log_widget.cpp
     src/state_manager.cpp
     src/layout/Layout.cpp
     src/settings_manager.cpp
     src/font_manager.cpp
     src/worker.cpp
+    src/platform/logger.cpp
 )
 
 # Define platform-specific logger sources

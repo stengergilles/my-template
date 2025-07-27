@@ -1,7 +1,7 @@
 #include "keyboard_helper.h"
 #include <jni.h>
 #include "imgui.h"  // Added ImGui header
-#include "../../../include/logger.h" // Include logger.h
+#include "../../../include/platform/logger.h" // Include logger.h
 
 #define LOG_TAG "keyboard_helper"
 

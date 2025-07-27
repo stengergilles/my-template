@@ -1,5 +1,5 @@
 #include "../include/worker.hpp"
-#include "../include/logger.h"
+#include "../include/platform/logger.h"
 
 Worker& Worker::getInstance() {
     static Worker instance;

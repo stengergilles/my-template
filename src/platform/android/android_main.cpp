@@ -4,7 +4,7 @@
 #include "../../include/platform/platform_android.h"
 #include <EGL/egl.h>
 #include "../../include/application.h"
-#include "../../include/logger.h"
+#include "../../include/platform/logger.h"
 #include "../../include/platform/android/platform_android_logger.h"
 #include "../../include/log_widget.h"
 #include "../../include/scaling_manager.h"

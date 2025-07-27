@@ -1,7 +1,7 @@
 #include "log_widget.h"
 #include "imgui.h"
 #include "../include/state_manager.h" // Include StateManager
-#include "../include/logger.h" // Include logger.h
+#include "../include/platform/logger.h" // Include logger.h
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>

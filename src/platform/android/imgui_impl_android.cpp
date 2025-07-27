@@ -9,7 +9,7 @@
 #include <android_native_app_glue.h> // For android_app
 #include "imgui.h"
 #include "../../../include/scaling_manager.h"
-#include "../../../include/logger.h" // Include logger.h
+#include "../../../include/platform/logger.h" // Include logger.h
 #include "../../../include/settings_manager.h" // Include SettingsManager
 #include "../../../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 #include <vector> // For std::vector

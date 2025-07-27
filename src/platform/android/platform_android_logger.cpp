@@ -1,5 +1,5 @@
 #include "../../../../include/platform/android/platform_android_logger.h"
-#include "../../../../include/logger.h"
+#include "../../../../include/platform/logger.h"
 #include <android/log.h>
 #include <cstdarg>
 
