@@ -22,8 +22,7 @@ public:
     // Initialize ImGui (platform-independent)
     bool initImGui();
     
-    // Main application loop
-    void run();
+    
     
     // Render a frame
     void renderFrame();

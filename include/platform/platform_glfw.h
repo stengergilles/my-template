@@ -12,7 +12,8 @@ public:
     virtual ~PlatformGLFW();
 
 protected:
-    // Platform-specific implementations
+    // Main application loop
+    void run();
     virtual bool platformInit() override;
     virtual void platformShutdown() override;
     virtual void platformNewFrame() override;

@@ -129,40 +129,7 @@ int Application::getOrientation() const {
     }
 }
 
-void Application::run()
-{
-    // For Android, we don't run the main loop here
-    // The main loop is handled in android_main.cpp
-    #ifndef __ANDROID__
-    // Initialize ImGui first
-    if (!initImGui()) {
-        LOG_ERROR("ImGui initialization failed");
-        return;
-    }
 
-    // Initialize platform-specific components
-    if (!platformInit()) {
-        LOG_ERROR("Platform initialization failed");
-        return;
-    }
-
-    // Main loop
-    m_running = true;
-    while (m_running) {
-        // Handle platform events (may set m_running to false)
-        m_running = platformHandleEvents();
-        
-        // Process tasks queued for the main thread
-        processMainThreadTasks();
-
-        // Render a frame
-        renderFrame();
-    }
-
-    // Cleanup
-    platformShutdown();
-    #endif
-}
 
 void Application::renderFrame()
 {

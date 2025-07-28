@@ -46,8 +46,10 @@ int main(int argc, char** argv)
         PlatformType app("ImGui Hello World", nullptr); // Pass nullptr for Android
 #endif
         
+        #if !defined(__ANDROID__)
         // Run the application
         app.run();
+#endif
         
         return 0;
     }
