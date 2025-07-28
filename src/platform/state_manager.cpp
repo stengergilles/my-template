@@ -1,5 +1,5 @@
-#include "../include/state_manager.h"
-#include "../include/platform/logger.h"
+#include "../../include/platform/state_manager.h"
+#include "../../include/platform/logger.h"
 #include <fstream>
 #include <sstream>
 #include <iomanip>

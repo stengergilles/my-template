@@ -1,7 +1,7 @@
 #include "../include/settings_manager.h"
 #include "../include/platform/logger.h"
-#include "../include/state_manager.h"
-#include "../include/scaling_manager.h"
+#include "../include/platform/state_manager.h"
+#include "../include/platform/scaling_manager.h"
 #include "imgui.h"
 #include "imgui_internal.h" // For ImGui::GetStyle()
 #include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // For ICON_MIN_FA, ICON_MAX_FA

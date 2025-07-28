@@ -1,6 +1,6 @@
 #include "widget/log_widget.h"
 #include "imgui.h"
-#include "../include/state_manager.h" // Include StateManager
+#include "../include/platform/state_manager.h" // Include StateManager
 #include "../include/platform/logger.h" // Include logger.h
 #include <cstdarg>
 #include <cstdio>

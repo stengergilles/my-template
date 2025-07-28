@@ -144,7 +144,7 @@ set(SOURCES
     src/platform/write_cacert.cpp
     src/platform/tempfile.cpp
     src/widget/log_widget.cpp
-    src/state_manager.cpp
+    src/platform/state_manager.cpp
     src/layout/Layout.cpp
     src/settings_manager.cpp
     src/platform/font_manager.cpp
