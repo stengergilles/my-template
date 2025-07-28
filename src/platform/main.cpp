@@ -1,18 +1,18 @@
 #include <iostream>
-#include "../include/platform/logger.h"
-#include "../include/widget/log_widget.h" // Include log_widget.h
+#include "../../include/platform/logger.h"
+#include "../../include/widget/log_widget.h" // Include log_widget.h
 #include <unistd.h> // For chdir
 
 #if defined(__ANDROID__)
-    #include "../include/platform/platform_android.h"
-    #include "../include/platform/android/platform_android_logger.h"
+    #include "../../include/platform/platform_android.h"
+    #include "../../include/platform/android/platform_android_logger.h"
     typedef PlatformAndroid PlatformType;
 #elif defined(__EMSCRIPTEN__)
-    #include "../include/platform/platform_wasm.h"
+    #include "../../include/platform/platform_wasm.h"
     typedef PlatformWasm PlatformType;
 #else
     // Default to GLFW for desktop platforms (Windows, Linux, macOS)
-    #include "../include/platform/platform_glfw.h"
+    #include "../../include/platform/platform_glfw.h"
     typedef PlatformGLFW PlatformType;
 #endif
 

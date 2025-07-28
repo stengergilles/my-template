@@ -139,7 +139,7 @@ include_directories(
 set(SOURCES
     src/application.cpp
     src/platform/platform_base.cpp
-    src/main.cpp
+    src/platform/main.cpp
     src/platform/http_client.cpp
     src/platform/write_cacert.cpp
     src/platform/tempfile.cpp
@@ -295,7 +295,7 @@ get_target_property(CURL_INCLUDE_DIRS libcurl INTERFACE_INCLUDE_DIRECTORIES)
 if(BUILD_TESTS)
   # Create a library with all application sources, excluding main.cpp
   set(LIB_SOURCES ${SOURCES})
-  list(REMOVE_ITEM LIB_SOURCES "src/main.cpp")
+  list(REMOVE_ITEM LIB_SOURCES "src/platform/main.cpp")
   
   add_library(app STATIC
       ${LIB_SOURCES}
