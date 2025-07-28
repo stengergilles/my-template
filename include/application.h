@@ -50,6 +50,8 @@ protected:
     virtual int getFramebufferWidth() const = 0;
     virtual int getFramebufferHeight() const = 0;
 
+    int getOrientation() const;
+
     std::string m_appName;
     ImGuiContext* m_imguiContext;
     bool m_running;

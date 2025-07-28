@@ -7,7 +7,7 @@
 #include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 #include "imgui.h"
 #include "layout/Layout.h"
-#include "platform/platform_android.h" // Include for PlatformAndroid
+
 #include <iostream>
 #include <GLES3/gl3.h> // Required for glClearColor and glClear
 
@@ -121,6 +121,14 @@ void Application::processMainThreadTasks()
     }
 }
 
+int Application::getOrientation() const {
+    if (ImGui::GetIO().DisplaySize.y > ImGui::GetIO().DisplaySize.x) {
+        return 1; // Portrait
+    } else {
+        return 0; // Landscape
+    }
+}
+
 void Application::run()
 {
     // For Android, we don't run the main loop here
@@ -197,12 +205,10 @@ void Application::renderFrame()
 
     // Center-left widget: content width (or percentage in portrait), autofit height, options and buttons
     Dimension centerLeftWidth = {SizeMode::CONTENT, 0.0f};
-#ifdef __ANDROID__
-    if (static_cast<PlatformAndroid*>(Application::getInstance())->getScreenOrientation() == 1) // 1 for ACONFIGURATION_ORIENTATION_PORT
+    if (Application::getInstance()->getOrientation() == 1) // 1 for portrait
     {
         centerLeftWidth = {SizeMode::PERCENTAGE, 30.0f};
     }
-#endif
     Layout::BeginCard(
         "CenterLeftOptions",
         centerLeftWidth,
@@ -229,14 +235,10 @@ void Application::renderFrame()
             ImGui::Text("Options:");
             ImGui::Checkbox("Option 1", &option1);
             ImGui::RadioButton("Radio 1", &radio, 0);
-#ifdef __ANDROID__
-            if (static_cast<PlatformAndroid*>(Application::getInstance())->getScreenOrientation() != 1) // Not portrait
-#endif
+            if (Application::getInstance()->getOrientation() != 1) // Not portrait
             ImGui::SameLine();
             ImGui::RadioButton("Radio 2", &radio, 1);
-#ifdef __ANDROID__
-            if (static_cast<PlatformAndroid*>(Application::getInstance())->getScreenOrientation() != 1) // Not portrait
-#endif
+            if (Application::getInstance()->getOrientation() != 1) // Not portrait
             ImGui::SameLine();
             ImGui::RadioButton("Radio 3", &radio, 2);
             ImGui::Separator();
