@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../include/platform/logger.h"
-#include "../include/log_widget.h" // Include log_widget.h
+#include "../include/widget/log_widget.h" // Include log_widget.h
 #include <unistd.h> // For chdir
 
 #if defined(__ANDROID__)

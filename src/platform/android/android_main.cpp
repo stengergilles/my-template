@@ -6,7 +6,7 @@
 #include "../../include/application.h"
 #include "../../include/platform/logger.h"
 #include "../../include/platform/android/platform_android_logger.h"
-#include "../../include/log_widget.h"
+#include "../../include/widget/log_widget.h"
 #include "../../include/scaling_manager.h"
 #include "../../include/state_manager.h" // Include StateManager
 #include <string> // For std::string

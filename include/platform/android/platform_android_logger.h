@@ -2,7 +2,7 @@
 #define PLATFORM_ANDROID_LOGGER_H
 
 #include "../../../include/platform/platform_logger.h"
-#include "../../../include/log_widget.h"
+#include "../../widget/log_widget.h"
 
 class AndroidPlatformLogger : public IPlatformLogger {
 public:

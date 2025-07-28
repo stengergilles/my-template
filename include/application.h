@@ -6,7 +6,7 @@
 #include "http_client.hpp"
 #include "platform/worker.hpp"
 #include "platform/platform_http_client.hpp" // For createPlatformHttpClient()
-#include "log_widget.h"
+#include "widget/log_widget.h"
 #include "layout/Layout.h"
 #include "settings_manager.h" // Include SettingsManager for full definition
 

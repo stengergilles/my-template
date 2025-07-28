@@ -143,7 +143,7 @@ set(SOURCES
     src/platform/http_client.cpp
     src/platform/write_cacert.cpp
     src/platform/tempfile.cpp
-    src/log_widget.cpp
+    src/widget/log_widget.cpp
     src/state_manager.cpp
     src/layout/Layout.cpp
     src/settings_manager.cpp
