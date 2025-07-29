@@ -2,6 +2,8 @@
 
 #include <string>
 #include <map>
+#include "nlohmann/json.hpp"
+
 #include <mutex>
 #include <condition_variable>
 

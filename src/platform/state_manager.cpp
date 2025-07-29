@@ -27,7 +27,7 @@ void StateManager::setInternalDataPath(const std::string& path) {
 }
 
 void StateManager::updateStateFilePath() {
-    m_stateFilePath = m_internalDataPath + "/app_state.ini";
+    m_stateFilePath = m_internalDataPath + "/app_state.json";
 }
 
 void StateManager::saveWindowPosition(const std::string& windowName, float x, float y) {
@@ -78,20 +78,19 @@ void StateManager::loadState() {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::ifstream file(m_stateFilePath);
     if (file.is_open()) {
-        m_state.clear();
-        std::string line;
-        while (std::getline(file, line)) {
-            size_t eqPos = line.find("=");
-            if (eqPos != std::string::npos) {
-                std::string key = line.substr(0, eqPos);
-                std::string value = line.substr(eqPos + 1);
-                m_state[key] = value;
+        try {
+            nlohmann::json j;
+            file >> j;
+            m_state.clear();
+            for (nlohmann::json::iterator it = j.begin(); it != j.end(); ++it) {
+                m_state[it.key()] = it.value().get<std::string>();
             }
+        } catch (const nlohmann::json::exception& e) {
+            LOG_ERROR("Error parsing state file %s: %s", m_stateFilePath.c_str(), e.what());
         }
         file.close();
-        
     } else {
-        
+        LOG_INFO("State file %s not found, creating new one on save.", m_stateFilePath.c_str());
     }
 }
 
@@ -99,11 +98,9 @@ void StateManager::saveState() {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::ofstream file(m_stateFilePath);
     if (file.is_open()) {
-        for (const auto& pair : m_state) {
-            file << pair.first << "=" << pair.second << "\n";
-        }
+        nlohmann::json j = m_state;
+        file << std::setw(4) << j << std::endl;
         file.close();
-        
     } else {
         LOG_ERROR("Failed to save state to %s", m_stateFilePath.c_str());
     }
