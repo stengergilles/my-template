@@ -10,7 +10,7 @@
 #include "imgui.h"
 #include "../../../include/platform/scaling_manager.h"
 #include "../../../include/platform/logger.h" // Include logger.h
-#include "../../../include/settings_manager.h" // Include SettingsManager
+#include "../../../include/platform/settings_manager.h" // Include SettingsManager
 #include "../../../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 #include <vector> // For std::vector
 #include <string> // For std::string

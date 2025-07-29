@@ -3,7 +3,7 @@
 #include "../include/platform/scaling_manager.h"
 #include "../include/platform/platform_http_client.hpp" // Added for PlatformHttpClient
 #include "../include/platform/state_manager.h"
-#include "../include/settings_manager.h" // Include SettingsManager
+#include "../include/platform/settings_manager.h" // Include SettingsManager
 #include "../external/IconFontCppHeaders/IconsFontAwesome6.h" // Font Awesome icons
 #include "imgui.h"
 #include "layout/Layout.h"

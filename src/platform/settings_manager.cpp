@@ -1,4 +1,4 @@
-#include "../include/settings_manager.h"
+#include "../include/platform/settings_manager.h"
 #include "../include/platform/logger.h"
 #include "../include/platform/state_manager.h"
 #include "../include/platform/scaling_manager.h"

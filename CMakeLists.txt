@@ -146,7 +146,7 @@ set(SOURCES
     src/widget/log_widget.cpp
     src/platform/state_manager.cpp
     src/layout/Layout.cpp
-    src/settings_manager.cpp
+    src/platform/settings_manager.cpp
     src/platform/font_manager.cpp
     src/platform/worker.cpp
     src/platform/logger.cpp

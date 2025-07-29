@@ -8,7 +8,7 @@
 #include "platform/platform_http_client.hpp" // For createPlatformHttpClient()
 #include "widget/log_widget.h"
 #include "layout/Layout.h"
-#include "settings_manager.h" // Include SettingsManager for full definition
+#include "platform/settings_manager.h" // Include SettingsManager for full definition
 
 // Forward declarations
 struct ImGuiContext;
