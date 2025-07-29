@@ -241,7 +241,12 @@ void SettingsManager::showSettingsEditor()
                 ImGui::EndCombo();
             }
 
-            if (ImGui::SliderFloat("UI Scale", &customSettings->scale, 0.5f, 2.0f, "%.1f")) settings_changed = true;
+            float old_scale = customSettings->scale;
+            if (ImGui::SliderFloat("UI Scale", &customSettings->scale, 0.5f, 2.0f, "%.1f")) {
+                if (customSettings->scale != old_scale) {
+                    settings_changed = true;
+                }
+            }
 
             if (settings_changed) {
                 applySettings(*customSettings);

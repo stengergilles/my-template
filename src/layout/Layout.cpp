@@ -5,6 +5,7 @@
 #include <map>       // For std::map
 #include <array>     // For std::array
 #include "../include/platform/logger.h" // For LOG_INFO
+#include "../include/platform/settings_manager.h" // For SettingsManager
 #include "../../external/IconFontCppHeaders/IconsFontAwesome6.h" // For Font Awesome icons
 
 namespace Layout {
@@ -96,6 +97,8 @@ void Card::render(const ImVec2& pos, const ImVec2& size, std::function<void(cons
             flags |= ImGuiWindowFlags_AlwaysAutoResize;
         }
 
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, SettingsManager::getInstance().getScreenBackground());
+
         if (ImGui::Begin(m_id.c_str(), nullptr, flags)) {
             if (m_isHideable && ImGui::IsWindowHovered() && ImGui::IsMouseDoubleClicked(0)) {
                 LOG_INFO("Double-tap detected on visible card: %s", m_id.c_str());
@@ -106,6 +109,8 @@ void Card::render(const ImVec2& pos, const ImVec2& size, std::function<void(cons
             }
         }
         ImGui::End();
+
+        ImGui::PopStyleColor();
     }
 }
 
