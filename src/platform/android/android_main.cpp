@@ -169,12 +169,6 @@ void android_main(struct android_app* app) {
             LOG_INFO("Platform initialized successfully at startup");
             
             g_initialized = true;
-            
-            // Force a small delay to ensure initialization completes
-            struct timespec ts;
-            ts.tv_sec = 0;
-            ts.tv_nsec = 100000000; // 100ms
-            nanosleep(&ts, NULL);
         } else {
             LOG_ERROR("Failed to initialize at startup");
         }
