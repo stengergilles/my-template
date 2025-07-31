@@ -6,6 +6,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <future> // Required for std::future and std::packaged_task
 
 class Worker {
 public:
@@ -17,13 +18,13 @@ public:
 
     ~Worker();
 
-    void postTask(std::function<void()> task);
+    std::future<void> postTask(std::function<void()> task);
 
 private:
     Worker();
     void threadLoop();
 
-    std::queue<std::function<void()>> m_tasks;
+    std::queue<std::packaged_task<void()>> m_tasks;
     std::mutex m_mutex;
     std::condition_variable m_condition;
     std::thread m_workerThread;

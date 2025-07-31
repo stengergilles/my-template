@@ -1,5 +1,5 @@
-#include "../platform/worker.hpp"
-#include "logger.h"
+#include "../include/platform/worker.hpp"
+#include <future> // Required for std::packaged_task
 
 Worker& Worker::getInstance() {
     static Worker instance;
@@ -21,33 +21,30 @@ Worker::~Worker() {
     }
 }
 
-void Worker::postTask(std::function<void()> task) {
+std::future<void> Worker::postTask(std::function<void()> task) {
+    std::packaged_task<void()> packaged_task(std::move(task)); // Move the std::function into packaged_task
+    std::future<void> future = packaged_task.get_future();
     {
         std::unique_lock<std::mutex> lock(m_mutex);
-        m_tasks.push(std::move(task));
+        m_tasks.push(std::move(packaged_task));
         m_condition.notify_one();
     }
+    return future;
 }
 
 void Worker::threadLoop() {
     while (true) {
-        std::function<void()> task;
+        std::packaged_task<void()> task;
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             m_condition.wait(lock, [this] { return !m_tasks.empty() || !m_running; });
 
             if (!m_running && m_tasks.empty()) {
-                break;
+                return;
             }
-            task = m_tasks.front();
+            task = std::move(m_tasks.front());
             m_tasks.pop();
         }
-        try {
-            task();
-        } catch (const std::exception& e) {
-            LOG_ERROR("Worker thread task failed: %s", e.what());
-        } catch (...) {
-            LOG_ERROR("Worker thread task failed with unknown exception");
-        }
+        task();
     }
 }

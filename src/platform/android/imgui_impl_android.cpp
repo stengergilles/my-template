@@ -546,6 +546,9 @@ void ImGui_ImplAndroid_NewFrame()
         
         // Apply the scale to ImGui
         ImGui::GetStyle().ScaleAllSizes(displayScale);
+
+        // Re-apply the custom style from the settings manager
+        SettingsManager::getInstance().reapplyCurrentStyle();
         
         // Inform the scaling manager that we've applied this scale
         scalingManager.applyScaling(displayScale);

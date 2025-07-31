@@ -60,7 +60,7 @@ static void handle_cmd(android_app* app, int32_t cmd) {
             break;
         case APP_CMD_LOST_FOCUS:
             // Save state when app loses focus
-            StateManager::getInstance().saveState();
+            StateManager::getInstance().saveStateAsync();
             break;
         default:
             break;
@@ -138,7 +138,7 @@ void android_main(struct android_app* app) {
     g_app = new PlatformAndroid("ImGui Hello World", &g_logWidget);
 
     // Load state at startup
-    StateManager::getInstance().loadState();
+        StateManager::getInstance().loadStateAsync();
     
     // Reset the scaling manager to force scaling application
     ScalingManager& scalingManager = ScalingManager::getInstance();
@@ -204,7 +204,7 @@ void android_main(struct android_app* app) {
                     delete g_logger;
                     g_logger = nullptr;
                 }
-                StateManager::getInstance().saveState(); // Save state on exit
+                StateManager::getInstance().saveStateAsync(); // Save state on exit
                 g_logWidget.Clear(); // Clear log widget to prevent memory leak
                 return;
             }

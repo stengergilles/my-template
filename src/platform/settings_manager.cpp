@@ -37,7 +37,7 @@ SettingsManager::SettingsManager()
 void SettingsManager::initialize()
 {
     // Apply a default setting immediately so the screen isn't black
-    applyImGuiStyle(m_availableSettings[0]); // Apply Dark settings by default
+    applySettings(m_availableSettings[0]); // Apply Dark settings by default
     loadSettingsAsync();
 }
 
@@ -81,26 +81,28 @@ void SettingsManager::setupDefaultSettings()
 void SettingsManager::applySettings(const Settings& settings)
 {
     m_currentSettings = settings;
+
+    // If the applied settings are for the "Custom" theme, update the corresponding entry
+    if (settings.name == "Custom") {
+        for (auto& availableSetting : m_availableSettings) {
+            if (availableSetting.name == "Custom") {
+                availableSetting = settings;
+                break;
+            }
+        }
+    }
+
+    // Apply fundamental changes first
+    ScalingManager::getInstance().setScaleAdjustment(m_currentSettings.scale);
+    FontManager::SetDefaultFont(m_currentSettings.font_name, m_currentSettings.font_size);
+
+    // Then, apply the style on top of the new context
     applyImGuiStyle(settings);
 
     LOG_INFO("Applied settings: %s", settings.name.c_str());
 
-    // Save settings to state manager
-    StateManager::getInstance().saveString("settings_name", m_currentSettings.name);
-    StateManager::getInstance().saveString("settings_screen_background_x", std::to_string(m_currentSettings.screen_background.x));
-    StateManager::getInstance().saveString("settings_screen_background_y", std::to_string(m_currentSettings.screen_background.y));
-    StateManager::getInstance().saveString("settings_screen_background_z", std::to_string(m_currentSettings.screen_background.z));
-    StateManager::getInstance().saveString("settings_screen_background_w", std::to_string(m_currentSettings.screen_background.w));
-    StateManager::getInstance().saveString("settings_widget_background_x", std::to_string(m_currentSettings.widget_background.x));
-    StateManager::getInstance().saveString("settings_widget_background_y", std::to_string(m_currentSettings.widget_background.y));
-    StateManager::getInstance().saveString("settings_widget_background_z", std::to_string(m_currentSettings.widget_background.z));
-    StateManager::getInstance().saveString("settings_widget_background_w", std::to_string(m_currentSettings.widget_background.w));
-    StateManager::getInstance().saveString("settings_corner_roundness", std::to_string(m_currentSettings.corner_roundness));
-    StateManager::getInstance().saveString("settings_font_name", m_currentSettings.font_name);
-    StateManager::getInstance().saveString("settings_font_size", std::to_string(m_currentSettings.font_size));
-    StateManager::getInstance().saveString("settings_scale", std::to_string(m_currentSettings.scale));
-    ScalingManager::getInstance().setScaleAdjustment(m_currentSettings.scale);
-    FontManager::SetDefaultFont(m_currentSettings.font_name, m_currentSettings.font_size);
+    // Save settings asynchronously
+    saveSettingsAsync();
 }
 
 bool SettingsManager::loadSettingsFromState(Settings& loadedSettings)
@@ -133,9 +135,25 @@ bool SettingsManager::loadSettingsFromState(Settings& loadedSettings)
 void SettingsManager::applyLoadedSettings(const Settings& settings)
 {
     m_currentSettings = settings;
-    applyImGuiStyle(settings);
-    ScalingManager::getInstance().setScaleAdjustment(settings.scale);
-    FontManager::SetDefaultFont(settings.font_name, settings.font_size);
+
+    // If the loaded settings are for the "Custom" theme, update the corresponding entry
+    // in m_availableSettings so the editor has the correct starting values.
+    if (settings.name == "Custom") {
+        for (auto& availableSetting : m_availableSettings) {
+            if (availableSetting.name == "Custom") {
+                availableSetting = settings;
+                break;
+            }
+        }
+    }
+
+    // Apply fundamental changes first
+    ScalingManager::getInstance().setScaleAdjustment(m_currentSettings.scale);
+    FontManager::SetDefaultFont(m_currentSettings.font_name, m_currentSettings.font_size);
+
+    // Then, apply the style on top of the new context
+    applyImGuiStyle(m_currentSettings);
+
     LOG_INFO("Applied loaded settings: %s", settings.name.c_str());
 }
 
@@ -176,17 +194,21 @@ void SettingsManager::applyImGuiStyle(const Settings& settings)
     style.FramePadding = ImVec2(4, 3);
 }
 
+void SettingsManager::reapplyCurrentStyle()
+{
+    applyImGuiStyle(m_currentSettings);
+}
+
 void SettingsManager::showSettingsEditor()
 {
-    bool settings_changed = false;
-
     // Settings selection dropdown
     if (ImGui::BeginCombo("Select Settings", m_currentSettings.name.c_str())) {
         for (const auto& settings : m_availableSettings) {
             bool is_selected = (m_currentSettings.name == settings.name);
             if (ImGui::Selectable(settings.name.c_str(), is_selected)) {
-                applySettings(settings);
-                settings_changed = true;
+                if (m_currentSettings.name != settings.name) {
+                    applySettings(settings);
+                }
             }
             if (is_selected) {
                 ImGui::SetItemDefaultFocus();
@@ -195,7 +217,7 @@ void SettingsManager::showSettingsEditor()
         ImGui::EndCombo();
     }
 
-    // Color pickers for current settings (if it's 'Custom' or editable)
+    // If the current theme is "Custom", show the editor
     if (m_currentSettings.name == "Custom") {
         // Find the "Custom" settings in the available settings list
         Settings* customSettings = nullptr;
@@ -207,9 +229,10 @@ void SettingsManager::showSettingsEditor()
         }
 
         if (customSettings) {
-            if (ImGui::ColorEdit3("Screen Background", (float*)&customSettings->screen_background)) settings_changed = true;
-            if (ImGui::ColorEdit3("Widget Background", (float*)&customSettings->widget_background)) settings_changed = true;
-            if (ImGui::SliderFloat("Corner Roundness", &customSettings->corner_roundness, 0.0f, 12.0f, "%.1f")) settings_changed = true;
+            bool changed = false;
+            changed |= ImGui::ColorEdit3("Screen Background", (float*)&customSettings->screen_background);
+            changed |= ImGui::ColorEdit3("Widget Background", (float*)&customSettings->widget_background);
+            changed |= ImGui::SliderFloat("Corner Roundness", &customSettings->corner_roundness, 0.0f, 12.0f, "%.1f");
 
             // Font selection
             if (ImGui::BeginCombo("Font", customSettings->font_name.c_str())) {
@@ -217,7 +240,7 @@ void SettingsManager::showSettingsEditor()
                     bool is_selected = (customSettings->font_name == fontName);
                     if (ImGui::Selectable(fontName.c_str(), is_selected)) {
                         customSettings->font_name = fontName;
-                        settings_changed = true;
+                        changed = true;
                     }
                     if (is_selected) {
                         ImGui::SetItemDefaultFocus();
@@ -227,12 +250,12 @@ void SettingsManager::showSettingsEditor()
             }
 
             // Font size selection
-            if (ImGui::BeginCombo("Font Size", std::to_string(customSettings->font_size).c_str())) {
+            if (ImGui::BeginCombo("Font Size", std::to_string(static_cast<int>(customSettings->font_size)).c_str())) {
                 for (float fontSize : m_availableFontSizes) {
                     bool is_selected = (customSettings->font_size == fontSize);
-                    if (ImGui::Selectable(std::to_string(fontSize).c_str(), is_selected)) {
+                    if (ImGui::Selectable(std::to_string(static_cast<int>(fontSize)).c_str(), is_selected)) {
                         customSettings->font_size = fontSize;
-                        settings_changed = true;
+                        changed = true;
                     }
                     if (is_selected) {
                         ImGui::SetItemDefaultFocus();
@@ -241,14 +264,9 @@ void SettingsManager::showSettingsEditor()
                 ImGui::EndCombo();
             }
 
-            float old_scale = customSettings->scale;
-            if (ImGui::SliderFloat("UI Scale", &customSettings->scale, 0.5f, 2.0f, "%.1f")) {
-                if (customSettings->scale != old_scale) {
-                    settings_changed = true;
-                }
-            }
+            changed |= ImGui::SliderFloat("UI Scale", &customSettings->scale, 0.5f, 2.0f, "%.1f");
 
-            if (settings_changed) {
+            if (changed) {
                 applySettings(*customSettings);
             }
         }
@@ -275,5 +293,27 @@ void SettingsManager::loadSettingsAsync()
     });
 }
 
+void SettingsManager::saveSettingsInternal(const Settings& settings)
+{
+    StateManager::getInstance().saveString("settings_name", settings.name);
+    StateManager::getInstance().saveString("settings_screen_background_x", std::to_string(settings.screen_background.x));
+    StateManager::getInstance().saveString("settings_screen_background_y", std::to_string(settings.screen_background.y));
+    StateManager::getInstance().saveString("settings_screen_background_z", std::to_string(settings.screen_background.z));
+    StateManager::getInstance().saveString("settings_screen_background_w", std::to_string(settings.screen_background.w));
+    StateManager::getInstance().saveString("settings_widget_background_x", std::to_string(settings.widget_background.x));
+    StateManager::getInstance().saveString("settings_widget_background_y", std::to_string(settings.widget_background.y));
+    StateManager::getInstance().saveString("settings_widget_background_z", std::to_string(settings.widget_background.z));
+    StateManager::getInstance().saveString("settings_widget_background_w", std::to_string(settings.widget_background.w));
+    StateManager::getInstance().saveString("settings_corner_roundness", std::to_string(settings.corner_roundness));
+    StateManager::getInstance().saveString("settings_font_name", settings.font_name);
+    StateManager::getInstance().saveString("settings_font_size", std::to_string(settings.font_size));
+    StateManager::getInstance().saveString("settings_scale", std::to_string(settings.scale));
+    StateManager::getInstance().saveStateAsync(); // Trigger async save in StateManager
+}
 
-
+void SettingsManager::saveSettingsAsync()
+{
+    Worker::getInstance().postTask([this]() {
+        saveSettingsInternal(m_currentSettings);
+    });
+}

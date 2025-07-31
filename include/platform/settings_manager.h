@@ -41,18 +41,20 @@ private:
 public:
     void initialize();
     void applySettings(const Settings& settings);
+    void reapplyCurrentStyle();
     void showSettingsEditor();
     void updateAvailableFonts();
     void loadSettingsAsync();
+    void saveSettingsAsync();
 
 private:
     bool loadSettingsFromState(Settings& loadedSettings);
     void applyLoadedSettings(const Settings& settings);
+    void saveSettingsInternal(const Settings& settings);
 
     // Getters for settings properties
 public:
     ImVec4 getScreenBackground() const { return m_currentSettings.screen_background; }
-    const std::vector<Settings>& getAvailableSettings() const { return m_availableSettings; }
     const std::vector<std::string>& getAvailableFontNames() const { return m_availableFontNames; }
     const std::vector<float>& getAvailableFontSizes() const { return m_availableFontSizes; }
     float getScale() const { return m_currentSettings.scale; }

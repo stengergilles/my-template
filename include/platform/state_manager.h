@@ -6,6 +6,7 @@
 
 #include <mutex>
 #include <condition_variable>
+#include "worker.hpp" // For Worker::getInstance().postTask
 
 class StateManager {
 public:
@@ -19,10 +20,10 @@ public:
     void saveString(const std::string& key, const std::string& value);
     bool loadString(const std::string& key, std::string& value);
 
-    // Load all state from file
-    void loadState();
-    // Save all state to file
-    void saveState();
+    // Load all state from file asynchronously
+    void loadStateAsync();
+    // Save all state to file asynchronously
+    void saveStateAsync();
 
     // Set the internal data path for file storage (Android specific)
     void setInternalDataPath(const std::string& path);
@@ -39,4 +40,6 @@ public:
     std::mutex m_mutex;
 
     void updateStateFilePath();
+    void loadStateInternal(); // Internal synchronous load
+    void saveStateInternal(); // Internal synchronous save
 };

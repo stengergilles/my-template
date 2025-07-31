@@ -1,17 +1,23 @@
 #include "../../include/platform/state_manager.h"
 #include "../../include/platform/logger.h"
+#include "../../include/platform/worker.hpp"
 #include <fstream>
 #include <sstream>
 #include <iomanip>
 
-
-
 StateManager::StateManager() : m_internalDataPath(".") {
     updateStateFilePath();
+    // Load state asynchronously on startup
+    loadStateAsync();
 }
 
 StateManager::~StateManager() {
-    saveState();
+    // Save state asynchronously on shutdown
+    // We need to wait for the save to complete before destruction
+    // to ensure all data is written to disk.
+    Worker::getInstance().postTask([this]() {
+        saveStateInternal();
+    }).get(); // .get() blocks until the task is complete
 }
 
 StateManager& StateManager::getInstance() {
@@ -23,7 +29,6 @@ void StateManager::setInternalDataPath(const std::string& path) {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_internalDataPath = path;
     updateStateFilePath();
-    
 }
 
 void StateManager::updateStateFilePath() {
@@ -35,7 +40,6 @@ void StateManager::saveWindowPosition(const std::string& windowName, float x, fl
     std::stringstream ss;
     ss << std::fixed << std::setprecision(2) << x << "," << y;
     m_state["window_pos_" + windowName] = ss.str();
-    
 }
 
 bool StateManager::loadWindowPosition(const std::string& windowName, float& x, float& y) {
@@ -48,7 +52,6 @@ bool StateManager::loadWindowPosition(const std::string& windowName, float& x, f
             try {
                 x = std::stof(value.substr(0, commaPos));
                 y = std::stof(value.substr(commaPos + 1));
-                
                 return true;
             } catch (const std::exception& e) {
                 LOG_ERROR("Error parsing window position for %s: %s", windowName.c_str(), e.what());
@@ -61,20 +64,18 @@ bool StateManager::loadWindowPosition(const std::string& windowName, float& x, f
 void StateManager::saveString(const std::string& key, const std::string& value) {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_state[key] = value;
-    
 }
 
 bool StateManager::loadString(const std::string& key, std::string& value) {
     std::lock_guard<std::mutex> lock(m_mutex);
     if (m_state.count(key)) {
         value = m_state[key];
-        
         return true;
     }
     return false;
 }
 
-void StateManager::loadState() {
+void StateManager::loadStateInternal() {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::ifstream file(m_stateFilePath);
     if (file.is_open()) {
@@ -94,7 +95,7 @@ void StateManager::loadState() {
     }
 }
 
-void StateManager::saveState() {
+void StateManager::saveStateInternal() {
     std::lock_guard<std::mutex> lock(m_mutex);
     std::ofstream file(m_stateFilePath);
     if (file.is_open()) {
@@ -104,4 +105,16 @@ void StateManager::saveState() {
     } else {
         LOG_ERROR("Failed to save state to %s", m_stateFilePath.c_str());
     }
+}
+
+void StateManager::loadStateAsync() {
+    Worker::getInstance().postTask([this]() {
+        loadStateInternal();
+    });
+}
+
+void StateManager::saveStateAsync() {
+    Worker::getInstance().postTask([this]() {
+        saveStateInternal();
+    });
 }

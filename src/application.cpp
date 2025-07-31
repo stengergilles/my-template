@@ -33,7 +33,7 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
     m_httpClient = std::make_unique<PlatformHttpClient>();
 
     // Load application state
-    StateManager::getInstance().loadState();
+    StateManager::getInstance().loadStateAsync();
 
     // Load current page from state
     std::string pageStr;
@@ -66,7 +66,7 @@ Application::~Application()
     StateManager::getInstance().saveString("current_page", pageStr);
 
     // Save application state
-    StateManager::getInstance().saveState();
+    StateManager::getInstance().saveStateAsync();
 
     // ImGui cleanup is handled in platformShutdown()
     if (s_instance == this) {
