@@ -75,7 +75,7 @@ void Card::render(const ImVec2& pos, const ImVec2& size, std::function<void(cons
         ImGui::SetNextWindowPos(pos);
 
         ImVec2 setSize = ImVec2(0, 0); // Default to auto-size for ImGui::SetNextWindowSize
-        ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove;
+        ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus;
 
         // Determine the size to pass to ImGui::SetNextWindowSize.
         // If mode is PERCENTAGE or AUTOFIT, use the calculated size.

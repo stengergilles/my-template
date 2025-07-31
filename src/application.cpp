@@ -224,11 +224,6 @@ void Application::renderFrame()
         HAlignment::CENTER,
         VAlignment::CENTER,
         [this]() {
-            // Render Log Widget if visible
-            if (m_log_widget) {
-                m_log_widget->Draw("Application Log", NULL);
-            }
-
             // Render the current page
             switch (m_currentPage) {
                 case Page::Home:
@@ -263,6 +258,11 @@ void Application::renderFrame()
 
     // End the custom card layout, triggering calculation and rendering
     Layout::EndCardLayout(ImGui::GetIO().DisplaySize);
+
+    // Render Log Widget if visible
+    if (m_log_widget) {
+        m_log_widget->Draw("Application Log", NULL);
+    }
     
     // Render application frame
     // renderImGui(); // Removed as content is now in CenterContent card
