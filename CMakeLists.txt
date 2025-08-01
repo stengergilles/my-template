@@ -1,4 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
+
+if ("${CMAKE_BINARY_DIR}" MATCHES ".*/linux($|/)")
+  message(STATUS "Linux build directory detected. Forcing non-Android build.")
+  set(ANDROID FALSE)
+  set(CMAKE_SYSTEM_NAME Linux)
+endif()
 project(imgui_hello_world)
 set(PROJECT_ROOT ${CMAKE_SOURCE_DIR})
 
@@ -67,7 +73,7 @@ else()
         COMMAND bash -c "
         cd ${PROJECT_ROOT}/external/openssl-src
         ./Configure no-tests --prefix=${OPENSSL_ROOT_DIR}
-        make -j\$(nproc)
+        make -j$(nproc)
         make install
         "
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -84,44 +90,7 @@ else()
   include_directories(${OPENSSL_INCLUDE_DIR})
 endif()
 
-# Find GLFW
-if(NOT ANDROID)
-  # First try to find system GLFW
-  find_package(glfw3 QUIET)
-  
-  if(NOT glfw3_FOUND)
-    # If not found, use our own GLFW
-    message(STATUS "System GLFW not found, using bundled GLFW")
-    
-    # Check if GLFW is already built
-    if(EXISTS "${PROJECT_ROOT}/external/glfw/build/src/libglfw3.a")
-      message(STATUS "Using pre-built GLFW")
-      set(GLFW_LIBRARIES "${PROJECT_ROOT}/external/glfw/build/src/libglfw3.a")
-      set(GLFW_INCLUDE_DIRS "${PROJECT_ROOT}/external/glfw/include")
-      
-      # Create imported target for GLFW
-      if(NOT TARGET glfw)
-        add_library(glfw STATIC IMPORTED GLOBAL)
-        set_target_properties(glfw PROPERTIES
-          IMPORTED_LOCATION "${GLFW_LIBRARIES}"
-          INTERFACE_INCLUDE_DIRECTORIES "${GLFW_INCLUDE_DIRS}"
-        )
-      endif()
-    else()
-      # If not built, add as subdirectory
-      set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-      set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-      set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-      set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
-      add_subdirectory(${PROJECT_ROOT}/external/glfw)
-      set(GLFW_INCLUDE_DIRS "${PROJECT_ROOT}/external/glfw/include")
-    endif()
-  else()
-    message(STATUS "Using system GLFW")
-  endif()
-  
-  include_directories(${GLFW_INCLUDE_DIRS})
-endif()
+
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -132,9 +101,15 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends
     ${CMAKE_CURRENT_SOURCE_DIR}/external/IconFontCppHeaders
     ${PROJECT_ROOT}/external/json/include
+    ${PROJECT_ROOT}/external/SDL/include
     
     ${GTEST_INCLUDE_DIR}
 )
+
+if(NOT ANDROID)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_ROOT}/external/SDL/cmake")
+    find_package(SDL2 REQUIRED)
+endif()
 
 set(SOURCES
     src/application.cpp
@@ -280,7 +255,6 @@ else()
 
     set(CURL_USE_OPENSSL ON CACHE BOOL "Use OpenSSL with libcurl" FORCE)
     set(CURL_ENABLE_OPENSSL_AUTO_FETCH OFF CACHE BOOL "" FORCE)
-    set(CURL_DISABLE_LIBPSL ON CACHE BOOL "Disable PSL support" FORCE)
     set(CURL_USE_LIBPSL OFF CACHE BOOL "Use PSL support" FORCE)
 
     add_subdirectory(external/curl)
@@ -332,7 +306,7 @@ if(BUILD_TESTS)
       add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 
       # Add dependency on cacert header for fetcher integration tests
-      if (TEST_SOURCE MATCHES "integration_.*_fetcher\.cpp")
+      if (TEST_SOURCE MATCHES "integration_.*_fetcher\\.cpp")
           add_dependencies(${TEST_NAME} gen_cacert_header)
       endif()
   endforeach()
@@ -354,7 +328,7 @@ add_custom_command(
     DEPENDS ${CACERT_PEM}
     COMMAND xxd -i ${CACERT_PEM} > ${CACERT_HEADER}.tmp && mv ${CACERT_HEADER}.tmp ${CACERT_HEADER}
     COMMAND sed -i -e 's|unsigned char .*|unsigned char cacert_pem[] = {|g' "${CACERT_HEADER}"
-    COMMAND sed -i -e 's|unsigned int[[:space:]]*.*|unsigned int cacert_pem_len = sizeof\(cacert_pem\)\;|' "${CACERT_HEADER}"
+    COMMAND sed -i -e 's|unsigned int[[:space:]]*.*|unsigned int cacert_pem_len = sizeof\(cacert_pem\)\;|' "${CACERT_HEADER}"       
     COMMENT "Generating and fixing cacert_pem_data.hpp"
 )
 
@@ -368,6 +342,7 @@ if(ANDROID AND NOT BUILD_TESTS)
         src/platform/android/android_main.cpp
         src/platform/android/imgui_impl_android.cpp
         src/platform/android/keyboard_helper.cpp
+        src/platform/android/platform_font_utils.cpp
         external/imgui/backends/imgui_impl_opengl3.cpp
     )
     include_directories(
@@ -376,6 +351,7 @@ if(ANDROID AND NOT BUILD_TESTS)
         ${CURL_INCLUDE_DIRS}
         ${PROJECT_ROOT}/external/json/include
         ${CMAKE_CURRENT_SOURCE_DIR}/include/app
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/platform
     )
     set(PLATFORM_LIBS
         android
@@ -422,44 +398,35 @@ if(ANDROID AND NOT BUILD_TESTS)
     
     
 endif()
-
-
-
-if(NOT ANDROID)
     
 
     
-
-    set(PLATFORM_SOURCES
-        src/platform/platform_glfw.cpp
-        src/platform/platform_base.cpp
-        src/platform/linux/asset_manager.cpp
-        external/imgui/backends/imgui_impl_glfw.cpp
-        external/imgui/backends/imgui_impl_opengl3.cpp
+if(NOT ANDROID AND NOT BUILD_TESTS)
+    add_definitions(-DLINUX)
+    add_definitions(-U__ANDROID__)
+    add_executable(${PROJECT_NAME}
+        ${SOURCES}
+        ${IMGUI_SOURCES}
+        src/platform/platform_sdl.cpp
+        src/platform/linux/platform_font_utils.cpp
+        ${PROJECT_ROOT}/external/imgui/backends/imgui_impl_sdl2.cpp
+        ${PROJECT_ROOT}/external/imgui/backends/imgui_impl_opengl3.cpp
     )
-
-    include_directories(
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/platform/linux
-    )
-
-    add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_SOURCES} ${PLATFORM_SOURCES})
 
     target_link_libraries(${PROJECT_NAME} PRIVATE
-        glfw
+        SDL2::SDL2
+        GL
+        dl
+        pthread
         CURL::libcurl
         OpenSSL::SSL
         OpenSSL::Crypto
         nlohmann_json::nlohmann_json
         platform_logger_lib
-        GL
-        X11
     )
-
     if(TARGET appcode)
         target_link_libraries(${PROJECT_NAME} PRIVATE appcode)
     endif()
 
     add_dependencies(${PROJECT_NAME} gen_cacert_header)
-
-    install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 endif()

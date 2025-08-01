@@ -34,14 +34,7 @@ void ImGui_ImplAndroid_SetAssetManager(AAssetManager* assetManager) {
     g_AssetManager = assetManager;
 }
 
-// Functions to get available font names and sizes
-const std::vector<std::string>& ImGui_ImplAndroid_GetAvailableFontNames() {
-    return s_availableFontNames;
-}
 
-const std::vector<float>& ImGui_ImplAndroid_GetAvailableFontSizes() {
-    return s_availableFontSizes;
-}
 
 
 

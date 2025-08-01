@@ -10,7 +10,6 @@ struct AAssetManager;
 void ImGui_ImplAndroid_SetAssetManager(AAssetManager* assetManager);
 
 // Functions to get available font names and sizes
-const std::vector<std::string>& ImGui_ImplAndroid_GetAvailableFontNames();
-const std::vector<float>& ImGui_ImplAndroid_GetAvailableFontSizes();
+
 
 void SetDefaultImGuiFont(const std::string& fontName, float fontSize);

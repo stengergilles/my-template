@@ -9,7 +9,6 @@
 #include "layout/Layout.h"
 
 #include <iostream>
-#include <GLES3/gl3.h> // Required for glClearColor and glClear
 
 // Initialize static instance
 Application* Application::s_instance = nullptr;

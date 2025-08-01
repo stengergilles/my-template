@@ -1,4 +1,5 @@
 #include "../include/platform/settings_manager.h"
+#include "../include/platform/platform_font_utils.h"
 #include "../include/platform/logger.h"
 #include "../include/platform/state_manager.h"
 #include "../include/platform/scaling_manager.h"
@@ -275,10 +276,8 @@ void SettingsManager::showSettingsEditor()
 
 void SettingsManager::updateAvailableFonts()
 {
-#ifdef __ANDROID__
-    m_availableFontNames = ImGui_ImplAndroid_GetAvailableFontNames();
-    m_availableFontSizes = ImGui_ImplAndroid_GetAvailableFontSizes();
-#endif
+    m_availableFontNames = Platform_GetAvailableFontNames();
+    m_availableFontSizes = ::Platform_GetAvailableFontSizes();
 }
 
 void SettingsManager::loadSettingsAsync()

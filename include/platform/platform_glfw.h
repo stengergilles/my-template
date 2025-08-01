@@ -11,9 +11,10 @@ public:
     PlatformGLFW(const std::string& appName,int width = 1280, int height = 720);
     virtual ~PlatformGLFW();
 
-protected:
     // Main application loop
     void run();
+
+protected:
     virtual bool platformInit() override;
     virtual void platformShutdown() override;
     virtual void platformNewFrame() override;

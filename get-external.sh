@@ -50,14 +50,14 @@ fi
 
 git clone https://github.com/juliettef/IconFontCppHeaders.git
 
-# Check if GLFW is already downloaded   
-if [ ! -d "glfw" ]; then 
-	echo "Downloading GLFW..."  
-	git clone https://github.com/glfw/glfw.git glfw   
-	cd glfw 
-	git checkout 3.3.8 
+# Check if SDL is already downloaded   
+if [ ! -d "SDL" ]; then 
+	echo "Downloading SDL..."  
+	git clone https://github.com/libsdl-org/SDL.git SDL   
+	cd SDL 
+	git checkout release-2.28.5 # Use a stable release tag
 	cd ..  
 else       
-	echo "GLFW already downloaded."   
+	echo "SDL already downloaded."   
 fi
 cd ..

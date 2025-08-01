@@ -11,7 +11,7 @@ def buildType = project.hasProperty('buildType') ? project.properties['buildType
 
 // Project configuration
 def projectRoot = file('../..')
-def buildDir = file("$projectRoot/build/linux")
+def buildDir = file("../build")
 
 // Configure the application
 application {
@@ -74,7 +74,7 @@ task downloadDependencies(type: Exec) {
 // Task to run CMake configuration
 task configureCMake(type: Exec, dependsOn: downloadDependencies) {
     workingDir buildDir
-    commandLine 'cmake', projectRoot, "-DCMAKE_BUILD_TYPE=${buildType}", "-DUSE_SYSTEM_OPENSSL=ON"
+    commandLine 'cmake', projectRoot, "-DCMAKE_BUILD_TYPE=${buildType}", "-DUSE_SYSTEM_OPENSSL=ON", "-DANDROID=OFF", "-DLINUX=1", "-DCMAKE_INSTALL_PREFIX=${buildDir}", "-DBUILD_SHARED_LIBS=OFF", "-DBUILD_STATIC_LIBS=ON", "-DBUILD_LIBCURL_DOCS=OFF", "-DBUILD_MISC_DOCS=OFF", "-DENABLE_CURL_MANUAL=OFF"
     
     doFirst {
         buildDir.mkdirs()

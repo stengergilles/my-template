@@ -1,5 +1,5 @@
 #include "../../../include/platform/linux/asset_manager.h"
-#include "../../../include/logger.h"
+#include "../../../include/platform/logger.h"
 #include <algorithm>
 
 // LinuxAsset implementation
