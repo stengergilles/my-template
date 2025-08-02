@@ -6,12 +6,15 @@
 #include <iomanip>
 
 StateManager::StateManager() : m_internalDataPath(".") {
+    LOG_INFO("StateManager constructor called.");
     updateStateFilePath();
     // Load state asynchronously on startup
     loadStateAsync();
 }
 
+
 StateManager::~StateManager() {
+    LOG_INFO("StateManager destructor called.");
     // Save state asynchronously on shutdown
     // We need to wait for the save to complete before destruction
     // to ensure all data is written to disk.
@@ -97,23 +100,27 @@ void StateManager::loadStateInternal() {
 
 void StateManager::saveStateInternal() {
     std::lock_guard<std::mutex> lock(m_mutex);
+    LOG_INFO("Attempting to save state to %s", m_stateFilePath.c_str());
     std::ofstream file(m_stateFilePath);
     if (file.is_open()) {
         nlohmann::json j = m_state;
         file << std::setw(4) << j << std::endl;
         file.close();
+        LOG_INFO("State successfully saved to %s", m_stateFilePath.c_str());
     } else {
         LOG_ERROR("Failed to save state to %s", m_stateFilePath.c_str());
     }
 }
 
 void StateManager::loadStateAsync() {
+    LOG_INFO("StateManager::loadStateAsync() called.");
     Worker::getInstance().postTask([this]() {
         loadStateInternal();
     });
 }
 
 void StateManager::saveStateAsync() {
+    LOG_INFO("StateManager::saveStateAsync() called.");
     Worker::getInstance().postTask([this]() {
         saveStateInternal();
     });
