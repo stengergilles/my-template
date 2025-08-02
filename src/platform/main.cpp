@@ -2,6 +2,7 @@
 #include "../../include/platform/logger.h"
 #include "../../include/widget/log_widget.h" // Include log_widget.h
 #include <unistd.h> // For chdir
+#include "../../include/platform/state_manager.h" // For StateManager
 
 #if defined(LINUX)
     #include "../../include/platform/platform_sdl.h"
@@ -32,6 +33,8 @@ int main(int argc, char** argv)
         LOG_ERROR("Failed to change directory to ../");
         return 1;
     }
+    // Load application state after setting the correct working directory
+    StateManager::getInstance().loadStateAsync();
 #elif (defined(__ANDROID__))
     static LogWidget main_log_widget;
     AndroidPlatformLogger* android_logger = dynamic_cast<AndroidPlatformLogger*>(g_logger);

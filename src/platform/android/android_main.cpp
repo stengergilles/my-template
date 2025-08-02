@@ -123,6 +123,8 @@ void android_main(struct android_app* app) {
             LOG_INFO("Successfully changed directory to: %s", path);
             
             StateManager::getInstance().setInternalDataPath(path); // Set path for StateManager
+            // Load state after setting the internal data path
+            StateManager::getInstance().loadStateAsync();
         } else {
             LOG_ERROR("Failed to change directory to: %s", path);
         }
@@ -137,8 +139,8 @@ void android_main(struct android_app* app) {
     // Create application instance
     g_app = new PlatformAndroid("ImGui Hello World", &g_logWidget);
 
-    // Load state at startup
-        StateManager::getInstance().loadStateAsync();
+    // Load state at startup - now handled within the chdir block
+    // StateManager::getInstance().loadStateAsync();
     
     // Reset the scaling manager to force scaling application
     ScalingManager& scalingManager = ScalingManager::getInstance();

@@ -169,7 +169,7 @@ void PlatformSDL::run()
         platformRender();
     }
 
-    platformShutdown();
+    // platformShutdown(); // Cleanup is handled by destructor
 }
 
 void PlatformSDL::set_window_title(const std::string& title)

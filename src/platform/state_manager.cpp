@@ -8,8 +8,7 @@
 StateManager::StateManager() : m_internalDataPath(".") {
     LOG_INFO("StateManager constructor called.");
     updateStateFilePath();
-    // Load state asynchronously on startup
-    loadStateAsync();
+    // State loading will be triggered externally after path is set
 }
 
 

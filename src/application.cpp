@@ -31,8 +31,7 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
     // Initialize HTTP client
     m_httpClient = std::make_unique<PlatformHttpClient>();
 
-    // Load application state
-    StateManager::getInstance().loadStateAsync();
+    // State loading is handled externally after path is set
 
     // Load current page from state
     std::string pageStr;
@@ -49,6 +48,7 @@ Application::Application(const std::string& appName, LogWidget* logWidget)
 
 Application::~Application()
 {
+    LOG_INFO("Application destructor called.");
     // Save current page to state
     std::string pageStr;
     switch (m_currentPage) {

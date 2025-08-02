@@ -404,6 +404,7 @@ endif()
 if(NOT ANDROID AND NOT BUILD_TESTS)
     add_definitions(-DLINUX)
     add_definitions(-U__ANDROID__)
+    add_compile_options(-g)
     add_executable(${PROJECT_NAME}
         ${SOURCES}
         ${IMGUI_SOURCES}
