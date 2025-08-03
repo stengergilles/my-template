@@ -55,6 +55,8 @@ private:
     // Getters for settings properties
 public:
     ImVec4 getScreenBackground() const { return m_currentSettings.screen_background; }
+    const std::string& getFontName() const { return m_currentSettings.font_name; }
+    float getFontSize() const { return m_currentSettings.font_size; }
     const std::vector<std::string>& getAvailableFontNames() const { return m_availableFontNames; }
     const std::vector<float>& getAvailableFontSizes() const { return m_availableFontSizes; }
     float getScale() const { return m_currentSettings.scale; }

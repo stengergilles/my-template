@@ -10,7 +10,7 @@ def applicationName = project.hasProperty('appName') ? project.properties['appNa
 def buildType = project.hasProperty('buildType') ? project.properties['buildType'] : 'Release'
 
 // Project configuration
-def projectRoot = file('../..')
+def projectRoot = file('../../')
 def buildDir = file("../build")
 
 // Configure the application
@@ -74,7 +74,7 @@ task downloadDependencies(type: Exec) {
 // Task to run CMake configuration
 task configureCMake(type: Exec, dependsOn: downloadDependencies) {
     workingDir buildDir
-    commandLine 'cmake', projectRoot, "-DCMAKE_BUILD_TYPE=${buildType}", "-DUSE_SYSTEM_OPENSSL=ON", "-DANDROID=OFF", "-DLINUX=1", "-DCMAKE_INSTALL_PREFIX=${buildDir}", "-DBUILD_SHARED_LIBS=OFF", "-DBUILD_STATIC_LIBS=ON", "-DBUILD_LIBCURL_DOCS=OFF", "-DBUILD_MISC_DOCS=OFF", "-DENABLE_CURL_MANUAL=OFF"
+    commandLine 'cmake', projectRoot, "-DCMAKE_BUILD_TYPE=${buildType}", "-DUSE_SYSTEM_OPENSSL=ON", "-DANDROID=OFF", "-DLINUX=1", "-DCMAKE_INSTALL_PREFIX=${buildDir}", "-DBUILD_SHARED_LIBS=OFF", "-DBUILD_STATIC_LIBS=ON", "-DBUILD_LIBCURL_DOCS=OFF", "-DBUILD_MISC_DOCS=OFF", "-DENABLE_CURL_MANUAL=OFF", "-DLINUX_PACKAGE_NAME=${project.properties['linuxPackageName']}"
     
     doFirst {
         buildDir.mkdirs()
@@ -130,3 +130,18 @@ task createDistribution(type: Tar, dependsOn: buildWithCMake) {
         println "Creating distribution package: ${destinationDirectory}/${archiveFileName}"
     }
 }
+
+task copyLinuxFonts(type: Copy) {
+    def assetsDir = file("$buildDir/bin/assets")
+    from fileTree("../../android/app/src/main/assets") {
+        include "*.ttf"
+    }
+    into assetsDir
+    doFirst {
+        assetsDir.mkdirs()
+        println "Copying fonts to Linux assets directory: ${assetsDir}"
+    }
+}
+
+// Ensure fonts are copied before CMake configuration
+configureCMake.dependsOn copyLinuxFonts

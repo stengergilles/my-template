@@ -405,6 +405,13 @@ if(NOT ANDROID AND NOT BUILD_TESTS)
     add_definitions(-DLINUX)
     add_definitions(-U__ANDROID__)
     add_compile_options(-g)
+
+    if(DEFINED LINUX_PACKAGE_NAME)
+        add_definitions(-DLINUX_APP_PACKAGE_NAME="${LINUX_PACKAGE_NAME}")
+    else()
+        # Provide a default if not set (though Gradle should always set it)
+        add_definitions(-DLINUX_APP_PACKAGE_NAME="com.my.app")
+    endif()
     add_executable(${PROJECT_NAME}
         ${SOURCES}
         ${IMGUI_SOURCES}

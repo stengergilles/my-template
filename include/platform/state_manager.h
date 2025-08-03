@@ -27,6 +27,7 @@ public:
 
     // Set the internal data path for file storage (Android specific)
     void setInternalDataPath(const std::string& path);
+    const std::string& getInternalDataPath() const { return m_internalDataPath; }
 
     private:
     StateManager();
