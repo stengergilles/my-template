@@ -127,7 +127,7 @@ int main(int argc, char** argv)
     try {
         // Create platform-specific application instance
         #if defined(LINUX)
-        PlatformType app("ImGui Hello World", 1280, 720); // Default width and height
+        PlatformType app("ImGui Hello World", 720, 1280); // Default width and height
         StateManager::getInstance().loadStateAsync();
 #elif (defined(__ANDROID__))
         PlatformType app("ImGui Hello World", nullptr); // Pass nullptr for Android
