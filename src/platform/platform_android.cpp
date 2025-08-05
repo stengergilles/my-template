@@ -105,8 +105,8 @@ bool PlatformAndroid::initWithWindow(ANativeWindow* window) {
     // Update SettingsManager with available fonts after ImGui is initialized
     SettingsManager::getInstance().updateAvailableFonts();
 
-    // Now that fonts are loaded, load settings asynchronously from the state
-    SettingsManager::getInstance().loadSettingsAsync();
+    // Now that fonts are loaded, load settings from the state
+    SettingsManager::getInstance().loadSettings();
     
     return success;
 }

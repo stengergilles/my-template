@@ -60,7 +60,11 @@ static void handle_cmd(android_app* app, int32_t cmd) {
             break;
         case APP_CMD_LOST_FOCUS:
             // Save state when app loses focus
-            StateManager::getInstance().saveStateAsync();
+            StateManager::getInstance().saveState();
+            break;
+        case APP_CMD_SAVE_STATE:
+            // The system has asked us to save our current state.
+            StateManager::getInstance().saveState();
             break;
         default:
             break;
@@ -196,11 +200,11 @@ void android_main(struct android_app* app) {
                     delete g_app;
                     g_app = nullptr;
                 }
+                StateManager::getInstance().saveState(); // Save state on exit
                 if (g_logger) { // Delete global logger
                     delete g_logger;
                     g_logger = nullptr;
                 }
-                StateManager::getInstance().saveStateAsync(); // Save state on exit
                 g_logWidget.Clear(); // Clear log widget to prevent memory leak
                 return;
             }

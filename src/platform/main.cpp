@@ -9,6 +9,7 @@
 #include <libgen.h> // For dirname
 #include <filesystem> // For std::filesystem
 #include "../../include/platform/state_manager.h" // For StateManager
+#include "../../include/platform/font_manager.h" // For FontManager
 
 // Helper function to convert package name to camel case
 std::string toCamelCase(const std::string& s) {
@@ -99,8 +100,11 @@ int main(int argc, char** argv)
     // Copy fonts from sourceAssetsDir to app home directory
     for (const auto& entry : std::filesystem::directory_iterator(sourceAssetsDir)) {
         if (entry.is_regular_file() && entry.path().extension() == ".ttf") {
-            std::filesystem::copy(entry.path(), appHomeDir / entry.path().filename(), std::filesystem::copy_options::overwrite_existing);
-            LOG_INFO("Copied font: %s to %s", entry.path().filename().c_str(), appHomeDir.c_str());
+            std::filesystem::path destPath = appHomeDir / entry.path().filename();
+            if (!std::filesystem::exists(destPath)) {
+                std::filesystem::copy(entry.path(), destPath);
+                LOG_INFO("Copied font: %s to %s", entry.path().filename().c_str(), appHomeDir.c_str());
+            }
         }
     }
 

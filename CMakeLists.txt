@@ -405,6 +405,7 @@ if(NOT ANDROID AND NOT BUILD_TESTS)
     add_definitions(-DLINUX)
     add_definitions(-U__ANDROID__)
     add_compile_options(-g)
+    add_definitions(-DFONT_ICON_FILE_NAME_FAS="fa-solid-900.ttf")
 
     if(DEFINED LINUX_PACKAGE_NAME)
         add_definitions(-DLINUX_APP_PACKAGE_NAME="${LINUX_PACKAGE_NAME}")

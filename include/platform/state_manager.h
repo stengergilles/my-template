@@ -24,6 +24,8 @@ public:
     void loadStateAsync();
     // Save all state to file asynchronously
     void saveStateAsync();
+    // Save all state to file synchronously
+    void saveState();
 
     // Set the internal data path for file storage (Android specific)
     void setInternalDataPath(const std::string& path);

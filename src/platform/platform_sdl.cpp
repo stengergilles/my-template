@@ -1,5 +1,7 @@
 #include "../../../include/platform/platform_sdl.h"
 #include "../../../include/platform/logger.h"
+#include "../../../include/platform/font_manager.h"
+#include "../../../include/platform/settings_manager.h"
 #include "imgui.h"
 #include "imgui_impl_sdl2.h"
 #include "imgui_impl_opengl3.h"
@@ -7,9 +9,15 @@
 #include <stdexcept>
 
 PlatformSDL::PlatformSDL(const std::string& title, int width, int height)
-    : m_window(nullptr), m_gl_context(nullptr), m_done(false), PlatformBase(title, nullptr), m_width(width), m_height(height)
-{
-    // Constructor now only initializes members and calls base constructor
+    : PlatformBase(title), m_window(nullptr), m_gl_context(nullptr), m_done(false), m_width(width), m_height(height) {
+    if (platformInit()) {
+        initializeImGui();
+    }
+}
+
+void PlatformSDL::initializeImGui() {
+    FontManager::LoadFonts();
+    SettingsManager::getInstance().initialize();
 }
 
 bool PlatformSDL::platformInit()

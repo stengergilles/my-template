@@ -14,12 +14,9 @@ StateManager::StateManager() : m_internalDataPath(".") {
 
 StateManager::~StateManager() {
     LOG_INFO("StateManager destructor called.");
-    // Save state asynchronously on shutdown
-    // We need to wait for the save to complete before destruction
-    // to ensure all data is written to disk.
-    Worker::getInstance().postTask([this]() {
-        saveStateInternal();
-    }).get(); // .get() blocks until the task is complete
+    // Save state synchronously on shutdown to avoid race conditions with the worker thread
+    // during static deinitialization.
+    saveStateInternal();
 }
 
 StateManager& StateManager::getInstance() {
@@ -118,9 +115,16 @@ void StateManager::loadStateAsync() {
     });
 }
 
+
+
 void StateManager::saveStateAsync() {
     LOG_INFO("StateManager::saveStateAsync() called.");
     Worker::getInstance().postTask([this]() {
         saveStateInternal();
     });
+}
+
+void StateManager::saveState() {
+    LOG_INFO("StateManager::saveState() called.");
+    saveStateInternal();
 }

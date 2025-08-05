@@ -39,7 +39,7 @@ void SettingsManager::initialize()
 {
     // Apply a default setting immediately so the screen isn't black
     applySettings(m_availableSettings[0]); // Apply Dark settings by default
-    loadSettingsAsync();
+    loadSettings();
 }
 
 SettingsManager::~SettingsManager()
@@ -280,17 +280,15 @@ void SettingsManager::updateAvailableFonts()
     m_availableFontSizes = ::Platform_GetAvailableFontSizes();
 }
 
-void SettingsManager::loadSettingsAsync()
+void SettingsManager::loadSettings()
 {
-    Worker::getInstance().postTask([this]() {
-        Settings loadedSettings;
-        if (loadSettingsFromState(loadedSettings)) {
-            Application::getInstance()->runOnMainThread([this, loadedSettings]() {
-                applyLoadedSettings(loadedSettings);
-            });
-        }
-    });
+    Settings loadedSettings;
+    if (loadSettingsFromState(loadedSettings)) {
+        applyLoadedSettings(loadedSettings);
+    }
 }
+
+
 
 void SettingsManager::saveSettingsInternal(const Settings& settings)
 {
@@ -316,3 +314,4 @@ void SettingsManager::saveSettingsAsync()
         saveSettingsInternal(m_currentSettings);
     });
 }
+

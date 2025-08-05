@@ -11,6 +11,7 @@ public:
 
     void run();
     void set_window_title(const std::string& title);
+    void initializeImGui() override;
 
 private:
     SDL_Window* m_window;

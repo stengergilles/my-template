@@ -44,8 +44,9 @@ public:
     void reapplyCurrentStyle();
     void showSettingsEditor();
     void updateAvailableFonts();
-    void loadSettingsAsync();
+    void loadSettings();
     void saveSettingsAsync();
+    
 
 private:
     bool loadSettingsFromState(Settings& loadedSettings);

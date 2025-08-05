@@ -8,6 +8,7 @@ public:
     PlatformBase(const std::string& appName = "ImGui Hello World", LogWidget* logWidget = nullptr);
     virtual ~PlatformBase();
     
+    virtual void initializeImGui() {};
     // Add a method to get the Android app pointer
     virtual void* getAndroidApp() { return nullptr; }
 
