@@ -80,8 +80,7 @@ bool PlatformSDL::platformInit()
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
+    
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForOpenGL(m_window, m_gl_context);

@@ -107,9 +107,6 @@ int main(int argc, char** argv)
             }
         }
     }
-
-    // Load application state after setting the correct working directory
-    StateManager::getInstance().loadStateAsync();
 #elif (defined(__ANDROID__))
     static LogWidget main_log_widget;
     AndroidPlatformLogger* android_logger = dynamic_cast<AndroidPlatformLogger*>(g_logger);
@@ -129,8 +126,9 @@ int main(int argc, char** argv)
 
     try {
         // Create platform-specific application instance
-#if defined(LINUX)
+        #if defined(LINUX)
         PlatformType app("ImGui Hello World", 1280, 720); // Default width and height
+        StateManager::getInstance().loadStateAsync();
 #elif (defined(__ANDROID__))
         PlatformType app("ImGui Hello World", nullptr); // Pass nullptr for Android
 #else

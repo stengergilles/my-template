@@ -52,7 +52,7 @@ void SettingsManager::setupDefaultSettings()
     // Dark Settings
     Settings darkSettings;
     darkSettings.name = "Dark";
-    darkSettings.screen_background = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // White
+    darkSettings.screen_background = ImVec4(0.1f, 0.1f, 0.1f, 1.0f); // Dark grey
     darkSettings.widget_background = ImVec4(0.2f, 0.2f, 0.2f, 1.0f); // Slightly lighter grey
     darkSettings.corner_roundness = 5.0f; // Default roundness for dark settings
     darkSettings.scale = 1.0f; // Default scale

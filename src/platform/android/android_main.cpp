@@ -34,6 +34,7 @@ static void handle_cmd(android_app* app, int32_t cmd) {
                     g_app->setAndroidApp(app);
                     ImGui_ImplAndroid_SetAssetManager(app->activity->assetManager);
                     if (g_app->initWithWindow(g_savedWindow)) {
+                        StateManager::getInstance().loadStateAsync();
                         g_initialized = true;
                     } else {
                         LOG_ERROR("Platform initialization failed");
@@ -127,8 +128,6 @@ void android_main(struct android_app* app) {
             LOG_INFO("Successfully changed directory to: %s", path);
             
             StateManager::getInstance().setInternalDataPath(path); // Set path for StateManager
-            // Load state after setting the internal data path
-            StateManager::getInstance().loadStateAsync();
         } else {
             LOG_ERROR("Failed to change directory to: %s", path);
         }

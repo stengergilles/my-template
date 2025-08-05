@@ -83,8 +83,7 @@ bool Application::initImGui()
         return false;
     }
 
-    // Setup ImGui style
-    ImGui::StyleColorsDark();
+    
 
     // Initialize the SettingsManager
     SettingsManager::getInstance().initialize();
