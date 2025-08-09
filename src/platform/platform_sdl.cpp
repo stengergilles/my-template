@@ -79,7 +79,6 @@ bool PlatformSDL::platformInit()
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_IsTouchScreen;         // Assume touch screen for Termux X11
 
     
 
@@ -104,8 +103,20 @@ PlatformSDL::~PlatformSDL()
 
 void PlatformSDL::platformNewFrame()
 {
-    ImGui_ImplOpenGL3_NewFrame();
+    ImGuiIO& io = ImGui::GetIO();
+
+    // Setup display size (every frame to handle window resizing)
+    int w, h;
+    int display_w, display_h;
+    SDL_GetWindowSize(m_window, &w, &h);
+    SDL_GL_GetDrawableSize(m_window, &display_w, &display_h);
+    io.DisplaySize = ImVec2((float)w, (float)h);
+    if (w > 0 && h > 0) {
+        io.DisplayFramebufferScale = ImVec2((float)display_w / w, (float)display_h / h);
+    }
+
     ImGui_ImplSDL2_NewFrame();
+    ImGui_ImplOpenGL3_NewFrame();
     ImGui::NewFrame();
 }
 
