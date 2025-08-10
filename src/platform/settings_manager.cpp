@@ -39,7 +39,6 @@ void SettingsManager::initialize()
 {
     // Apply a default setting immediately so the screen isn't black
     applySettings(m_availableSettings[0]); // Apply Dark settings by default
-    loadSettings();
 }
 
 SettingsManager::~SettingsManager()

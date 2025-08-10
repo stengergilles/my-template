@@ -30,6 +30,8 @@ public:
     // Set the internal data path for file storage (Android specific)
     void setInternalDataPath(const std::string& path);
     const std::string& getInternalDataPath() const { return m_internalDataPath; }
+    bool isStateLoaded() const { return m_stateLoaded.load(); }
+    void resetStateLoaded() { m_stateLoaded.store(false); }
 
     private:
     StateManager();
@@ -41,6 +43,7 @@ public:
     std::string m_stateFilePath;
     std::map<std::string, std::string> m_state;
     std::mutex m_mutex;
+    std::atomic<bool> m_stateLoaded;
 
     void updateStateFilePath();
     void loadStateInternal(); // Internal synchronous load

@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iomanip>
 
-StateManager::StateManager() : m_internalDataPath(".") {
+StateManager::StateManager() : m_internalDataPath("."), m_stateLoaded(false) {
     LOG_INFO("StateManager constructor called.");
     updateStateFilePath();
     // State loading will be triggered externally after path is set
@@ -112,6 +112,7 @@ void StateManager::loadStateAsync() {
     LOG_INFO("StateManager::loadStateAsync() called.");
     Worker::getInstance().postTask([this]() {
         loadStateInternal();
+        m_stateLoaded.store(true);
     });
 }
 

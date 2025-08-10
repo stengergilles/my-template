@@ -216,6 +216,12 @@ void android_main(struct android_app* app) {
 
             // Run a single frame of the application
             Application::getInstance()->renderFrame();
+
+            // Check if state is loaded and apply settings
+            if (StateManager::getInstance().isStateLoaded()) {
+                SettingsManager::getInstance().loadSettings();
+                StateManager::getInstance().resetStateLoaded(); // Reset the flag
+            }
             
             // Sleep a bit to avoid busy waiting
             struct timespec ts;
