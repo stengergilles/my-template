@@ -163,37 +163,21 @@ void android_main(struct android_app* app) {
     LOG_INFO("Scale adjustment set to 1.0 for better visibility");
     
     
-    // Force initialization immediately
-    if (app->window != nullptr) {
-        g_savedWindow = app->window;
-        g_app->setAndroidApp(app);
-        
-        // Initialize with proper scaling
-        bool success = g_app->initWithWindow(g_savedWindow);
-        if (success) {
-            LOG_INFO("Platform initialized successfully at startup");
-            
-            g_initialized = true;
-        } else {
-            LOG_ERROR("Failed to initialize at startup");
-        }
-    }
-    
-    
-    
     // Main loop
     while (1) {
         // Read all pending events
+        int ident;
         int events;
         android_poll_source* source;
         
         // Process events - block until we get events
-        while ((ALooper_pollAll(g_initialized ? 0 : -1, nullptr, &events, (void**)&source)) >= 0) {
+        while ((ident = ALooper_pollOnce(g_initialized ? 0 : -1, nullptr, &events, (void**)&source)) >= 0) {
+            // Process this event.
             if (source != nullptr) {
                 source->process(app, source);
             }
-            
-            // Check if we are exiting
+
+            // Check if we are exiting.
             if (app->destroyRequested != 0) {
                 if (g_app) {
                     delete g_app;
